@@ -1,0 +1,16 @@
+{
+  "tools": [
+    {
+      "name": "教学工具",
+      "description": "用于教学的 HTML 演示工具",
+      "domain": "https://tools.oscarstudio.cn",
+      "status": "新"
+    },
+    {
+      "name": "HTML-PPT",
+      "description": "使用 HTML 制作的 PPT 演示方案",
+      "domain": "https://ppt.oscarstudio.cn",
+      "status": "无"
+    }
+  ]
+}

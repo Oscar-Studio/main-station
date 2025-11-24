@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oscar Studio - 专注于提升教学和学习质量</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-card {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .header-card h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header-card p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .tools-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #444;
+            font-weight: 600;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-header {
+            padding: 20px 20px 10px;
+            position: relative;
+        }
+        
+        .tool-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .tool-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-new {
+            background-color: #4cd964;
+            color: white;
+        }
+        
+        .status-hot {
+            background-color: #ff3b30;
+            color: white;
+        }
+        
+        .status-recommended {
+            background-color: #ff9500;
+            color: white;
+        }
+        
+        .tool-description {
+            padding: 0 20px 15px;
+            color: #666;
+            flex-grow: 1;
+        }
+        
+        .tool-footer {
+            padding: 15px 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .enter-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .enter-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+            background-color: #ffeaea;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-card {
+                padding: 25px;
+            }
+            
+            .header-card h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-card">
+            <h1>Oscar Studio</h1>
+            <p>专注于提升教学和学习质量</p>
+        </div>
+        
+        <div class="tools-section">
+            <h2>我们的工具</h2>
+            <div id="tools-container" class="tools-grid">
+                <div class="loading">正在加载工具...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 从同文件夹下的config.json文件读取数据
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('config.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络响应不正常');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayTools(data.tools);
+                })
+                .catch(error => {
+                    console.error('获取工具数据时出错:', error);
+                    document.getElementById('tools-container').innerHTML = 
+                        '<div class="error">加载工具数据失败，请检查网络连接或配置文件。</div>';
+                });
+        });
+
+        function displayTools(tools) {
+            const container = document.getElementById('tools-container');
+            
+            if (!tools || tools.length === 0) {
+                container.innerHTML = '<div class="error">没有找到工具数据。</div>';
+                return;
+            }
+            
+            let toolsHTML = '';
+            
+            tools.forEach(tool => {
+                let statusHTML = '';
+                if (tool.status && tool.status !== '无') {
+                    // 将状态标签改为中文显示
+                    let E_status = tool.status;
+                    if (tool.status === '新') E_status = 'new';
+                    else if (tool.status === '热') E_status = 'hot';
+                    else if (tool.status === '推荐') E_status = 'recommended';
+                    
+                    statusHTML = `<span class="tool-status status-${E_status}">${tool.status}</span>`;
+                }
+                
+                toolsHTML += `
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-name">${tool.name}</div>
+                            ${statusHTML}
+                        </div>
+                        <div class="tool-description">${tool.description}</div>
+                        <div class="tool-footer">
+                            <button class="enter-btn" onclick="window.open('${tool.domain}', '_blank')">进入工具</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = toolsHTML;
+        }
+    </script>
+</body>
+</html>
