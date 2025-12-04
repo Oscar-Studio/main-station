@@ -311,7 +311,17 @@
         }
 
         // Start when ready
-        window.addEventListener('load', startAnimation);
+        // Start when ready
+        window.addEventListener('load', () => {
+            startAnimation();
+
+            function notifyParent() {
+                window.parent.postMessage('close-intro', '*');
+            }
+
+            window.addEventListener('click', notifyParent);
+            window.addEventListener('keydown', notifyParent);
+        });
 
     </script>
 </body>
