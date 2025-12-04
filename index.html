@@ -224,10 +224,61 @@
                 font-size: 2rem;
             }
         }
+
+        /* Startup Animation Overlay */
+        #startup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: #010409;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #startup-overlay iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #startup-overlay .hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            pointer-events: none;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0.3;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- Startup Animation -->
+    <div id="startup-overlay">
+        <iframe src="动画.html" id="anim-frame"></iframe>
+        <div class="hint">点击任意键进入 / Click anywhere to enter</div>
+    </div>
     <div class="container">
         <div class="header-card">
             <h1>Oscar Studio</h1>
@@ -304,6 +355,34 @@
 
             container.innerHTML = toolsHTML;
         }
+    </script>
+    <script>
+        // Startup Animation Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            const overlay = document.getElementById('startup-overlay');
+
+            function closeOverlay() {
+                if (!overlay) return;
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.remove();
+                }, 500);
+                window.removeEventListener('click', closeOverlay);
+                window.removeEventListener('keydown', closeOverlay);
+                window.removeEventListener('message', handleMessage);
+            }
+
+            function handleMessage(event) {
+                if (event.data === 'close-intro') {
+                    closeOverlay();
+                }
+            }
+
+            window.addEventListener('click', closeOverlay);
+            window.addEventListener('keydown', closeOverlay);
+            window.addEventListener('message', handleMessage);
+            window.focus();
+        });
     </script>
 </body>
 
