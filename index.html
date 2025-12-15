@@ -87,9 +87,208 @@
             z-index: 1;
         }
 
+        /* Main Layout Styles */
+        .main-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .tools-section {
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Sidebar Cards */
+        .sidebar-card {
+            background: var(--card-bg);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            color: var(--dark-color);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .sidebar-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--secondary-color);
+        }
+
+        .sidebar-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+
+        /* Announcement Card */
+        .announcement-list {
+            list-style: none;
+        }
+
+        .announcement-item {
+            border-bottom: 1px solid #30363d;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            color: #d0d7de;
+            line-height: 1.5;
+            transition: var(--transition);
+        }
+
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .announcement-date {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .announcement-content {
+            opacity: 0.9;
+        }
+
+        .toggle-announcement {
+            margin-top: 15px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #30363d;
+            padding: 10px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .toggle-announcement:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Clock Card */
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .analog-clock {
+            width: 150px;
+            height: 150px;
+            border: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            position: relative;
+            background: radial-gradient(circle, #1a2332 0%, #0d1117 100%);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 4px;
+            z-index: 2;
+            transform: translateX(-50%) rotate(0deg);
+        }
+
+        .hour-hand {
+            width: 4px;
+            height: 35px;
+            background: white;
+            z-index: 3;
+        }
+
+        .minute-hand {
+            width: 3px;
+            height: 50px;
+            background: #8b949e;
+            z-index: 3;
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 60px;
+            background: #ff3b30;
+            z-index: 4;
+        }
+
+        .center-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .marker {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            width: 2px;
+            height: 10px;
+            left: 50%;
+            top: 5px;
+            transform-origin: 50% 70px;
+            /* (Clock height / 2) - top offset = 75 - 5 = 70px */
+        }
+
+        /* Using transform-origin to rotate the markers around the center of the clock */
+        /* Center of clock is at 75px, 75px. 
+           Marker top is at 5px. Height is 10px. 
+           Distance from marker top to center is 70px.
+           So transform-origin Y should be 70px? 
+           Wait, 'top: 5px' means top edge is 5px from parent top.
+           Center is at 75px from parent top.
+           Distance is 75 - 5 = 70px.
+        */
+
+        .digital-time {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+            margin-bottom: 5px;
+        }
+
+        .current-date {
+            color: #8b949e;
+            font-size: 1rem;
+        }
+
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
         }
 
@@ -215,11 +414,17 @@
             grid-column: 1 / -1;
         }
 
-        @media (max-width: 768px) {
-            .tools-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
             }
 
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
             .header-card h1 {
                 font-size: 2rem;
             }
@@ -279,6 +484,7 @@
         <iframe src="动画.html" id="anim-frame"></iframe>
         <div class="hint">点击任意键进入 / Click anywhere to enter</div>
     </div>
+
     <div class="container">
         <div class="header-card">
             <h1>Oscar Studio</h1>
@@ -286,8 +492,55 @@
         </div>
 
         <main>
-            <div class="tools-grid" id="tools-container">
-                <div class="loading">正在加载工具...</div>
+            <div class="main-layout">
+                <!-- Main Tools Section -->
+                <div class="tools-section">
+                    <div class="tools-grid" id="tools-container">
+                        <div class="loading">正在加载工具...</div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <aside class="sidebar">
+                    <!-- Announcement Card -->
+                    <div class="sidebar-card announcement-card">
+                        <h3>最新公告</h3>
+                        <ul class="announcement-list" id="announcement-list">
+                            <li style="text-align:center; padding:10px; color:#888;">加载公告中...</li>
+                        </ul>
+                        <button class="toggle-announcement" id="toggle-announcements">展开更多 ▼</button>
+                    </div>
+
+                    <!-- Clock Card -->
+                    <div class="sidebar-card clock-card">
+                        <h3>当前时间</h3>
+                        <div class="clock-container">
+                            <div class="analog-clock">
+                                <!-- 12 Markers -->
+                                <div class="clock-face-markers" id="clock-markers">
+                                    <div class="marker" style="transform: translateX(-50%) rotate(0deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(30deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(60deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(90deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(120deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(150deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(180deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(210deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(240deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(270deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(300deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(330deg)"></div>
+                                </div>
+                                <div class="hand hour-hand" id="hour-hand"></div>
+                                <div class="hand minute-hand" id="minute-hand"></div>
+                                <div class="hand second-hand" id="second-hand"></div>
+                                <div class="center-dot"></div>
+                            </div>
+                            <div class="digital-time" id="digital-time">--:--:--</div>
+                            <div class="current-date" id="current-date">----/--/--</div>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </main>
 
@@ -297,8 +550,10 @@
     </div>
 
     <script>
-        // 从同文件夹下的config.json文件读取数据
+        // Main Application Logic
         document.addEventListener('DOMContentLoaded', function () {
+
+            // 1. Load Tools
             fetch('config.json')
                 .then(response => {
                     if (!response.ok) {
@@ -314,8 +569,18 @@
                     document.getElementById('tools-container').innerHTML =
                         '<div class="error">加载工具数据失败，请检查网络连接或配置文件。</div>';
                 });
+
+            // 2. Load Announcements
+            fetchAnnouncements();
+
+            // 3. Start Clock
+            startClock();
+
+            // 4. Startup Overlay Logic
+            setupStartupOverlay();
         });
 
+        // --- Tools Logic ---
         function displayTools(tools) {
             const container = document.getElementById('tools-container');
 
@@ -329,7 +594,6 @@
             tools.forEach(tool => {
                 let statusHTML = '';
                 if (tool.status && tool.status !== '无') {
-                    // 将状态标签改为中文显示
                     let statusClass = 'featured-badge';
                     if (tool.status === '新') statusClass += ' status-new';
                     else if (tool.status === '热') statusClass += ' status-hot';
@@ -355,19 +619,107 @@
 
             container.innerHTML = toolsHTML;
         }
-    </script>
-    <script>
-        // Startup Animation Logic
-        document.addEventListener('DOMContentLoaded', function () {
+
+        // --- Announcement Logic ---
+        let allAnnouncements = [];
+        let isExpanded = false;
+
+        function fetchAnnouncements() {
+            fetch('announcement.json')
+                .then(res => res.json())
+                .then(data => {
+                    // Show n, n-1, n-2 (latest 3)
+                    // We reverse the array so index 0 is the last element of the original JSON
+                    allAnnouncements = data.reverse();
+
+                    renderAnnouncements();
+
+                    const btn = document.getElementById('toggle-announcements');
+                    if (data.length <= 3) {
+                        btn.style.display = 'none';
+                    } else {
+                        btn.style.display = 'block';
+                        btn.onclick = () => {
+                            isExpanded = !isExpanded;
+                            renderAnnouncements();
+                            btn.innerHTML = isExpanded ? '收起公告 ▲' : '展开更多 ▼';
+                        };
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to load announcements:', err);
+                    document.getElementById('announcement-list').innerHTML = '<li class="announcement-item" style="color:#d32f2f;">加载失败</li>';
+                    document.getElementById('toggle-announcements').style.display = 'none';
+                });
+        }
+
+        function renderAnnouncements() {
+            const list = document.getElementById('announcement-list');
+            const itemsToShow = isExpanded ? allAnnouncements : allAnnouncements.slice(0, 3);
+
+            if (itemsToShow.length === 0) {
+                list.innerHTML = '<li class="announcement-item">暂无公告</li>';
+                return;
+            }
+
+            let html = '';
+            itemsToShow.forEach(item => {
+                html += `
+                    <li class="announcement-item">
+                        <span class="announcement-date">${item.date}</span>
+                        <div class="announcement-content">${item.content}</div>
+                    </li>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        // --- Clock Logic ---
+        function startClock() {
+            const updateTime = () => {
+                const now = new Date();
+
+                // Digital
+                const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+                document.getElementById('digital-time').textContent = timeStr;
+
+                const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+                document.getElementById('current-date').textContent = dateStr;
+
+                // Analog
+                const seconds = now.getSeconds();
+                const minutes = now.getMinutes();
+                const hours = now.getHours();
+
+                const secondDeg = ((seconds / 60) * 360);
+                const minuteDeg = ((minutes / 60) * 360) + ((seconds / 60) * 6);
+                const hourDeg = ((hours % 12 / 12) * 360) + ((minutes / 60) * 30);
+
+                const secondHand = document.getElementById('second-hand');
+                const minuteHand = document.getElementById('minute-hand');
+                const hourHand = document.getElementById('hour-hand');
+
+                if (secondHand) secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+                if (minuteHand) minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+                if (hourHand) hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            };
+
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        // --- Startup Overlay Logic ---
+        function setupStartupOverlay() {
             const overlay = document.getElementById('startup-overlay');
 
             function closeOverlay() {
                 if (!overlay) return;
                 overlay.style.opacity = '0';
                 setTimeout(() => {
-                    overlay.remove();
+                    if (overlay.parentNode) overlay.remove();
                 }, 500);
                 window.removeEventListener('click', closeOverlay);
+                window.removeEventListener('touchstart', closeOverlay);
                 window.removeEventListener('keydown', closeOverlay);
                 window.removeEventListener('message', handleMessage);
             }
@@ -383,7 +735,7 @@
             window.addEventListener('keydown', closeOverlay);
             window.addEventListener('message', handleMessage);
             window.focus();
-        });
+        }
     </script>
 </body>
 
