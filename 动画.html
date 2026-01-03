@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oscar Studio - Knowledge Universe</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #010409;
+            /* 星空黑 */
+            font-family: 'Arial', sans-serif;
+        }
+
+        #canvas-helper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #universe {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .particle {
+            fill: #2A5CAA;
+            /* 默认科技蓝 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Off-screen canvas for sampling coordinates -->
+    <canvas id="canvas-helper"></canvas>
+
+    <!-- Main SVG Display -->
+    <svg id="universe" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+                <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+            </filter>
+            <radialGradient id="particle-grad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fff" />
+                <stop offset="100%" stop-color="#2A5CAA" />
+            </radialGradient>
+        </defs>
+
+        <g id="lines-layer"></g>
+        <g id="particles-layer" filter="url(#glow)"></g>
+    </svg>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            particleCount: 1200,
+            colors: ['#2A5CAA', '#00E5FF', '#6A00FF', '#C0C0C0'],
+            text: "oscarstudio",
+            finalText: "oscarstudio.cn",
+            width: 1920,
+            height: 1080
+        };
+
+        const svg = document.getElementById('universe');
+        const particlesLayer = document.getElementById('particles-layer');
+        const linesLayer = document.getElementById('lines-layer');
+        const canvas = document.getElementById('canvas-helper');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        // Set canvas size for sampling
+        canvas.width = CONFIG.width;
+        canvas.height = CONFIG.height;
+
+        // Particle System
+        let particles = [];
+
+        class Particle {
+            constructor(id) {
+                this.id = id;
+                this.element = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                this.x = Math.random() * CONFIG.width;
+                this.y = Math.random() * CONFIG.height;
+                this.size = Math.random() * 2 + 1;
+                this.color = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
+
+                this.element.setAttribute("r", this.size);
+                this.element.setAttribute("fill", this.color);
+                this.element.setAttribute("cx", this.x);
+                this.element.setAttribute("cy", this.y);
+                this.element.setAttribute("class", "particle");
+
+                particlesLayer.appendChild(this.element);
+            }
+
+            update() {
+                this.element.setAttribute("cx", this.x);
+                this.element.setAttribute("cy", this.y);
+            }
+        }
+
+        // Initialize Particles
+        function initParticles() {
+            for (let i = 0; i < CONFIG.particleCount; i++) {
+                particles.push(new Particle(i));
+            }
+        }
+
+        // Helper: Get coordinates from text
+        function getCoordinatesFromText(text, fontSize = 200, fontFace = "Arial") {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `bold ${fontSize}px ${fontFace}`;
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const coords = [];
+            const gap = 6; // Sampling gap
+
+            for (let y = 0; y < canvas.height; y += gap) {
+                for (let x = 0; x < canvas.width; x += gap) {
+                    const alpha = data[(y * canvas.width + x) * 4 + 3];
+                    if (alpha > 128) {
+                        coords.push({ x, y });
+                    }
+                }
+            }
+            return coords;
+        }
+
+        // Helper: Get coordinates for icons
+        function getIconCoordinates() {
+            // We'll simulate icons by drawing text symbols for simplicity and robustness
+            // In a real asset pipeline, we might parse SVG paths, but canvas text is easier here.
+
+            const coords = [];
+            const icons = [
+                { text: "</>", x: CONFIG.width * 0.3, y: CONFIG.height * 0.5, color: '#00E5FF' }, // Code
+                { text: "AI", x: CONFIG.width * 0.5, y: CONFIG.height * 0.5, color: '#6A00FF' },  // AI
+                { text: "BOT", x: CONFIG.width * 0.7, y: CONFIG.height * 0.5, color: '#C0C0C0' }  // Robot
+            ];
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "bold 150px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            icons.forEach(icon => {
+                ctx.fillStyle = "white"; // Draw all in white for sampling
+                ctx.fillText(icon.text, icon.x, icon.y);
+            });
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const gap = 6;
+
+            for (let y = 0; y < canvas.height; y += gap) {
+                for (let x = 0; x < canvas.width; x += gap) {
+                    const alpha = data[(y * canvas.width + x) * 4 + 3];
+                    if (alpha > 128) {
+                        // Determine which icon this belongs to roughly by x position
+                        let color = '#fff';
+                        if (x < CONFIG.width * 0.4) color = icons[0].color;
+                        else if (x < CONFIG.width * 0.6) color = icons[1].color;
+                        else color = icons[2].color;
+
+                        coords.push({ x, y, color });
+                    }
+                }
+            }
+            return coords;
+        }
+
+
+        // Main Animation Sequence
+        function startAnimation() {
+            initParticles();
+
+            const tl = gsap.timeline();
+
+            // Phase 1: Random Float (already set by init) -> Converge to "oscarstudio"
+            const textCoords = getCoordinatesFromText(CONFIG.text);
+
+            // Shuffle particles to targets
+            // We might have more particles than coords or vice versa.
+            // Strategy: Loop through particles and assign a target coord modulo length.
+
+            tl.to(particles, {
+                duration: 2,
+                x: (i) => textCoords[i % textCoords.length].x,
+                y: (i) => textCoords[i % textCoords.length].y,
+                ease: "power2.inOut",
+                stagger: {
+                    amount: 1,
+                    from: "random"
+                },
+                onUpdate: () => {
+                    particles.forEach(p => p.update()); // Sync SVG attributes
+                }
+            });
+
+            // Phase 2: Pulse & Flow
+            tl.to(particles.map(p => p.element), {
+                duration: 0.5,
+                attr: { r: (i) => particles[i].size * 1.5 },
+                yoyo: true,
+                repeat: 3,
+                ease: "sine.inOut"
+            });
+
+            // Phase 3: Explode to Icons & Network Lines
+            const iconCoords = getIconCoordinates();
+
+            tl.to(particles, {
+                duration: 1.5,
+                x: (i) => iconCoords[i % iconCoords.length].x,
+                y: (i) => iconCoords[i % iconCoords.length].y,
+                // Change color to match icon
+                onStart: () => {
+                    particles.forEach((p, i) => {
+                        const target = iconCoords[i % iconCoords.length];
+                        gsap.to(p.element, { fill: target.color, duration: 1 });
+                    });
+                },
+                ease: "back.out(1.7)",
+                onUpdate: () => particles.forEach(p => p.update())
+            });
+
+            // Draw lines between nearby particles to simulate network
+            // This is expensive, so we'll just draw a few fixed lines or animate a few "connector" lines
+            // For performance, let's create a few specific connection lines between the icon centers
+            tl.add(() => {
+                const centers = [
+                    { x: CONFIG.width * 0.3, y: CONFIG.height * 0.5 },
+                    { x: CONFIG.width * 0.5, y: CONFIG.height * 0.5 },
+                    { x: CONFIG.width * 0.7, y: CONFIG.height * 0.5 }
+                ];
+
+                // Connect 0-1 and 1-2
+                const lines = [
+                    { x1: centers[0].x, y1: centers[0].y, x2: centers[1].x, y2: centers[1].y },
+                    { x1: centers[1].x, y1: centers[1].y, x2: centers[2].x, y2: centers[2].y }
+                ];
+
+                lines.forEach(lineData => {
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", lineData.x1);
+                    line.setAttribute("y1", lineData.y1);
+                    line.setAttribute("x2", lineData.x1); // Start at x1 for animation
+                    line.setAttribute("y2", lineData.y1); // Start at y1
+                    line.setAttribute("stroke", "#2A5CAA");
+                    line.setAttribute("stroke-width", "2");
+                    line.setAttribute("stroke-dasharray", "5,5");
+                    line.setAttribute("opacity", "0.5");
+                    linesLayer.appendChild(line);
+
+                    gsap.to(line, {
+                        attr: { x2: lineData.x2, y2: lineData.y2 },
+                        duration: 1,
+                        ease: "power1.inOut"
+                    });
+                });
+            }, "-=0.5");
+
+
+            // Phase 4: Reform to "oscarstudio.cn"
+            const finalTextCoords = getCoordinatesFromText(CONFIG.finalText, 150);
+
+            tl.to(particles, {
+                delay: 2, // Wait a bit at icons
+                duration: 2,
+                x: (i) => finalTextCoords[i % finalTextCoords.length].x,
+                y: (i) => finalTextCoords[i % finalTextCoords.length].y,
+                onStart: () => {
+                    // Clear lines
+                    linesLayer.innerHTML = '';
+                    // Reset colors to blue/cyan mix
+                    particles.forEach(p => {
+                        gsap.to(p.element, { fill: CONFIG.colors[Math.floor(Math.random() * 2)], duration: 1 });
+                    });
+                },
+                ease: "power3.inOut",
+                onUpdate: () => particles.forEach(p => p.update())
+            });
+
+            // Final Glow Pulse
+            tl.to(particles.map(p => p.element), {
+                duration: 2,
+                attr: { opacity: 0.8 },
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        }
+
+        // Start when ready
+        // Start when ready
+        window.addEventListener('load', () => {
+            startAnimation();
+
+            function notifyParent() {
+                window.parent.postMessage('close-intro', '*');
+            }
+
+            window.addEventListener('click', notifyParent);
+            window.addEventListener('touchstart', notifyParent);
+            window.addEventListener('keydown', notifyParent);
+        });
+
+    </script>
+</body>
+
+</html>

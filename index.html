@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oscar Studio</title>
+    <script defer src="https://cloud.umami.is/script.js"
+        data-website-id="97c80657-65b9-44c6-a67c-043ee9df96e6"></script>
+    <style>
+        :root {
+            /* Festive New Year Theme */
+            --primary-color: #D32F2F;
+            /* Festive Red */
+            --secondary-color: #FFD700;
+            /* Gold */
+            --accent-color: #FF5252;
+            --light-color: #010409;
+            --dark-color: #ffffff;
+            --success-color: #28a745;
+            --card-bg: #1a0f0f;
+            /* Slightly reddish dark background */
+            --card-border: 1px solid #4a1a1a;
+            --card-shadow: 0 10px 20px rgba(211, 47, 47, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(211, 47, 47, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .header-card h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-card p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main Layout Styles */
+        .main-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .tools-section {
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Sidebar Cards */
+        .sidebar-card {
+            background: var(--card-bg);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            color: var(--dark-color);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .sidebar-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--secondary-color);
+        }
+
+        .sidebar-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+
+        /* Announcement Card */
+        .announcement-list {
+            list-style: none;
+        }
+
+        .announcement-item {
+            border-bottom: 1px solid #30363d;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            color: #d0d7de;
+            line-height: 1.5;
+            transition: var(--transition);
+        }
+
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .announcement-date {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .announcement-content {
+            opacity: 0.9;
+        }
+
+        .toggle-announcement {
+            margin-top: 15px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #30363d;
+            padding: 10px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .toggle-announcement:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Clock Card */
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .analog-clock {
+            width: 150px;
+            height: 150px;
+            border: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            position: relative;
+            background: radial-gradient(circle, #1a2332 0%, #0d1117 100%);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 4px;
+            z-index: 2;
+            transform: translateX(-50%) rotate(0deg);
+        }
+
+        .hour-hand {
+            width: 4px;
+            height: 35px;
+            background: white;
+            z-index: 3;
+        }
+
+        .minute-hand {
+            width: 3px;
+            height: 50px;
+            background: #8b949e;
+            z-index: 3;
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 60px;
+            background: #ff3b30;
+            z-index: 4;
+        }
+
+        .center-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .marker {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            width: 2px;
+            height: 10px;
+            left: 50%;
+            top: 5px;
+            transform-origin: 50% 70px;
+            /* (Clock height / 2) - top offset = 75 - 5 = 70px */
+        }
+
+        /* Using transform-origin to rotate the markers around the center of the clock */
+        /* Center of clock is at 75px, 75px. 
+           Marker top is at 5px. Height is 10px. 
+           Distance from marker top to center is 70px.
+           So transform-origin Y should be 70px? 
+           Wait, 'top: 5px' means top edge is 5px from parent top.
+           Center is at 75px from parent top.
+           Distance is 75 - 5 = 70px.
+        */
+
+        .digital-time {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+            margin-bottom: 5px;
+        }
+
+        .current-date {
+            color: #8b949e;
+            font-size: 1rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: var(--card-border);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--secondary-color);
+        }
+
+        .tool-icon {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+            font-size: 3rem;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .tool-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-content h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: 1.2rem;
+        }
+
+        .tool-content p {
+            color: #8b949e;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+            margin-top: 30px;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .status-new {
+            background-color: var(--success-color);
+        }
+
+        .status-hot {
+            background-color: #ff3b30;
+        }
+
+        .status-recommended {
+            background-color: #ff9500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #dc3545;
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-card h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Startup Animation Overlay */
+        #startup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: #010409;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #startup-overlay iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #startup-overlay .hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            pointer-events: none;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Startup Animation -->
+    <div id="startup-overlay">
+        <iframe src="Firework_Simulator/index.html" id="anim-frame"></iframe>
+        <div id="startup-close-btn"
+            style="position:absolute; top:70px; right:20px; color:white; font-size:30px; cursor:pointer; z-index:10001; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.1); border-radius:50%;">
+            ×</div>
+    </div>
+
+    <div class="container">
+        <div class="header-card" id="header-card" title="双击打开烟花秀">
+            <h1>Oscar Studio</h1>
+            <p>专注于提升教学和学习质量</p>
+        </div>
+
+        <main>
+            <div class="main-layout">
+                <!-- Main Tools Section -->
+                <div class="tools-section">
+                    <div class="tools-grid" id="tools-container">
+                        <div class="loading">正在加载工具...</div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <aside class="sidebar">
+                    <!-- Announcement Card -->
+                    <div class="sidebar-card announcement-card">
+                        <h3>最新公告</h3>
+                        <ul class="announcement-list" id="announcement-list">
+                            <li style="text-align:center; padding:10px; color:#888;">加载公告中...</li>
+                        </ul>
+                        <button class="toggle-announcement" id="toggle-announcements">展开更多 ▼</button>
+                    </div>
+
+                    <!-- Clock Card -->
+                    <div class="sidebar-card clock-card">
+                        <h3>当前时间</h3>
+                        <div class="clock-container">
+                            <div class="analog-clock">
+                                <!-- 12 Markers -->
+                                <div class="clock-face-markers" id="clock-markers">
+                                    <div class="marker" style="transform: translateX(-50%) rotate(0deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(30deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(60deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(90deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(120deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(150deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(180deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(210deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(240deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(270deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(300deg)"></div>
+                                    <div class="marker" style="transform: translateX(-50%) rotate(330deg)"></div>
+                                </div>
+                                <div class="hand hour-hand" id="hour-hand"></div>
+                                <div class="hand minute-hand" id="minute-hand"></div>
+                                <div class="hand second-hand" id="second-hand"></div>
+                                <div class="center-dot"></div>
+                            </div>
+                            <div class="digital-time" id="digital-time">--:--:--</div>
+                            <div class="current-date" id="current-date">----/--/--</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <footer>
+            <p>Oscar Studio &copy; 2025 - Designed by Oscar</p>
+        </footer>
+    </div>
+
+    <script>
+        // Main Application Logic
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 1. Load Tools
+            fetch('config.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络响应不正常');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayTools(data.tools);
+                })
+                .catch(error => {
+                    console.error('获取工具数据时出错:', error);
+                    document.getElementById('tools-container').innerHTML =
+                        '<div class="error">加载工具数据失败，请检查网络连接或配置文件。</div>';
+                });
+
+            // 2. Load Announcements
+            fetchAnnouncements();
+
+            // 3. Start Clock
+            startClock();
+
+            // 4. Startup Overlay Logic
+            setupStartupOverlay();
+        });
+
+        // --- Tools Logic ---
+        function displayTools(tools) {
+            const container = document.getElementById('tools-container');
+
+            if (!tools || tools.length === 0) {
+                container.innerHTML = '<div class="error">没有找到工具数据。</div>';
+                return;
+            }
+
+            let toolsHTML = '';
+
+            tools.forEach(tool => {
+                let statusHTML = '';
+                if (tool.status && tool.status !== '无') {
+                    let statusClass = 'featured-badge';
+                    if (tool.status === '新') statusClass += ' status-new';
+                    else if (tool.status === '热') statusClass += ' status-hot';
+                    else if (tool.status === '推荐') statusClass += ' status-recommended';
+
+                    statusHTML = `<span class="${statusClass}">${tool.status}</span>`;
+                }
+
+                toolsHTML += `
+                    <div class="tool-card">
+                        ${statusHTML}
+                        <div class="tool-icon">
+                            ${tool.icon || '🚀'}
+                        </div>
+                        <div class="tool-content">
+                            <h3>${tool.name}</h3>
+                            <p>${tool.description}</p>
+                            <a href="${tool.domain}" target="_blank" class="btn btn-block">进入工具</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = toolsHTML;
+        }
+
+        // --- Announcement Logic ---
+        let allAnnouncements = [];
+        let isExpanded = false;
+
+        function fetchAnnouncements() {
+            fetch('announcement.json')
+                .then(res => res.json())
+                .then(data => {
+                    // Show n, n-1, n-2 (latest 3)
+                    // We reverse the array so index 0 is the last element of the original JSON
+                    allAnnouncements = data.reverse();
+
+                    renderAnnouncements();
+
+                    const btn = document.getElementById('toggle-announcements');
+                    if (data.length <= 3) {
+                        btn.style.display = 'none';
+                    } else {
+                        btn.style.display = 'block';
+                        btn.onclick = () => {
+                            isExpanded = !isExpanded;
+                            renderAnnouncements();
+                            btn.innerHTML = isExpanded ? '收起公告 ▲' : '展开更多 ▼';
+                        };
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to load announcements:', err);
+                    document.getElementById('announcement-list').innerHTML = '<li class="announcement-item" style="color:#d32f2f;">加载失败</li>';
+                    document.getElementById('toggle-announcements').style.display = 'none';
+                });
+        }
+
+        function renderAnnouncements() {
+            const list = document.getElementById('announcement-list');
+            const itemsToShow = isExpanded ? allAnnouncements : allAnnouncements.slice(0, 3);
+
+            if (itemsToShow.length === 0) {
+                list.innerHTML = '<li class="announcement-item">暂无公告</li>';
+                return;
+            }
+
+            let html = '';
+            itemsToShow.forEach(item => {
+                html += `
+                    <li class="announcement-item">
+                        <span class="announcement-date">${item.date}</span>
+                        <div class="announcement-content">${item.content}</div>
+                    </li>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        // --- Clock Logic ---
+        function startClock() {
+            const updateTime = () => {
+                const now = new Date();
+
+                // Digital
+                const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+                document.getElementById('digital-time').textContent = timeStr;
+
+                const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+                document.getElementById('current-date').textContent = dateStr;
+
+                // Analog
+                const seconds = now.getSeconds();
+                const minutes = now.getMinutes();
+                const hours = now.getHours();
+
+                const secondDeg = ((seconds / 60) * 360);
+                const minuteDeg = ((minutes / 60) * 360) + ((seconds / 60) * 6);
+                const hourDeg = ((hours % 12 / 12) * 360) + ((minutes / 60) * 30);
+
+                const secondHand = document.getElementById('second-hand');
+                const minuteHand = document.getElementById('minute-hand');
+                const hourHand = document.getElementById('hour-hand');
+
+                if (secondHand) secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+                if (minuteHand) minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+                if (hourHand) hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            };
+
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        // --- Startup Overlay Logic ---
+        function setupStartupOverlay() {
+            const overlay = document.getElementById('startup-overlay');
+            const closeBtn = document.getElementById('startup-close-btn');
+
+            function closeOverlay() {
+                if (!overlay) return;
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    if (overlay.parentNode) overlay.remove();
+                }, 500);
+            }
+
+            if (closeBtn) closeBtn.onclick = closeOverlay;
+            window.focus();
+        }
+
+        // --- New Year & Firework Show Logic ---
+        function setupNewYearLogic() {
+            const headerCard = document.getElementById('header-card');
+
+            // 1. Double click to open fireworks
+            headerCard.addEventListener('dblclick', () => {
+                openFireworkShow();
+            });
+
+            // 2. Scheduled logic
+            setInterval(() => {
+                const now = new Date();
+                const month = now.getMonth() + 1;
+                const day = now.getDate();
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const seconds = now.getSeconds();
+
+                // Check for 2025/12/31 23:59:00
+                if (now.getFullYear() === 2025 && month === 12 && day === 31 && hours === 23 && minutes === 59 && seconds === 0) {
+                    if (!document.getElementById('firework-overlay')) {
+                        openFireworkShow(true); // true means automatic mode
+                    }
+                }
+
+                // Coordination with the firework show
+                const fireworkIframe = document.getElementById('firework-iframe');
+                if (fireworkIframe && fireworkIframe.contentWindow) {
+                    // Start countdown at 23:59:50
+                    if (hours === 23 && minutes === 59 && seconds === 50) {
+                        fireworkIframe.contentWindow.postMessage('start-countdown', '*');
+                    }
+                    // Start finale at 00:00:00
+                    if (hours === 0 && minutes === 0 && seconds === 0) {
+                        fireworkIframe.contentWindow.postMessage('start-finale', '*');
+                    }
+                    // Close at 00:01:00
+                    if (hours === 0 && minutes === 1 && seconds === 0) {
+                        closeFireworkShow();
+                    }
+                }
+            }, 1000);
+        }
+
+        function openFireworkShow(isAuto = false) {
+            if (document.getElementById('firework-overlay')) return;
+
+            const overlay = document.createElement('div');
+            overlay.id = 'firework-overlay';
+            overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:10000; background:#000; transition:opacity 0.5s ease;';
+
+            const iframe = document.createElement('iframe');
+            iframe.id = 'firework-iframe';
+            iframe.src = 'Firework_Simulator/index.html';
+            iframe.style.cssText = 'width:100%; height:100%; border:none;';
+
+            const closeBtn = document.createElement('div');
+            closeBtn.innerHTML = '×';
+            closeBtn.style.cssText = 'position:absolute; top:70px; right:20px; color:white; font-size:30px; cursor:pointer; z-index:10001; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.1); border-radius:50%;';
+            closeBtn.onclick = closeFireworkShow;
+
+            overlay.appendChild(iframe);
+            overlay.appendChild(closeBtn);
+            document.body.appendChild(overlay);
+        }
+
+        function closeFireworkShow() {
+            const overlay = document.getElementById('firework-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.remove(), 500);
+            }
+        }
+
+        // Initialize New Year logic
+        setupNewYearLogic();
+    </script>
+</body>
+
+</html>
