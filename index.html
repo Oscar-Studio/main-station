@@ -487,6 +487,252 @@
                 opacity: 0.3;
             }
         }
+
+        /* 用户登录相关样式 - 添加在现有CSS末尾 */
+        .user-section {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .user-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--card-bg);
+            border: var(--card-border);
+            border-radius: 10px;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-info {
+            padding: 15px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .user-info .username {
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .user-info .phone {
+            color: #8b949e;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+        }
+
+        .dropdown-menu li {
+            border-bottom: 1px solid #30363d;
+        }
+
+        .dropdown-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 15px;
+            color: #d0d7de;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        /* 模态框样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: var(--card-border);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: white;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d0d7de;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group .error {
+            color: #ff3b30;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #30363d;
+            text-align: right;
+        }
+
+        #apiMessage {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        #apiMessage.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        #apiMessage.error {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .user-section {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: flex-end;
+                margin-bottom: 15px;
+            }
+
+            .user-dropdown {
+                right: 50%;
+                transform: translateX(50%);
+            }
+        }
     </style>
 </head>
 
@@ -497,6 +743,130 @@
         <div id="startup-close-btn"
             style="position:absolute; top:70px; right:20px; color:white; font-size:30px; cursor:pointer; z-index:10001; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.1); border-radius:50%;">
             ×</div>
+    </div>
+
+    <!-- 在 <body> 开始处，<header-card> 之前添加 -->
+    <div class="user-section" id="userSection">
+        <!-- 未登录时显示 -->
+        <button class="user-btn" id="loginBtn">登录</button>
+        <button class="user-btn" id="registerBtn">注册</button>
+
+        <!-- 登录后显示 -->
+        <div id="loggedInUser" style="display: none;">
+            <div class="user-avatar" id="userAvatar"></div>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-info">
+                    <div class="username" id="dropdownUsername"></div>
+                    <div class="phone" id="dropdownPhone"></div>
+                </div>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="editProfileBtn">修改个人信息</a></li>
+                    <li><a href="#" id="changePasswordBtn">修改密码</a></li>
+                    <li><a href="#" id="logoutBtn">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">登录</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="apiMessage"></div>
+
+                <!-- 登录表单 -->
+                <form id="loginForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="loginAccount">用户名/手机号</label>
+                        <input type="text" id="loginAccount" placeholder="请输入用户名或手机号">
+                        <div class="error" id="loginAccountError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">密码</label>
+                        <input type="password" id="loginPassword" placeholder="请输入密码">
+                        <div class="error" id="loginPasswordError"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn" style="width: 100%;">登录</button>
+                    </div>
+                </form>
+
+                <!-- 注册表单 -->
+                <form id="registerForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="regUsername">用户名</label>
+                        <input type="text" id="regUsername" placeholder="请输入用户名（3-50字符）">
+                        <div class="error" id="regUsernameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">手机号</label>
+                        <input type="text" id="regPhone" placeholder="请输入11位手机号">
+                        <div class="error" id="regPhoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">密码</label>
+                        <input type="password" id="regPassword" placeholder="请输入密码（至少6位）">
+                        <div class="error" id="regPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">确认密码</label>
+                        <input type="password" id="regConfirmPassword" placeholder="请再次输入密码">
+                        <div class="error" id="regConfirmPasswordError"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn" style="width: 100%;">注册</button>
+                    </div>
+                </form>
+
+                <!-- 修改个人信息表单 -->
+                <form id="editProfileForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="editUsername">用户名</label>
+                        <input type="text" id="editUsername" placeholder="请输入新用户名">
+                        <div class="error" id="editUsernameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">手机号</label>
+                        <input type="text" id="editPhone" placeholder="请输入新手机号">
+                        <div class="error" id="editPhoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPassword">当前密码（用于验证）</label>
+                        <input type="password" id="editPassword" placeholder="请输入当前密码">
+                        <div class="error" id="editPasswordError"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn" style="width: 100%;">保存修改</button>
+                    </div>
+                </form>
+
+                <!-- 修改密码表单 -->
+                <form id="changePasswordForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="currentPassword">当前密码</label>
+                        <input type="password" id="currentPassword" placeholder="请输入当前密码">
+                        <div class="error" id="currentPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">新密码</label>
+                        <input type="password" id="newPassword" placeholder="请输入新密码（至少6位）">
+                        <div class="error" id="newPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">确认新密码</label>
+                        <input type="password" id="confirmNewPassword" placeholder="请再次输入新密码">
+                        <div class="error" id="confirmNewPasswordError"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn" style="width: 100%;">修改密码</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="container">
@@ -566,7 +936,6 @@
     <script>
         // Main Application Logic
         document.addEventListener('DOMContentLoaded', function () {
-
             // 1. Load Tools
             fetch('config.json')
                 .then(response => {
@@ -592,6 +961,10 @@
 
             // 4. Startup Overlay Logic
             setupStartupOverlay();
+
+            // 5. 初始化用户管理
+            checkLoginStatus();
+            setupEventListeners();
         });
 
         // --- Tools Logic ---
@@ -617,18 +990,18 @@
                 }
 
                 toolsHTML += `
-                    <div class="tool-card">
-                        ${statusHTML}
-                        <div class="tool-icon">
-                            ${tool.icon || '🚀'}
-                        </div>
-                        <div class="tool-content">
-                            <h3>${tool.name}</h3>
-                            <p>${tool.description}</p>
-                            <a href="${tool.domain}" target="_blank" class="btn btn-block">进入工具</a>
-                        </div>
+                <div class="tool-card">
+                    ${statusHTML}
+                    <div class="tool-icon">
+                        ${tool.icon || '🚀'}
                     </div>
-                `;
+                    <div class="tool-content">
+                        <h3>${tool.name}</h3>
+                        <p>${tool.description}</p>
+                        <a href="${tool.domain}" target="_blank" class="btn btn-block">进入工具</a>
+                    </div>
+                </div>
+            `;
             });
 
             container.innerHTML = toolsHTML;
@@ -679,11 +1052,11 @@
             let html = '';
             itemsToShow.forEach(item => {
                 html += `
-                    <li class="announcement-item">
-                        <span class="announcement-date">${item.date}</span>
-                        <div class="announcement-content">${item.content}</div>
-                    </li>
-                `;
+                <li class="announcement-item">
+                    <span class="announcement-date">${item.date}</span>
+                    <div class="announcement-content">${item.content}</div>
+                </li>
+            `;
             });
             list.innerHTML = html;
         }
@@ -815,6 +1188,557 @@
 
         // Initialize New Year logic
         setupNewYearLogic();
+
+        // ================= 用户登录管理 =================
+
+        // API基础URL - 根据您的服务器IP修改
+        // 注意：如果遇到跨域问题，可以尝试以下几种方式：
+        // 1. 使用相对路径（如果API在同一域名下）
+        // 2. 在服务器端配置CORS
+        // 3. 使用代理
+        const API_BASE_URL = 'http://119.23.64.153/api';
+
+        // 测试API是否可访问
+        console.log('API Base URL:', API_BASE_URL);
+
+        // 用户状态管理
+        let currentUser = null;
+        let currentToken = null;
+
+        // DOM元素
+        const userSection = document.getElementById('userSection');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const loggedInUser = document.getElementById('loggedInUser');
+        const userAvatar = document.getElementById('userAvatar');
+        const userDropdown = document.getElementById('userDropdown');
+        const dropdownUsername = document.getElementById('dropdownUsername');
+        const dropdownPhone = document.getElementById('dropdownPhone');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // 模态框元素
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const closeModal = document.getElementById('closeModal');
+        const apiMessage = document.getElementById('apiMessage');
+
+        // 表单元素
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const changePasswordForm = document.getElementById('changePasswordForm');
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            const token = localStorage.getItem('userToken');
+            const userData = localStorage.getItem('userData');
+
+            console.log('检查登录状态:', { token, userData });
+
+            if (token && userData) {
+                try {
+                    currentToken = token;
+                    currentUser = JSON.parse(userData);
+                    updateUserUI();
+                } catch (e) {
+                    console.error('解析用户数据失败:', e);
+                    localStorage.removeItem('userToken');
+                    localStorage.removeItem('userData');
+                }
+            }
+        }
+
+        // 测试API连接 - 修改后的版本
+        async function testAPIConnection() {
+            try {
+                console.log('测试API连接...');
+
+                // 使用OPTIONS方法而不是GET来测试
+                const response = await fetch(`${API_BASE_URL}/login.php`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'content-type'
+                    }
+                });
+
+                console.log('API连接测试响应:', response.status, response.statusText);
+
+                // 检查CORS头部
+                const corsHeaders = {
+                    'allow-origin': response.headers.get('access-control-allow-origin'),
+                    'allow-methods': response.headers.get('access-control-allow-methods'),
+                    'allow-headers': response.headers.get('access-control-allow-headers')
+                };
+                console.log('CORS头部:', corsHeaders);
+
+                // 即使返回405也认为是可访问的（因为API存在）
+                return response.status === 200 || response.status === 204 || response.status === 405;
+            } catch (error) {
+                console.error('API连接测试失败:', error);
+                return false;
+            }
+        }
+
+        // 更新用户界面
+        function updateUserUI() {
+            console.log('更新用户界面:', currentUser);
+
+            if (currentUser) {
+                // 显示已登录状态
+                loginBtn.style.display = 'none';
+                registerBtn.style.display = 'none';
+                loggedInUser.style.display = 'flex';
+
+                // 更新用户信息
+                const firstChar = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U';
+                userAvatar.textContent = firstChar;
+                dropdownUsername.textContent = currentUser.username || '未设置';
+                dropdownPhone.textContent = currentUser.phone || '未设置';
+            } else {
+                // 显示未登录状态
+                loginBtn.style.display = 'inline-block';
+                registerBtn.style.display = 'inline-block';
+                loggedInUser.style.display = 'none';
+            }
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            console.log('设置事件监听器');
+
+            // 登录按钮
+            loginBtn.addEventListener('click', () => {
+                showModal('login');
+            });
+
+            // 注册按钮
+            registerBtn.addEventListener('click', () => {
+                showModal('register');
+            });
+
+            // 用户头像点击 - 显示/隐藏下拉菜单
+            if (userAvatar) {
+                userAvatar.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('active');
+                });
+            }
+
+            // 编辑个人信息
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    userDropdown.classList.remove('active');
+                    showModal('editProfile');
+                });
+            }
+
+            // 修改密码
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    userDropdown.classList.remove('active');
+                    showModal('changePassword');
+                });
+            }
+
+            // 退出登录
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout();
+                });
+            }
+
+            // 关闭模态框
+            if (closeModal) {
+                closeModal.addEventListener('click', hideModal);
+            }
+
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', (e) => {
+                    if (e.target === modalOverlay) hideModal();
+                });
+            }
+
+            // 表单提交事件
+            if (loginForm) loginForm.addEventListener('submit', handleLogin);
+            if (registerForm) registerForm.addEventListener('submit', handleRegister);
+            if (editProfileForm) editProfileForm.addEventListener('submit', handleEditProfile);
+            if (changePasswordForm) changePasswordForm.addEventListener('submit', handleChangePassword);
+
+            // 点击页面其他地方关闭下拉菜单
+            document.addEventListener('click', () => {
+                if (userDropdown) userDropdown.classList.remove('active');
+            });
+        }
+
+        // 显示模态框
+        function showModal(type) {
+            console.log('显示模态框:', type);
+
+            // 隐藏所有表单
+            if (loginForm) loginForm.style.display = 'none';
+            if (registerForm) registerForm.style.display = 'none';
+            if (editProfileForm) editProfileForm.style.display = 'none';
+            if (changePasswordForm) changePasswordForm.style.display = 'none';
+            clearMessages();
+
+            switch (type) {
+                case 'login':
+                    modalTitle.textContent = '登录';
+                    if (loginForm) loginForm.style.display = 'block';
+                    break;
+                case 'register':
+                    modalTitle.textContent = '注册';
+                    if (registerForm) registerForm.style.display = 'block';
+                    break;
+                case 'editProfile':
+                    if (!currentUser) {
+                        showMessage('请先登录');
+                        return;
+                    }
+                    modalTitle.textContent = '修改个人信息';
+                    document.getElementById('editUsername').value = currentUser.username || '';
+                    document.getElementById('editPhone').value = currentUser.phone || '';
+                    if (editProfileForm) editProfileForm.style.display = 'block';
+                    break;
+                case 'changePassword':
+                    modalTitle.textContent = '修改密码';
+                    if (changePasswordForm) changePasswordForm.style.display = 'block';
+                    break;
+            }
+
+            if (modalOverlay) modalOverlay.classList.add('active');
+        }
+
+        // 隐藏模态框
+        function hideModal() {
+            console.log('隐藏模态框');
+            if (modalOverlay) modalOverlay.classList.remove('active');
+            clearMessages();
+            clearFormErrors();
+        }
+
+        // 显示API消息
+        function showMessage(message, type = 'error') {
+            console.log('显示消息:', type, message);
+            if (apiMessage) {
+                apiMessage.textContent = message;
+                apiMessage.className = type;
+                apiMessage.style.display = 'block';
+            }
+        }
+
+        // 清除消息
+        function clearMessages() {
+            if (apiMessage) {
+                apiMessage.textContent = '';
+                apiMessage.style.display = 'none';
+            }
+        }
+
+        // 清除表单错误
+        function clearFormErrors() {
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => {
+                error.textContent = '';
+                error.style.display = 'none';
+            });
+        }
+
+        // 显示表单错误
+        function showFormError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // ================= API 调用函数 =================
+
+        // 处理登录 - 修正后的版本
+        async function handleLogin(e) {
+            e.preventDefault();
+            clearMessages();
+            clearFormErrors();
+
+            const account = document.getElementById('loginAccount').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // 简单验证
+            if (!account) {
+                showFormError('loginAccount', '请输入用户名或手机号');
+                return;
+            }
+            if (!password) {
+                showFormError('loginPassword', '请输入密码');
+                return;
+            }
+
+            console.log('尝试登录:', account);
+
+            try {
+                // 直接尝试登录，不先测试连接
+                const formData = new FormData();
+                formData.append('account', account);
+                formData.append('password', password);
+
+                const response = await fetch(`${API_BASE_URL}/login.php`, {
+                    method: 'POST',
+                    // 使用formdata，让浏览器自动设置头部
+                    body: formData
+                });
+
+                console.log('登录响应状态:', response.status, response.statusText);
+
+                // 即使状态码不是200，也尝试解析JSON
+                let result;
+                try {
+                    const text = await response.text();
+                    console.log('响应文本:', text);
+                    result = JSON.parse(text);
+                } catch (parseError) {
+                    console.error('解析响应失败:', parseError);
+                    throw new Error(`服务器返回了无效的JSON: ${response.status} ${response.statusText}`);
+                }
+
+                if (result.success) {
+                    // 保存token和用户信息
+                    currentToken = result.token;
+                    currentUser = result.user;
+
+                    localStorage.setItem('userToken', currentToken);
+                    localStorage.setItem('userData', JSON.stringify(currentUser));
+
+                    updateUserUI();
+                    hideModal();
+                    showMessage('登录成功！', 'success');
+                    setTimeout(() => clearMessages(), 2000);
+                } else {
+                    showMessage(result.message || '登录失败');
+                }
+            } catch (error) {
+                console.error('登录错误详情:', error);
+                showMessage(`登录失败: ${error.message}`);
+            }
+        }
+
+        // 处理注册
+        async function handleRegister(e) {
+            e.preventDefault();
+            clearMessages();
+            clearFormErrors();
+
+            const username = document.getElementById('regUsername').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            // 验证
+            if (username.length < 3 || username.length > 50) {
+                showFormError('regUsername', '用户名长度应为3-50字符');
+                return;
+            }
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                showFormError('regPhone', '手机号格式不正确');
+                return;
+            }
+            if (password.length < 6) {
+                showFormError('regPassword', '密码长度至少6位');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showFormError('regConfirmPassword', '两次输入的密码不一致');
+                return;
+            }
+
+            console.log('尝试注册:', username);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/register.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, phone, password })
+                });
+
+                console.log('注册响应状态:', response.status);
+                const result = await response.json();
+                console.log('注册响应数据:', result);
+
+                if (result.success) {
+                    showMessage('注册成功！请登录', 'success');
+                    // 3秒后切换到登录表单
+                    setTimeout(() => {
+                        showModal('login');
+                    }, 2000);
+                } else {
+                    showMessage(result.message || '注册失败');
+                }
+            } catch (error) {
+                console.error('注册错误:', error);
+                showMessage('网络错误，请稍后重试。错误详情：' + error.message);
+            }
+        }
+
+        // 处理修改个人信息
+        async function handleEditProfile(e) {
+            e.preventDefault();
+            clearMessages();
+            clearFormErrors();
+
+            if (!currentUser || !currentToken) {
+                showMessage('请先登录');
+                return;
+            }
+
+            const username = document.getElementById('editUsername').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const password = document.getElementById('editPassword').value;
+
+            // 验证
+            if (username.length < 3 || username.length > 50) {
+                showFormError('editUsername', '用户名长度应为3-50字符');
+                return;
+            }
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                showFormError('editPhone', '手机号格式不正确');
+                return;
+            }
+            if (!password) {
+                showFormError('editPassword', '请输入当前密码验证');
+                return;
+            }
+
+            console.log('尝试更新个人信息:', username);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/update.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        phone: phone,
+                        password: password
+                    })
+                });
+
+                console.log('更新响应状态:', response.status);
+                const result = await response.json();
+                console.log('更新响应数据:', result);
+
+                if (result.success) {
+                    // 更新本地存储的用户信息和token
+                    currentUser.username = result.user.username;
+                    currentUser.phone = result.user.phone;
+                    currentToken = result.token; // 更新token（因为用户名可能变了）
+
+                    localStorage.setItem('userToken', currentToken);
+                    localStorage.setItem('userData', JSON.stringify(currentUser));
+
+                    updateUserUI();
+                    hideModal();
+                    showMessage('个人信息更新成功！', 'success');
+                    setTimeout(() => clearMessages(), 2000);
+                } else {
+                    showMessage(result.message || '更新失败');
+                }
+            } catch (error) {
+                console.error('更新错误:', error);
+                showMessage('网络错误，请稍后重试。错误详情：' + error.message);
+            }
+        }
+
+        // 处理修改密码
+        async function handleChangePassword(e) {
+            e.preventDefault();
+            clearMessages();
+            clearFormErrors();
+
+            if (!currentUser || !currentToken) {
+                showMessage('请先登录');
+                return;
+            }
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            // 验证
+            if (!currentPassword) {
+                showFormError('currentPassword', '请输入当前密码');
+                return;
+            }
+            if (newPassword.length < 6) {
+                showFormError('newPassword', '新密码长度至少6位');
+                return;
+            }
+            if (newPassword !== confirmNewPassword) {
+                showFormError('confirmNewPassword', '两次输入的新密码不一致');
+                return;
+            }
+
+            console.log('尝试修改密码');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/change_password.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword,
+                        confirm_password: confirmNewPassword
+                    })
+                });
+
+                console.log('修改密码响应状态:', response.status);
+                const result = await response.json();
+                console.log('修改密码响应数据:', result);
+
+                if (result.success) {
+                    hideModal();
+                    showMessage('密码修改成功！请重新登录', 'success');
+
+                    // 密码修改后需要重新登录
+                    setTimeout(() => {
+                        logout();
+                        showModal('login');
+                    }, 2000);
+                } else {
+                    showMessage(result.message || '密码修改失败');
+                }
+            } catch (error) {
+                console.error('修改密码错误:', error);
+                showMessage('网络错误，请稍后重试。错误详情：' + error.message);
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            console.log('退出登录');
+            currentUser = null;
+            currentToken = null;
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userData');
+            updateUserUI();
+            if (userDropdown) userDropdown.classList.remove('active');
+            showMessage('已退出登录', 'success');
+            setTimeout(() => clearMessages(), 2000);
+        }
     </script>
 </body>
 
