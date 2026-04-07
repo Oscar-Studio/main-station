@@ -1,6 +1,12 @@
 {
   "tools": [
     {
+      "name": "AI 工具",
+      "description": "AI 助手和智能工具",
+      "domain": "https://ai.oscarstudio.cn",
+      "status": "新"
+    },
+    {
       "name": "教学工具",
       "description": "用于教学的 HTML 演示工具",
       "domain": "https://tools.oscarstudio.cn",
