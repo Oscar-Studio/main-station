@@ -5,1192 +5,486 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oscar Studio</title>
-    <script defer src="https://cloud.umami.is/script.js"
-        data-website-id="97c80657-65b9-44c6-a67c-043ee9df96e6"></script>
-    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-    <script>LA.init({ id: "3OajlikRGHiAuUyD", ck: "3OajlikRGHiAuUyD" })</script>
-    <script src="https://sdk.51.la/perf/js-sdk-perf.min.js" crossorigin="anonymous"></script>
-    <script>
-        new LingQue.Monitor().init({ id: "3ObWo5erYPvqYd11" });
-    </script>
     <style>
         :root {
-            /* Festive New Year Theme */
-            --primary-color: #D32F2F;
-            /* Festive Red */
-            --secondary-color: #FFD700;
-            /* Gold */
-            --accent-color: #FF5252;
-            --light-color: #010409;
-            --dark-color: #ffffff;
-            --success-color: #28a745;
-            --card-bg: #1a0f0f;
-            /* Slightly reddish dark background */
-            --card-border: 1px solid #4a1a1a;
-            --card-shadow: 0 10px 20px rgba(211, 47, 47, 0.2);
-            --transition: all 0.3s ease;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --card-bg: #1e293b;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--dark);
+            color: var(--light);
             line-height: 1.6;
-            min-height: 100vh;
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header-card {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            border-radius: 15px;
-            padding: 40px;
-            color: white;
-            text-align: center;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(211, 47, 47, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .header-card h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-card p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Main Layout Styles */
-        .main-layout {
-            display: flex;
-            gap: 25px;
-            align-items: flex-start;
-        }
-
-        .tools-section {
-            flex: 1;
-        }
-
-        .sidebar {
-            width: 320px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        /* Sidebar Cards */
-        .sidebar-card {
-            background: var(--card-bg);
-            border: var(--card-border);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--card-shadow);
-            color: var(--dark-color);
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .sidebar-card:hover {
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-            border-color: var(--secondary-color);
-        }
-
-        .sidebar-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 10px;
-        }
-
-        /* Announcement Card */
-        .announcement-list {
-            list-style: none;
-        }
-
-        .announcement-item {
-            border-bottom: 1px solid #30363d;
-            padding: 12px 0;
-            font-size: 0.95rem;
-            color: #d0d7de;
-            line-height: 1.5;
-            transition: var(--transition);
-        }
-
-        .announcement-item:last-child {
-            border-bottom: none;
-        }
-
-        .announcement-item:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .announcement-date {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--secondary-color);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .announcement-content {
-            opacity: 0.9;
-        }
-
-        .toggle-announcement {
-            margin-top: 15px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-align: center;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #30363d;
-            padding: 10px;
-            border-radius: 5px;
-            transition: var(--transition);
-        }
-
-        .toggle-announcement:hover {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        /* Clock Card */
-        .clock-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 0;
-        }
-
-        .analog-clock {
-            width: 150px;
-            height: 150px;
-            border: 4px solid var(--secondary-color);
-            border-radius: 50%;
-            margin-bottom: 20px;
-            position: relative;
-            background: radial-gradient(circle, #1a2332 0%, #0d1117 100%);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
-        }
-
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform-origin: bottom center;
-            border-radius: 4px;
-            z-index: 2;
-            transform: translateX(-50%) rotate(0deg);
-        }
-
-        .hour-hand {
-            width: 4px;
-            height: 35px;
-            background: white;
-            z-index: 3;
-        }
-
-        .minute-hand {
-            width: 3px;
-            height: 50px;
-            background: #8b949e;
-            z-index: 3;
-        }
-
-        .second-hand {
-            width: 2px;
-            height: 60px;
-            background: #ff3b30;
-            z-index: 4;
-        }
-
-        .center-dot {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 5;
-            border: 2px solid var(--secondary-color);
-        }
-
-        .marker {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.4);
-            width: 2px;
-            height: 10px;
-            left: 50%;
-            top: 5px;
-            transform-origin: 50% 70px;
-            /* (Clock height / 2) - top offset = 75 - 5 = 70px */
-        }
-
-        /* Using transform-origin to rotate the markers around the center of the clock */
-        /* Center of clock is at 75px, 75px. 
-           Marker top is at 5px. Height is 10px. 
-           Distance from marker top to center is 70px.
-           So transform-origin Y should be 70px? 
-           Wait, 'top: 5px' means top edge is 5px from parent top.
-           Center is at 75px from parent top.
-           Distance is 75 - 5 = 70px.
-        */
-
-        .digital-time {
-            font-size: 2.2rem;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            color: white;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
-            margin-bottom: 5px;
-        }
-
-        .current-date {
-            color: #8b949e;
-            font-size: 1rem;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .tool-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            border: var(--card-border);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-            border-color: var(--secondary-color);
-        }
-
-        .tool-icon {
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
-            font-size: 3rem;
-            border-bottom: 1px solid #30363d;
-        }
-
-        .tool-content {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tool-content h3 {
-            margin-bottom: 10px;
-            color: var(--dark-color);
-            font-size: 1.2rem;
-        }
-
-        .tool-content p {
-            color: #8b949e;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            flex-grow: 1;
-            line-height: 1.5;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            text-align: center;
-        }
-
-        .btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            color: #8b949e;
-            border-top: 1px solid #30363d;
-            margin-top: 30px;
-        }
-
-        .featured-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--accent-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 1;
-        }
-
-        .status-new {
-            background-color: var(--success-color);
-        }
-
-        .status-hot {
-            background-color: #ff3b30;
-        }
-
-        .status-recommended {
-            background-color: #ff9500;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-            grid-column: 1 / -1;
-        }
-
-        .error {
-            text-align: center;
-            padding: 40px;
-            color: #dc3545;
-            font-size: 1.2rem;
-            grid-column: 1 / -1;
-        }
-
-        @media (max-width: 900px) {
-            .main-layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-card h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Startup Animation Overlay */
-        #startup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background-color: #010409;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease;
-        }
-
-        #startup-overlay iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        #startup-overlay .hint {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
-            pointer-events: none;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                opacity: 0.3;
-            }
-
-            50% {
-                opacity: 0.8;
-            }
-
-            100% {
-                opacity: 0.3;
-            }
-        }
-
-        /* 用户登录相关样式 - 添加在现有CSS末尾 */
-        .user-section {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-btn {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .user-btn:hover {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            border: 2px solid var(--secondary-color);
-        }
-
-        .user-dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: var(--card-bg);
-            border: var(--card-border);
-            border-radius: 10px;
-            min-width: 200px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            z-index: 1001;
-            display: none;
-            overflow: hidden;
-        }
-
-        .user-dropdown.active {
-            display: block;
-        }
-
-        .user-info {
-            padding: 15px;
-            border-bottom: 1px solid #30363d;
-        }
-
-        .user-info .username {
-            font-weight: bold;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        .user-info .phone {
-            color: #8b949e;
-            font-size: 0.85rem;
-        }
-
-        .dropdown-menu {
-            list-style: none;
-        }
-
-        .dropdown-menu li {
-            border-bottom: 1px solid #30363d;
-        }
-
-        .dropdown-menu li:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 12px 15px;
-            color: #d0d7de;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .dropdown-menu a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
-        /* 模态框样式 */
-        .modal-overlay {
+        /* Navigation */
+        nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            display: none;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--card-bg);
-            border-radius: 10px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: var(--card-border);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-        }
-
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #30363d;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .modal-header h3 {
-            color: white;
-            margin: 0;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: #8b949e;
+        nav .logo {
             font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            opacity: 0.8;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, var(--dark) 70%);
+            padding: 2rem;
+        }
+
+        #hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeIn 1s ease-out;
+        }
+
+        #hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            animation: fadeIn 1s ease-out 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
             cursor: pointer;
-            line-height: 1;
-            padding: 0;
-            width: 30px;
-            height: 30px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-section:nth-child(odd) {
+            background: linear-gradient(180deg, var(--dark) 0%, #1a1a2e 100%);
+        }
+
+        .tool-section:nth-child(even) {
+            background: #1a1a2e;
+        }
+
+        .tool-content {
+            max-width: 800px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .tool-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .tool-section p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .tool-section .btn {
+            display: inline-block;
+        }
+
+        /* Section Backgrounds */
+        #ai {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+
+        #ai::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        #teaching-tools {
+            background: linear-gradient(135deg, #0f172a 0%, #172554 50%, #0f172a 100%);
+        }
+
+        #teaching-tools::before {
+            content: '';
+            position: absolute;
+            top: 30%;
+            right: 15%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        #html-ppt {
+            background: linear-gradient(135deg, #0f172a 0%, #4c1d95 50%, #0f172a 100%);
+        }
+
+        #html-ppt::before {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            left: 20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        #games {
+            background: linear-gradient(135deg, #0f172a 0%, #166534 50%, #0f172a 100%);
+        }
+
+        #games::before {
+            content: '';
+            position: absolute;
+            top: 40%;
+            right: 25%;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0f1a;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back to Top Button */
+        #back-to-top {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: var(--transition);
+            font-size: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
 
-        .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .modal-body {
-            padding: 20px;
+        #back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #d0d7de;
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #30363d;
-            border-radius: 5px;
-            color: white;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .form-group .error {
-            color: #ff3b30;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid #30363d;
-            text-align: right;
-        }
-
-        #apiMessage {
-            text-align: center;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        #apiMessage.success {
-            background: rgba(40, 167, 69, 0.1);
-            color: #28a745;
-            border: 1px solid rgba(40, 167, 69, 0.3);
-        }
-
-        #apiMessage.error {
-            background: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
-            border: 1px solid rgba(255, 59, 48, 0.3);
-        }
-
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .user-section {
-                position: relative;
-                top: 0;
-                right: 0;
-                justify-content: flex-end;
-                margin-bottom: 15px;
+            nav {
+                padding: 1rem;
             }
 
-            .user-dropdown {
-                right: 50%;
-                transform: translateX(50%);
+            nav .logo {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            nav ul li a {
+                font-size: 0.9rem;
+            }
+
+            #hero h1 {
+                font-size: 2.5rem;
+            }
+
+            #hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .tool-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .tool-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .tool-section p {
+                font-size: 1rem;
+            }
+
+            .tool-icon {
+                font-size: 3rem;
+            }
+
+            #back-to-top {
+                right: 1rem;
+                bottom: 1rem;
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul {
+                display: none;
+            }
+
+            #hero h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Startup Animation -->
-    <div id="startup-overlay">
-        <iframe src="Firework_Simulator/index.html" id="anim-frame"></iframe>
-        <div id="startup-close-btn"
-            style="position:absolute; top:70px; right:20px; color:white; font-size:30px; cursor:pointer; z-index:10001; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.1); border-radius:50%;">
-            ×</div>
-    </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Oscar Studio</div>
+        <ul>
+            <li><a href="#ai">AI 工具</a></li>
+            <li><a href="#teaching-tools">教学工具</a></li>
+            <li><a href="#html-ppt">HTML-PPT</a></li>
+            <li><a href="#games">益智游戏</a></li>
+        </ul>
+    </nav>
 
-    <!-- 在 <body> 开始处，<header-card> 之前添加 -->
-    <div class="user-section" id="userSection">
-        <!-- 未登录时显示 -->
-        <button class="user-btn" id="loginBtn">登录</button>
-        <button class="user-btn" id="registerBtn">注册</button>
-
-        <!-- 登录后显示 -->
-        <div id="loggedInUser" style="display: none;">
-            <div class="user-avatar" id="userAvatar"></div>
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-info">
-                    <div class="username" id="dropdownUsername"></div>
-                    <div class="phone" id="dropdownPhone"></div>
-                </div>
-                <ul class="dropdown-menu">
-                    <li><a href="#" id="editProfileBtn">修改个人信息</a></li>
-                    <li><a href="#" id="changePasswordBtn">修改密码</a></li>
-                    <li><a href="#" id="logoutBtn">退出登录</a></li>
-                </ul>
-            </div>
+    <!-- Hero Section -->
+    <section id="hero">
+        <h1>Oscar Studio</h1>
+        <p>专注于提升教学和学习质量</p>
+        <div class="hero-buttons">
+            <a href="#ai" class="btn btn-primary">开始探索</a>
+            <a href="https://github.com/oscarstudio" target="_blank" class="btn btn-secondary">加入我们</a>
         </div>
-    </div>
+    </section>
 
-    <!-- 模态框 -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">登录</h3>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="apiMessage"></div>
-
-                <!-- 登录表单 -->
-                <form id="loginForm" style="display: none;">
-                    <div class="form-group">
-                        <label for="loginAccount">用户名/手机号</label>
-                        <input type="text" id="loginAccount" placeholder="请输入用户名或手机号">
-                        <div class="error" id="loginAccountError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">密码</label>
-                        <input type="password" id="loginPassword" placeholder="请输入密码">
-                        <div class="error" id="loginPasswordError"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn" style="width: 100%;">登录</button>
-                    </div>
-                </form>
-
-                <!-- 注册表单 -->
-                <form id="registerForm" style="display: none;">
-                    <div class="form-group">
-                        <label for="regUsername">用户名</label>
-                        <input type="text" id="regUsername" placeholder="请输入用户名（3-50字符）">
-                        <div class="error" id="regUsernameError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPhone">手机号</label>
-                        <input type="text" id="regPhone" placeholder="请输入11位手机号">
-                        <div class="error" id="regPhoneError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPassword">密码</label>
-                        <input type="password" id="regPassword" placeholder="请输入密码（至少6位）">
-                        <div class="error" id="regPasswordError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="regConfirmPassword">确认密码</label>
-                        <input type="password" id="regConfirmPassword" placeholder="请再次输入密码">
-                        <div class="error" id="regConfirmPasswordError"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn" style="width: 100%;">注册</button>
-                    </div>
-                </form>
-
-                <!-- 修改个人信息表单 -->
-                <form id="editProfileForm" style="display: none;">
-                    <div class="form-group">
-                        <label for="editUsername">用户名</label>
-                        <input type="text" id="editUsername" placeholder="请输入新用户名">
-                        <div class="error" id="editUsernameError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="editPhone">手机号</label>
-                        <input type="text" id="editPhone" placeholder="请输入新手机号">
-                        <div class="error" id="editPhoneError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="editPassword">当前密码（用于验证）</label>
-                        <input type="password" id="editPassword" placeholder="请输入当前密码">
-                        <div class="error" id="editPasswordError"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn" style="width: 100%;">保存修改</button>
-                    </div>
-                </form>
-
-                <!-- 修改密码表单 -->
-                <form id="changePasswordForm" style="display: none;">
-                    <div class="form-group">
-                        <label for="currentPassword">当前密码</label>
-                        <input type="password" id="currentPassword" placeholder="请输入当前密码">
-                        <div class="error" id="currentPasswordError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">新密码</label>
-                        <input type="password" id="newPassword" placeholder="请输入新密码（至少6位）">
-                        <div class="error" id="newPasswordError"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmNewPassword">确认新密码</label>
-                        <input type="password" id="confirmNewPassword" placeholder="请再次输入新密码">
-                        <div class="error" id="confirmNewPasswordError"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn" style="width: 100%;">修改密码</button>
-                    </div>
-                </form>
-            </div>
+    <!-- AI 工具 Section -->
+    <section id="ai" class="tool-section">
+        <div class="tool-content">
+            <div class="tool-icon">🤖</div>
+            <h2>AI 工具</h2>
+            <p>集成多种先进 AI 模型，包括 DeepSeek 和 MiniMax，为您提供智能问答、文本生成、语音合成等全方位 AI 服务。简洁易用的界面让您轻松享受人工智能带来的便利，无论是学习、工作还是创意写作，都能为您提供有力的支持。</p>
+            <a href="https://ai.oscarstudio.cn" target="_blank" class="btn btn-primary">Explore</a>
         </div>
-    </div>
+    </section>
 
-    <div class="container">
-        <div class="header-card" id="header-card" title="双击打开烟花秀">
-            <h1>Oscar Studio</h1>
-            <p>专注于提升教学和学习质量</p>
+    <!-- 教学工具 Section -->
+    <section id="teaching-tools" class="tool-section">
+        <div class="tool-content">
+            <div class="tool-icon">📚</div>
+            <h2>教学工具</h2>
+            <p>丰富的 HTML 演示工具，专为教师和学生设计。包含函数图像绘制、几何图形演示、化学方程式配平、计时器、抽签器等多种实用工具，让抽象的知识变得直观可见，使课堂教学更加生动有趣，提升学习效率。</p>
+            <a href="https://tools.oscarstudio.cn" target="_blank" class="btn btn-primary">Explore</a>
         </div>
+    </section>
 
-        <main>
-            <div class="main-layout">
-                <!-- Main Tools Section -->
-                <div class="tools-section">
-                    <div class="tools-grid" id="tools-container">
-                        <div class="loading">正在加载工具...</div>
-                    </div>
-                </div>
+    <!-- HTML-PPT Section -->
+    <section id="html-ppt" class="tool-section">
+        <div class="tool-content">
+            <div class="tool-icon">📊</div>
+            <h2>HTML-PPT</h2>
+            <p>创新的网页版 PPT 演示方案，使用纯 HTML、CSS 和 JavaScript 构建。无需安装任何软件，直接在浏览器中展示您的演示文稿。支持动画效果、响应式布局，让您的演讲更加流畅专业。跨越平台限制，随时随地精彩呈现。</p>
+            <a href="https://ppt.oscarstudio.cn" target="_blank" class="btn btn-primary">Explore</a>
+        </div>
+    </section>
 
-                <!-- Right Sidebar -->
-                <aside class="sidebar">
-                    <!-- Announcement Card -->
-                    <div class="sidebar-card announcement-card">
-                        <h3>最新公告</h3>
-                        <ul class="announcement-list" id="announcement-list">
-                            <li style="text-align:center; padding:10px; color:#888;">加载公告中...</li>
-                        </ul>
-                        <button class="toggle-announcement" id="toggle-announcements">展开更多 ▼</button>
-                    </div>
+    <!-- 益智游戏 Section -->
+    <section id="games" class="tool-section">
+        <div class="tool-content">
+            <div class="tool-icon">🎮</div>
+            <h2>益智游戏</h2>
+            <p>精心设计的益智游戏集合，包括中国象棋、国际象棋、五子棋、24点等多种经典游戏。在娱乐中锻炼思维能力和逻辑推理能力，适合各个年龄段的用户。简洁美观的界面和流畅的操作体验，让游戏时光更加愉快。</p>
+            <a href="https://games.oscarstudio.cn" target="_blank" class="btn btn-primary">Explore</a>
+        </div>
+    </section>
 
-                    <!-- Clock Card -->
-                    <div class="sidebar-card clock-card">
-                        <h3>当前时间</h3>
-                        <div class="clock-container">
-                            <div class="analog-clock">
-                                <!-- 12 Markers -->
-                                <div class="clock-face-markers" id="clock-markers">
-                                    <div class="marker" style="transform: translateX(-50%) rotate(0deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(30deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(60deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(90deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(120deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(150deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(180deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(210deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(240deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(270deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(300deg)"></div>
-                                    <div class="marker" style="transform: translateX(-50%) rotate(330deg)"></div>
-                                </div>
-                                <div class="hand hour-hand" id="hour-hand"></div>
-                                <div class="hand minute-hand" id="minute-hand"></div>
-                                <div class="hand second-hand" id="second-hand"></div>
-                                <div class="center-dot"></div>
-                            </div>
-                            <div class="digital-time" id="digital-time">--:--:--</div>
-                            <div class="current-date" id="current-date">----/--/--</div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </main>
+    <!-- Footer -->
+    <footer>
+        <p>Oscar Studio &copy; 2026</p>
+        <p><a href="https://github.com/oscarstudio" target="_blank">GitHub 仓库</a> | <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2026012488号-1</a></p>
+    </footer>
 
-        <footer>
-            <p>Oscar Studio &copy; 2026 - Designed by Oscar</p>
-            <p><a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2026012488号-1</a></p>
-        </footer>
-    </div>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="回到顶部">↑</button>
 
-    <script src="user-auth.js"></script>
     <script>
-        // Main Application Logic
-        document.addEventListener('DOMContentLoaded', function () {
-            // 1. Load Tools
-            fetch('config.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('网络响应不正常');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    displayTools(data.tools);
-                })
-                .catch(error => {
-                    console.error('获取工具数据时出错:', error);
-                    document.getElementById('tools-container').innerHTML =
-                        '<div class="error">加载工具数据失败，请检查网络连接或配置文件。</div>';
-                });
+        // Back to Top Button Logic
+        const backToTopBtn = document.getElementById('back-to-top');
+        const hero = document.getElementById('hero');
 
-            // 2. Load Announcements
-            fetchAnnouncements();
+        function toggleBackToTop() {
+            const heroBottom = hero.offsetTop + hero.offsetHeight;
+            if (window.scrollY > heroBottom - 100) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
 
-            // 3. Start Clock
-            startClock();
-
-            // 4. Startup Overlay Logic
-            setupStartupOverlay();
-
-            // 5. 初始化用户管理
-            checkLoginStatus();
-            setupEventListeners();
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // --- Tools Logic ---
-        function displayTools(tools) {
-            const container = document.getElementById('tools-container');
-
-            if (!tools || tools.length === 0) {
-                container.innerHTML = '<div class="error">没有找到工具数据。</div>';
-                return;
-            }
-
-            let toolsHTML = '';
-
-            tools.forEach(tool => {
-                let statusHTML = '';
-                if (tool.status && tool.status !== '无') {
-                    let statusClass = 'featured-badge';
-                    if (tool.status === '新') statusClass += ' status-new';
-                    else if (tool.status === '热') statusClass += ' status-hot';
-                    else if (tool.status === '推荐') statusClass += ' status-recommended';
-
-                    statusHTML = `<span class="${statusClass}">${tool.status}</span>`;
-                }
-
-                toolsHTML += `
-                <div class="tool-card">
-                    ${statusHTML}
-                    <div class="tool-icon">
-                        ${tool.icon || '🚀'}
-                    </div>
-                    <div class="tool-content">
-                        <h3>${tool.name}</h3>
-                        <p>${tool.description}</p>
-                        <a href="${tool.domain}" target="_blank" class="btn btn-block">进入工具</a>
-                    </div>
-                </div>
-            `;
-            });
-
-            container.innerHTML = toolsHTML;
-        }
-
-        // --- Announcement Logic ---
-        let allAnnouncements = [];
-        let isExpanded = false;
-
-        function fetchAnnouncements() {
-            fetch('announcement.json')
-                .then(res => res.json())
-                .then(data => {
-                    // Show n, n-1, n-2 (latest 3)
-                    // We reverse the array so index 0 is the last element of the original JSON
-                    allAnnouncements = data.reverse();
-
-                    renderAnnouncements();
-
-                    const btn = document.getElementById('toggle-announcements');
-                    if (data.length <= 3) {
-                        btn.style.display = 'none';
-                    } else {
-                        btn.style.display = 'block';
-                        btn.onclick = () => {
-                            isExpanded = !isExpanded;
-                            renderAnnouncements();
-                            btn.innerHTML = isExpanded ? '收起公告 ▲' : '展开更多 ▼';
-                        };
-                    }
-                })
-                .catch(err => {
-                    console.error('Failed to load announcements:', err);
-                    document.getElementById('announcement-list').innerHTML = '<li class="announcement-item" style="color:#d32f2f;">加载失败</li>';
-                    document.getElementById('toggle-announcements').style.display = 'none';
-                });
-        }
-
-        function renderAnnouncements() {
-            const list = document.getElementById('announcement-list');
-            const itemsToShow = isExpanded ? allAnnouncements : allAnnouncements.slice(0, 3);
-
-            if (itemsToShow.length === 0) {
-                list.innerHTML = '<li class="announcement-item">暂无公告</li>';
-                return;
-            }
-
-            let html = '';
-            itemsToShow.forEach(item => {
-                html += `
-                <li class="announcement-item">
-                    <span class="announcement-date">${item.date}</span>
-                    <div class="announcement-content">${item.content}</div>
-                </li>
-            `;
-            });
-            list.innerHTML = html;
-        }
-
-        // --- Clock Logic ---
-        function startClock() {
-            const updateTime = () => {
-                const now = new Date();
-
-                // Digital
-                const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
-                document.getElementById('digital-time').textContent = timeStr;
-
-                const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-                document.getElementById('current-date').textContent = dateStr;
-
-                // Analog
-                const seconds = now.getSeconds();
-                const minutes = now.getMinutes();
-                const hours = now.getHours();
-
-                const secondDeg = ((seconds / 60) * 360);
-                const minuteDeg = ((minutes / 60) * 360) + ((seconds / 60) * 6);
-                const hourDeg = ((hours % 12 / 12) * 360) + ((minutes / 60) * 30);
-
-                const secondHand = document.getElementById('second-hand');
-                const minuteHand = document.getElementById('minute-hand');
-                const hourHand = document.getElementById('hour-hand');
-
-                if (secondHand) secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
-                if (minuteHand) minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-                if (hourHand) hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
-            };
-
-            updateTime();
-            setInterval(updateTime, 1000);
-        }
-
-        // --- Startup Overlay Logic ---
-        function setupStartupOverlay() {
-            const overlay = document.getElementById('startup-overlay');
-            const closeBtn = document.getElementById('startup-close-btn');
-
-            function closeOverlay() {
-                if (!overlay) return;
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    if (overlay.parentNode) overlay.remove();
-                }, 500);
-            }
-
-            if (closeBtn) closeBtn.onclick = closeOverlay;
-            window.focus();
-        }
-
-        // --- New Year & Firework Show Logic ---
-        function setupNewYearLogic() {
-            const headerCard = document.getElementById('header-card');
-
-            // 1. Double click to open fireworks
-            headerCard.addEventListener('dblclick', () => {
-                openFireworkShow();
-            });
-
-            // 2. Scheduled logic
-            setInterval(() => {
-                const now = new Date();
-                const month = now.getMonth() + 1;
-                const day = now.getDate();
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
-                const seconds = now.getSeconds();
-
-                // Check for 2026/12/31 23:59:00
-                if (now.getFullYear() === 2026 && month === 12 && day === 31 && hours === 23 && minutes === 59 && seconds === 0) {
-                    if (!document.getElementById('firework-overlay')) {
-                        openFireworkShow(true); // true means automatic mode
-                    }
-                }
-
-                // Coordination with the firework show
-                const fireworkIframe = document.getElementById('firework-iframe');
-                if (fireworkIframe && fireworkIframe.contentWindow) {
-                    // Start countdown at 23:59:50
-                    if (hours === 23 && minutes === 59 && seconds === 50) {
-                        fireworkIframe.contentWindow.postMessage('start-countdown', '*');
-                    }
-                    // Start finale at 00:00:00
-                    if (hours === 0 && minutes === 0 && seconds === 0) {
-                        fireworkIframe.contentWindow.postMessage('start-finale', '*');
-                    }
-                    // Close at 00:01:00
-                    if (hours === 0 && minutes === 1 && seconds === 0) {
-                        closeFireworkShow();
-                    }
-                }
-            }, 1000);
-        }
-
-        function openFireworkShow(isAuto = false) {
-            if (document.getElementById('firework-overlay')) return;
-
-            const overlay = document.createElement('div');
-            overlay.id = 'firework-overlay';
-            overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:10000; background:#000; transition:opacity 0.5s ease;';
-
-            const iframe = document.createElement('iframe');
-            iframe.id = 'firework-iframe';
-            iframe.src = 'Firework_Simulator/index.html';
-            iframe.style.cssText = 'width:100%; height:100%; border:none;';
-
-            const closeBtn = document.createElement('div');
-            closeBtn.innerHTML = '×';
-            closeBtn.style.cssText = 'position:absolute; top:70px; right:20px; color:white; font-size:30px; cursor:pointer; z-index:10001; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.1); border-radius:50%;';
-            closeBtn.onclick = closeFireworkShow;
-
-            overlay.appendChild(iframe);
-            overlay.appendChild(closeBtn);
-            document.body.appendChild(overlay);
-        }
-
-        function closeFireworkShow() {
-            const overlay = document.getElementById('firework-overlay');
-            if (overlay) {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.remove(), 500);
-            }
-        }
-
-        // Initialize New Year logic
-        setupNewYearLogic();
-
+        window.addEventListener('scroll', toggleBackToTop);
+        toggleBackToTop();
     </script>
 </body>
 
