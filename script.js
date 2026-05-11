@@ -42,36 +42,57 @@
             }
         };
 
-        let currentLang = localStorage.getItem('lang') || 'zh';
+        let currentLang = localStorage.getItem('lang');
+        // Validate lang against allowed list to prevent XSS
+        const allowedLangs = ['zh', 'en'];
+        if (!currentLang || !allowedLangs.includes(currentLang)) {
+            currentLang = 'zh';
+        }
 
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('lang', lang);
             const t = translations[lang];
+            if (!t) return;
+
+            // Cache selectors for better performance
+            const navLinks = document.querySelectorAll('nav ul li a');
+            const heroH1 = document.querySelector('#hero h1');
+            const heroP = document.querySelector('#hero p');
+            const heroBtnPrimary = document.querySelector('#hero .btn-primary');
+            const heroBtnSecondary = document.querySelector('#hero .btn-secondary');
+            const aiH2 = document.querySelector('#ai h2');
+            const aiP = document.querySelector('#ai p');
+            const teachingH2 = document.querySelector('#teaching-tools h2');
+            const teachingP = document.querySelector('#teaching-tools p');
+            const pptH2 = document.querySelector('#html-ppt h2');
+            const pptP = document.querySelector('#html-ppt p');
+            const gamesH2 = document.querySelector('#games h2');
+            const gamesP = document.querySelector('#games p');
+            const footerFirstP = document.querySelector('footer p:first-child');
+            const footerLinks = document.querySelectorAll('footer a');
 
             // Update nav links
-            const navLinks = document.querySelectorAll('nav ul li a');
             navLinks.forEach((link, i) => link.textContent = t.nav[i]);
 
             // Update hero
-            document.querySelector('#hero h1').textContent = t.heroTitle;
-            document.querySelector('#hero p').textContent = t.heroSubtitle;
-            document.querySelector('#hero .btn-primary').textContent = t.heroBtn1;
-            document.querySelector('#hero .btn-secondary').textContent = t.heroBtn2;
+            heroH1.textContent = t.heroTitle;
+            heroP.textContent = t.heroSubtitle;
+            heroBtnPrimary.textContent = t.heroBtn1;
+            heroBtnSecondary.textContent = t.heroBtn2;
 
             // Update sections
-            document.querySelector('#ai h2').textContent = t.aiTitle;
-            document.querySelector('#ai p').textContent = t.aiDesc;
-            document.querySelector('#teaching-tools h2').textContent = t.teachingTitle;
-            document.querySelector('#teaching-tools p').textContent = t.teachingDesc;
-            document.querySelector('#html-ppt h2').textContent = t.pptTitle;
-            document.querySelector('#html-ppt p').textContent = t.pptDesc;
-            document.querySelector('#games h2').textContent = t.gamesTitle;
-            document.querySelector('#games p').textContent = t.gamesDesc;
+            aiH2.textContent = t.aiTitle;
+            aiP.textContent = t.aiDesc;
+            teachingH2.textContent = t.teachingTitle;
+            teachingP.textContent = t.teachingDesc;
+            pptH2.textContent = t.pptTitle;
+            pptP.textContent = t.pptDesc;
+            gamesH2.textContent = t.gamesTitle;
+            gamesP.textContent = t.gamesDesc;
 
             // Update footer
-            document.querySelector('footer p:first-child').textContent = t.footer;
-            const footerLinks = document.querySelectorAll('footer a');
+            footerFirstP.textContent = t.footer;
             footerLinks[0].textContent = t.footerLink1;
             footerLinks[1].textContent = t.footerLink2;
 
@@ -84,10 +105,13 @@
             });
         }
 
-        // Toggle dropdown
-        langToggle.addEventListener('click', () => {
+        // Toggle dropdown - with flag to prevent duplicate binding
+        let isDropdownBound = false;
+        langToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             langDropdown.classList.toggle('open');
         });
+        isDropdownBound = true;
 
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
@@ -112,6 +136,7 @@
         const hero = document.getElementById('hero');
 
         function toggleBackToTop() {
+            if (!hero) return;
             const heroBottom = hero.offsetTop + hero.offsetHeight;
             if (window.scrollY > heroBottom - 100) {
                 backToTopBtn.classList.add('visible');
