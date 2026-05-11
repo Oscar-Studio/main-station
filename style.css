@@ -77,24 +77,51 @@
         }
 
         .lang-toggle {
-            background: none;
-            border: none;
+            /* 液态玻璃样式 */
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+
             color: var(--light);
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-            opacity: 0.8;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lang-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left 0.5s ease;
+        }
+
+        .lang-toggle:hover::before {
+            left: 100%;
         }
 
         .lang-toggle:hover {
-            opacity: 1;
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
         }
 
         .lang-toggle::after {
@@ -109,27 +136,30 @@
 
         .lang-menu {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 8px);
             right: 0;
-            background: rgba(30, 41, 59, 0.98);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 0.5rem 0;
-            min-width: 120px;
+            /* 液态玻璃菜单 */
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 0.5rem;
+            min-width: 140px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 1001;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
         }
 
         .lang-dropdown.open .lang-menu {
             opacity: 1;
             visibility: visible;
-            transform: translateY(5px);
+            transform: translateY(0) scale(1);
         }
 
         .lang-menu li {
@@ -139,22 +169,24 @@
 
         .lang-menu li button {
             width: 100%;
-            padding: 0.6rem 1rem;
+            padding: 0.7rem 1rem;
             background: none;
             border: none;
             color: var(--light);
             text-align: left;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.3s;
+            border-radius: 10px;
         }
 
         .lang-menu li button:hover {
-            background: rgba(99, 102, 241, 0.2);
+            background: rgba(99, 102, 241, 0.25);
             color: var(--primary);
         }
 
         .lang-menu li button.active {
+            background: rgba(99, 102, 241, 0.2);
             color: var(--primary);
             font-weight: 600;
         }
@@ -195,6 +227,178 @@
             animation: fadeIn 1s ease-out 0.4s both;
         }
 
+        /* ==================== 液态玻璃 (Liquid Glass) ==================== */
+        .liquid-glass {
+            /* 玻璃基础属性 */
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+
+            /* 液态光泽效果 */
+            position: relative;
+            overflow: hidden;
+
+            /* 光泽层 - 液态流动效果 */
+            &::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(
+                    45deg,
+                    transparent 40%,
+                    rgba(255, 255, 255, 0.15) 50%,
+                    transparent 60%
+                );
+                transform: rotate(45deg);
+                animation: liquidShine 4s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            /* 内边框光泽 */
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                padding: 1px;
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.3) 0%,
+                    transparent 50%,
+                    rgba(255, 255, 255, 0.1) 100%
+                );
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+            }
+        }
+
+        @keyframes liquidShine {
+            0%, 100% {
+                transform: rotate(45deg) translateX(-100%);
+            }
+            50% {
+                transform: rotate(45deg) translateX(100%);
+            }
+        }
+
+        /* 液态玻璃按钮 */
+        .btn-liquid {
+            padding: 0.875rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+            /* 玻璃属性 */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--light);
+
+            /* 液态光泽动效 */
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.25),
+                    transparent
+                );
+                transition: left 0.6s ease;
+            }
+
+            &:hover::before {
+                left: 100%;
+            }
+
+            &:hover {
+                transform: translateY(-3px) scale(1.02);
+                background: rgba(255, 255, 255, 0.18);
+                border-color: rgba(255, 255, 255, 0.35);
+                box-shadow:
+                    0 15px 40px rgba(99, 102, 241, 0.25),
+                    0 0 30px rgba(255, 255, 255, 0.1);
+            }
+
+            &:active {
+                transform: translateY(-1px) scale(0.98);
+            }
+        }
+
+        /* 液态玻璃按钮 - 主要色变体 */
+        .btn-liquid-primary {
+            background: linear-gradient(
+                135deg,
+                rgba(99, 102, 241, 0.4) 0%,
+                rgba(139, 92, 246, 0.4) 50%,
+                rgba(99, 102, 241, 0.4) 100%
+            ),
+            rgba(255, 255, 255, 0.1);
+            border-color: rgba(139, 92, 246, 0.5);
+
+            &:hover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(99, 102, 241, 0.6) 0%,
+                    rgba(139, 92, 246, 0.6) 50%,
+                    rgba(99, 102, 241, 0.6) 100%
+                ),
+                rgba(255, 255, 255, 0.15);
+                box-shadow:
+                    0 15px 40px rgba(99, 102, 241, 0.4),
+                    0 0 50px rgba(139, 92, 246, 0.3);
+            }
+        }
+
+        /* 液态玻璃按钮 - 次要色变体 */
+        .btn-liquid-secondary {
+            background: rgba(236, 72, 153, 0.2);
+            border-color: rgba(236, 72, 153, 0.4);
+
+            &:hover {
+                background: rgba(236, 72, 153, 0.35);
+                border-color: rgba(236, 72, 153, 0.6);
+                box-shadow:
+                    0 15px 40px rgba(236, 72, 153, 0.3),
+                    0 0 30px rgba(236, 72, 153, 0.2);
+            }
+        }
+
+        /* 液态玻璃按钮 - 幽灵变体（透明背景） */
+        .btn-liquid-ghost {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.3);
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.12);
+                border-color: rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        /* ==================== 原有按钮样式（保留兼容） ==================== */
         .btn {
             padding: 0.875rem 2rem;
             border-radius: 50px;
@@ -225,6 +429,11 @@
         .btn-secondary:hover {
             border-color: var(--primary);
             color: var(--primary);
+        }
+
+        /* Hero 区域使用液态玻璃按钮 */
+        #hero .btn-liquid {
+            min-width: 160px;
         }
 
         /* Tool Sections */
@@ -473,4 +682,162 @@
             #hero h1 {
                 font-size: 2rem;
             }
+        }
+
+        /* ==================== 登录按钮液态玻璃样式 ==================== */
+        .login-register-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+            /* 液态玻璃属性 */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--light);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.25),
+                transparent
+            );
+            transition: left 0.6s ease;
+        }
+
+        .login-register-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-register-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.35);
+            box-shadow:
+                0 10px 30px rgba(99, 102, 241, 0.25),
+                0 0 20px rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+
+        /* 用户头像按钮 */
+        .user-avatar-btn {
+            background: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .user-avatar-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .user-avatar-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #ec4899) !important;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 用户下拉菜单 */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 200px;
+
+            /* 液态玻璃效果 */
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .user-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .user-dropdown-header {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-dropdown-header .user-name {
+            color: var(--light);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-dropdown-header .user-email {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .user-dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0.5rem 0;
+        }
+
+        .user-dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.7rem 1rem;
+            background: none;
+            border: none;
+            color: #f85149;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 10px;
+        }
+
+        .user-dropdown-item:hover {
+            background: rgba(248, 81, 73, 0.15);
         }
