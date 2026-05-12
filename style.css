@@ -31,14 +31,46 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+            /* 液态玻璃效果 */
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding: 1rem 2rem;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             gap: 3rem;
             z-index: 1000;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 导航栏光泽动效 */
+        nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 25%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0.05) 75%,
+                transparent 100%
+            );
+            transform: skewX(-20deg);
+            animation: navShine 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes navShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
         }
 
         nav .logo {
@@ -49,25 +81,48 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
+            position: relative;
+            z-index: 1;
         }
 
         nav ul {
             display: flex;
             gap: 2rem;
             list-style: none;
+            position: relative;
+            z-index: 1;
         }
 
         nav ul li a {
             color: var(--light);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
-            opacity: 0.8;
+            transition: all 0.3s;
+            opacity: 0.7;
+            position: relative;
+            padding: 0.4rem 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: all 0.3s;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
         nav ul li a:hover {
-            color: var(--primary);
+            color: var(--light);
             opacity: 1;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
         }
 
         /* Language Dropdown */
