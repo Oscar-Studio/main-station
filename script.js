@@ -59,8 +59,8 @@
             const navLinks = document.querySelectorAll('nav ul li a');
             const heroH1 = document.querySelector('#hero h1');
             const heroP = document.querySelector('#hero p');
-            const heroBtnPrimary = document.querySelector('#hero .btn-primary');
-            const heroBtnSecondary = document.querySelector('#hero .btn-secondary');
+            const heroBtnPrimary = document.querySelector('#hero .btn-liquid-primary');
+            const heroBtnSecondary = document.querySelector('#hero .btn-liquid-ghost');
             const aiH2 = document.querySelector('#ai h2');
             const aiP = document.querySelector('#ai p');
             const teachingH2 = document.querySelector('#teaching-tools h2');
