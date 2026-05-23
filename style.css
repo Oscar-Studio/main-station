@@ -21,6 +21,11 @@
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--dark);
+            background-image: var(--user-bg-image, none);
+            background-size: var(--user-bg-size, cover);
+            background-position: var(--user-bg-position, center);
+            background-repeat: var(--user-bg-repeat, no-repeat);
+            background-attachment: var(--user-bg-attachment, fixed);
             color: var(--light);
             line-height: 1.6;
         }
