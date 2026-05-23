@@ -87,10 +87,6 @@ nav .logo {
             height: 100%;
             width: auto;
         }
-            text-decoration: none;
-            position: relative;
-            z-index: 1;
-        }
 
         nav ul {
             display: flex;
