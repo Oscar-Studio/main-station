@@ -505,7 +505,7 @@ nav .logo {
             min-width: 160px;
         }
 
-        /* Tool Sections - 半透明玻璃效果，显示用户背景 */
+        /* Tool Sections - 完全透明，显示用户背景 */
         .tool-section {
             min-height: 100vh;
             display: flex;
@@ -515,24 +515,18 @@ nav .logo {
             padding: 6rem 2rem;
             position: relative;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.5) !important;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: transparent !important;
         }
 
         .tool-section:nth-child(odd),
         .tool-section:nth-child(even) {
-            background: rgba(15, 23, 42, 0.5) !important;
+            background: transparent !important;
         }
 
         .tool-content {
             max-width: 800px;
             text-align: center;
             z-index: 1;
-            background: rgba(15, 23, 42, 0.7);
-            padding: 2rem;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
         }
 
         .tool-icon {
@@ -557,9 +551,13 @@ nav .logo {
             display: inline-block;
         }
 
-        /* Section Backgrounds - 恢复原色作为色调 */
-        #ai {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 27, 75, 0.7) 50%, rgba(15, 23, 42, 0.7) 100%);
+        /* Section Backgrounds - 透明以显示用户背景 */
+        #ai,
+        #teaching-tools,
+        #html-ppt,
+        #games,
+        #hero {
+            background: transparent !important;
         }
 
         #ai::before {
@@ -570,12 +568,8 @@ nav .logo {
             left: 10%;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
             border-radius: 50%;
-        }
-
-        #teaching-tools {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(23, 37, 84, 0.7) 50%, rgba(15, 23, 42, 0.7) 100%);
         }
 
         #teaching-tools::before {
@@ -586,12 +580,8 @@ nav .logo {
             right: 15%;
             width: 250px;
             height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
             border-radius: 50%;
-        }
-
-        #html-ppt {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(76, 29, 149, 0.7) 50%, rgba(15, 23, 42, 0.7) 100%);
         }
 
         #html-ppt::before {
@@ -602,12 +592,8 @@ nav .logo {
             left: 20%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
             border-radius: 50%;
-        }
-
-        #games {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(22, 101, 52, 0.7) 50%, rgba(15, 23, 42, 0.7) 100%);
         }
 
         #games::before {
@@ -618,7 +604,7 @@ nav .logo {
             right: 25%;
             width: 280px;
             height: 280px;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.08) 0%, transparent 70%);
             border-radius: 50%;
         }
 
