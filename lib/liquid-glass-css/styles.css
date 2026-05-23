@@ -1,0 +1,190 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: url('img/threads.webp') no-repeat center center / cover;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+.hint {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 14px;
+    border-radius: 999px;
+    backdrop-filter: blur(12px);
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .hint.is-visible {
+        opacity: 1;
+    }
+}
+
+.bg-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.bg-option {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.bg-option:hover {
+    transform: scale(1.05);
+}
+
+.bg-option.is-active {
+    border-color: white;
+}
+
+.bg-option[data-bg="img/threads.webp"] {
+    background-image: url('img/threads.webp');
+}
+
+.bg-option[data-bg="img/vases.webp"] {
+    background-image: url('img/vases.webp');
+}
+
+.draggable {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.inner {
+    border-radius: 50%;
+    background-color: #00000001;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    mask-image: radial-gradient(
+        circle at center,
+        transparent 0% 70%,
+         black 70% 100%
+      );  
+}
+
+.outline {
+    width: 492px;
+    height: 492px;
+    backdrop-filter: blur(60px) saturate(120%);
+    background-color: #FFFFFF44;
+}
+
+.inner--05 {
+    width: 490px;
+    height: 490px;
+    backdrop-filter: blur(10px) saturate(220%);
+}
+.inner--04 {
+    width: 488px;
+    height: 488px;
+    backdrop-filter: blur(14px) saturate(240%);
+}
+.inner--03 {
+    width: 486px;
+    height: 486px;
+    backdrop-filter: blur(18px) saturate(260%);
+}
+.inner--02 {
+    width: 484px;
+    height: 484px;
+    backdrop-filter: blur(22px) saturate(280%);
+}
+.inner--01 {
+    width: 482px;
+    height: 482px;
+    backdrop-filter: blur(26px) saturate(300%);
+}
+.inner-00 {
+    width: 480px;
+    height: 480px;
+    backdrop-filter: blur(30px) saturate(320%);
+
+}
+.inner-01 {
+    width: 478px;
+    height: 478px;
+    backdrop-filter: blur(26px) saturate(300%);
+
+}
+.inner-02 {
+    width: 476px;
+    height: 476px;
+    backdrop-filter: blur(22px) saturate(280%);
+
+}
+.inner-03 {
+    width: 474px;
+    height: 474px;
+    backdrop-filter: blur(18px) saturate(260%);
+
+}
+.inner-04 {
+    width: 472px;
+    height: 472px;
+    backdrop-filter: blur(14px) saturate(240%);
+
+}
+.inner-06 {
+    width: 470px;
+    height: 470px;
+    backdrop-filter: blur(10px) saturate(220%);
+
+}
+.inner-07 {
+    width: 468px;
+    height: 468px;
+    backdrop-filter: blur(6px) saturate(200%);
+
+}
+.inner-08 {
+    width: 466px;
+    height: 466px;
+    backdrop-filter: blur(2px) saturate(180%);
+}
+.inner-09 {
+    mask-image: unset;
+    width: 464px;
+    height: 464px;
+    backdrop-filter: blur(4px) saturate(100%);
+}
+.inner-09::after {
+    content: "";
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 492px;
+    height: 492px;
+    border-radius: 50%;
+    background-color: #00000022;
+    filter: blur(15px);
+}

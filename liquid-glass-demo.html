@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>液态玻璃 - Liquid Glass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 背景层 - 被折射的内容 */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bg-gradient {
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 60%),
+                linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+
+        .bg-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.6;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: rgba(99, 102, 241, 0.5);
+            top: 20%;
+            left: 10%;
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: rgba(236, 72, 153, 0.4);
+            top: 60%;
+            right: 20%;
+            animation: float2 10s ease-in-out infinite;
+        }
+
+        .shape-3 {
+            width: 250px;
+            height: 250px;
+            background: rgba(59, 130, 246, 0.3);
+            bottom: 30%;
+            left: 30%;
+            animation: float3 12s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -20px); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, 30px); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        /* WebGL Canvas */
+        #gl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* 可交互的液态玻璃按钮 */
+        .glass-button {
+            position: relative;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #f8fafc;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: transform 0.3s ease;
+            z-index: 20;
+        }
+
+        /* 信息展示 */
+        .info {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 30;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .info h1 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景层 -->
+    <div class="background">
+        <div class="bg-gradient"></div>
+        <div class="bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+
+    <!-- WebGL Canvas -->
+    <canvas id="gl-canvas"></canvas>
+
+    <!-- 信息 -->
+    <div class="info">
+        <h1>WebGL 液态玻璃</h1>
+        <p>基于光线追踪折射模拟 · 移动鼠标查看折射效果</p>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- 液态玻璃 Shader -->
+    <script id="glass-vertex" type="x-shader/x-vertex">
+        varying vec2 vUv;
+        varying vec3 vNormal;
+        varying vec3 vViewPosition;
+        varying vec3 vWorldPosition;
+
+        void main() {
+            vUv = uv;
+            vNormal = normalize(normalMatrix * normal);
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            vViewPosition = -mvPosition.xyz;
+            vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    </script>
+
+    <script id="glass-fragment" type="x-shader/x-fragment">
+        precision highp float;
+
+        uniform sampler2D tBackground;
+        uniform vec2 uResolution;
+        uniform vec2 uMouse;
+        uniform float uTime;
+        uniform float uIOR;           // 折射率
+        uniform float uThickness;      // 玻璃厚度
+        uniform float uChromatic;     // 色差强度
+        uniform float uFresnel;       // 菲涅尔强度
+        uniform float uCaustic;       // 焦散强度
+
+        varying vec2 vUv;
+        varying vec3 vNormal;
+        varying vec3 vViewPosition;
+        varying vec3 vWorldPosition;
+
+        // 噪声函数
+        float hash(vec2 p) {
+            return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+        }
+
+        float noise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
+            f = f * f * (3.0 - 2.0 * f);
+
+            float a = hash(i);
+            float b = hash(i + vec2(1.0, 0.0));
+            float c = hash(i + vec2(0.0, 1.0));
+            float d = hash(i + vec2(1.0, 1.0));
+
+            return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+        }
+
+        // 分形噪声用于焦散
+        float fbm(vec2 p) {
+            float value = 0.0;
+            float amplitude = 0.5;
+            for (int i = 0; i < 4; i++) {
+                value += amplitude * noise(p);
+                p *= 2.0;
+                amplitude *= 0.5;
+            }
+            return value;
+        }
+
+        // 菲涅尔项
+        float fresnel(vec3 viewDir, vec3 normal, float power) {
+            return pow(1.0 - max(dot(viewDir, normal), 0.0), power);
+        }
+
+        // 折射计算 (Snell's Law)
+        vec2 refractUV(vec2 uv, vec3 normal, float ior) {
+            // 将法线投影到屏幕空间
+            vec2 screenNormal = normalize(vec2(
+                dot(normal, vec3(1.0, 0.0, 0.0)),
+                dot(normal, vec3(0.0, 1.0, 0.0))
+            ));
+
+            // 根据入射角计算偏移
+            float angle = length(screenNormal) * 0.5;
+            vec2 offset = screenNormal * angle * (ior - 1.0) * uThickness;
+
+            return uv + offset;
+        }
+
+        void main() {
+            vec2 uv = vUv;
+            vec3 normal = normalize(vNormal);
+            vec3 viewDir = normalize(vViewPosition);
+
+            // 检测边缘（用于高光）
+            float edge = fresnel(viewDir, normal, 2.0);
+
+            // 基础折射偏移
+            vec2 refractOffset = vec2(0.0);
+
+            // 根据法线方向计算折射偏移
+            // X方向偏移
+            refractOffset.x = normal.x * 0.08 * uIOR * uThickness;
+            // Y方向偏移
+            refractOffset.y = normal.y * 0.08 * uIOR * uThickness;
+
+            // 添加鼠标交互影响
+            vec2 mouseInfluence = (uMouse - 0.5) * 0.03;
+            refractOffset += mouseInfluence * (1.0 - edge);
+
+            // 动态波动
+            float wave = sin(uTime * 2.0 + vUv.x * 10.0) * 0.002;
+            refractOffset.y += wave;
+
+            // 采样背景（带折射）
+            vec2 sampleUV = uv + refractOffset;
+            sampleUV = clamp(sampleUV, 0.0, 1.0);
+
+            // 色差 - RGB通道不同偏移
+            float chromaticOffset = uChromatic * 0.01 * edge;
+            vec4 bgR = texture2D(tBackground, sampleUV + vec2(chromaticOffset, 0.0));
+            vec4 bgG = texture2D(tBackground, sampleUV);
+            vec4 bgB = texture2D(tBackground, sampleUV - vec2(chromaticOffset, 0.0));
+            vec4 refractedColor = vec4(bgR.r, bgG.g, bgB.b, 1.0);
+
+            // 焦散效果
+            vec2 causticUV = vWorldPosition.xy * 0.5 + uTime * 0.1;
+            float caustic = fbm(causticUV * 3.0);
+            caustic = pow(caustic, 2.0) * uCaustic * edge;
+
+            // 边缘高光
+            float highlight = edge * uFresnel;
+
+            // 顶部高光（模拟玻璃顶部光泽）
+            float topHighlight = smoothstep(0.3, 0.0, vUv.y) * 0.3;
+
+            // 组合颜色
+            vec3 color = refractedColor.rgb;
+
+            // 添加高光
+            color += vec3(1.0) * highlight * 0.5;
+            color += vec3(1.0, 0.95, 0.9) * topHighlight;
+
+            // 添加焦散（冷色调）
+            color += vec3(0.6, 0.8, 1.0) * caustic;
+
+            // 边缘淡淡的彩虹色散
+            vec3 rainbow = vec3(
+                sin(edge * 10.0 + uTime) * 0.5 + 0.5,
+                sin(edge * 10.0 + uTime + 2.094) * 0.5 + 0.5,
+                sin(edge * 10.0 + uTime + 4.188) * 0.5 + 0.5
+            );
+            color += rainbow * edge * 0.1 * uChromatic;
+
+            // 玻璃本身的色调（极淡）
+            vec3 glassTint = vec3(0.95, 0.97, 1.0);
+            color = mix(color, color * glassTint, 0.1);
+
+            // 透明度 - 中心透明，边缘稍实
+            float alpha = 0.1 + edge * 0.4 + topHighlight;
+
+            gl_FragColor = vec4(color, alpha);
+        }
+    </script>
+
+    <script>
+        // ===== Three.js 场景设置 =====
+        const canvas = document.getElementById('gl-canvas');
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true,
+            antialias: true,
+            premultipliedAlpha: false
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.OrthographicCamera(
+            -window.innerWidth / 2, window.innerWidth / 2,
+            window.innerHeight / 2, -window.innerHeight / 2,
+            0.1, 1000
+        );
+        camera.position.z = 100;
+
+        // ===== 创建背景纹理 =====
+        function createBackgroundTexture() {
+            const bgCanvas = document.createElement('canvas');
+            bgCanvas.width = 512;
+            bgCanvas.height = 512;
+            const ctx = bgCanvas.getContext('2d');
+
+            // 渐变背景
+            const gradient = ctx.createRadialGradient(256, 200, 0, 256, 256, 400);
+            gradient.addColorStop(0, '#3b82f6');
+            gradient.addColorStop(0.5, '#8b5cf6');
+            gradient.addColorStop(1, '#0f172a');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 512, 512);
+
+            // 模糊的光斑
+            for (let i = 0; i < 5; i++) {
+                const x = Math.random() * 512;
+                const y = Math.random() * 512;
+                const r = 50 + Math.random() * 100;
+                const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
+                grd.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+                grd.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = grd;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            const texture = new THREE.CanvasTexture(bgCanvas);
+            texture.needsUpdate = true;
+            return texture;
+        }
+
+        const backgroundTexture = createBackgroundTexture();
+
+        // ===== 液态玻璃材质 =====
+        const glassMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                tBackground: { value: backgroundTexture },
+                uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+                uTime: { value: 0 },
+                uIOR: { value: 1.5 },           // 玻璃折射率约1.5
+                uThickness: { value: 1.0 },     // 厚度
+                uChromatic: { value: 1.0 },    // 色差
+                uFresnel: { value: 1.0 },      // 菲涅尔
+                uCaustic: { value: 0.3 }        // 焦散
+            },
+            vertexShader: document.getElementById('glass-vertex').textContent,
+            fragmentShader: document.getElementById('glass-fragment').textContent,
+            transparent: true,
+            depthWrite: false
+        });
+
+        // ===== 创建液态玻璃对象 =====
+        const glassObjects = [];
+
+        // 主按钮 - 中心
+        const btnGeometry = new THREE.PlaneGeometry(180, 50, 20, 10);
+        const mainBtn = new THREE.Mesh(btnGeometry, glassMaterial.clone());
+        mainBtn.position.set(0, 0, 0);
+        scene.add(mainBtn);
+        glassObjects.push({ mesh: mainBtn, baseY: 0 });
+
+        // 左侧小按钮
+        const btn2Geometry = new THREE.PlaneGeometry(120, 40, 15, 8);
+        const leftBtn = new THREE.Mesh(btn2Geometry, glassMaterial.clone());
+        leftBtn.position.set(-150, -80, 0);
+        scene.add(leftBtn);
+        glassObjects.push({ mesh: leftBtn, baseY: -80 });
+
+        // 右侧小按钮
+        const rightBtn = new THREE.Mesh(btn2Geometry.clone(), glassMaterial.clone());
+        rightBtn.position.set(150, -80, 0);
+        scene.add(rightBtn);
+        glassObjects.push({ mesh: rightBtn, baseY: -80 });
+
+        // ===== 鼠标交互 =====
+        let mouseX = 0.5, mouseY = 0.5;
+        let targetMouseX = 0.5, targetMouseY = 0.5;
+
+        document.addEventListener('mousemove', (e) => {
+            targetMouseX = e.clientX / window.innerWidth;
+            targetMouseY = 1.0 - e.clientY / window.innerHeight;
+        });
+
+        // ===== 动画循环 =====
+        let time = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            time += 0.016;
+
+            // 平滑鼠标
+            mouseX += (targetMouseX - mouseX) * 0.05;
+            mouseY += (targetMouseY - mouseY) * 0.05;
+
+            // 更新每个玻璃对象的uniform
+            glassObjects.forEach((obj, i) => {
+                obj.mesh.material.uniforms.uTime.value = time;
+                obj.mesh.material.uniforms.uMouse.value.set(mouseX, mouseY);
+
+                // 轻微浮动
+                obj.mesh.position.y = obj.baseY + Math.sin(time + i * 2) * 3;
+
+                // 鼠标靠近时微微倾斜（用sin模拟）
+                obj.mesh.rotation.z = Math.sin(time * 0.5 + i) * 0.02;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // ===== 响应式 =====
+        window.addEventListener('resize', () => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+
+            camera.left = -w / 2;
+            camera.right = w / 2;
+            camera.top = h / 2;
+            camera.bottom = -h / 2;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(w, h);
+
+            glassObjects.forEach(obj => {
+                obj.mesh.material.uniforms.uResolution.value.set(w, h);
+            });
+        });
+
+        // ===== 鼠标点击涟漪效果 =====
+        canvas.style.pointerEvents = 'auto';
+        canvas.addEventListener('click', (e) => {
+            const x = e.clientX - window.innerWidth / 2;
+            const y = -(e.clientY - window.innerHeight / 2);
+
+            // 在点击位置创建一个临时的高光
+            const rippleGeometry = new THREE.CircleGeometry(30, 32);
+            const rippleMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.5
+            });
+            const ripple = new THREE.Mesh(rippleGeometry, rippleMaterial);
+            ripple.position.set(x, y, 1);
+            scene.add(ripple);
+
+            // 动画消散
+            let scale = 1;
+            let opacity = 0.5;
+            function rippleAnimate() {
+                scale += 0.1;
+                opacity -= 0.05;
+                ripple.scale.set(scale, scale, 1);
+                rippleMaterial.opacity = opacity;
+                if (opacity > 0) {
+                    requestAnimationFrame(rippleAnimate);
+                } else {
+                    scene.remove(ripple);
+                    rippleGeometry.dispose();
+                    rippleMaterial.dispose();
+                }
+            }
+            rippleAnimate();
+        });
+    </script>
+</body>
+</html>
