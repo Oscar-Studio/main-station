@@ -131,7 +131,28 @@ nav .logo {
         /* Language Dropdown */
         .lang-dropdown {
             position: relative;
-            margin-left: auto;
+        }
+
+        /* Nav CTA Button */
+        .nav-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #1e293b;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            color: #1e293b;
         }
 
         .lang-toggle {
