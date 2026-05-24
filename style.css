@@ -94,6 +94,7 @@ nav .logo {
             list-style: none;
             position: relative;
             z-index: 1;
+            margin-left: auto;
         }
 
         nav ul li a {
@@ -131,6 +132,7 @@ nav .logo {
         /* Language Dropdown */
         .lang-dropdown {
             position: relative;
+            margin-left: 1rem;
         }
 
         /* Nav CTA Button */
