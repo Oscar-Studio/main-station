@@ -5,7 +5,7 @@
 
         const translations = {
             zh: {
-                nav: ['AI 工具', '教学工具', 'HTML-PPT', '益智游戏'],
+                nav: ['AI 工具', '教学工具', 'HTML-PPT', '益智游戏', '反馈'],
                 heroTitle: 'Oscar Studio',
                 heroSubtitle: '专注于提升教学和学习质量',
                 heroBtn1: '开始探索',
@@ -23,7 +23,7 @@
                 footerLink2: '粤ICP备2026012488号-1'
             },
             en: {
-                nav: ['AI Tools', 'Teaching Tools', 'HTML-PPT', 'Games'],
+                nav: ['AI Tools', 'Teaching Tools', 'HTML-PPT', 'Games', 'Feedback'],
                 heroTitle: 'Oscar Studio',
                 heroSubtitle: 'Focused on improving teaching and learning quality',
                 heroBtn1: 'Start Exploring',
