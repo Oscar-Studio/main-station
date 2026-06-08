@@ -151,3 +151,27 @@
 
         window.addEventListener('scroll', toggleBackToTop);
         toggleBackToTop();
+
+        // ============ Opilot 命令面板（⌘K / Ctrl+K）============
+        (function initOpilot() {
+            const btn = document.getElementById('opilotTrigger');
+            if (!btn || !window.Opilot) return;
+
+            function open() {
+                Opilot.openPalette({
+                    sources: [
+                        { site: 'tools', origin: 'https://tools.oscarstudio.cn', configUrl: 'https://tools.oscarstudio.cn/tools-config.json' },
+                        { site: 'games', origin: 'https://games.oscarstudio.cn', configUrl: 'https://games.oscarstudio.cn/tools-config.json' },
+                        { site: 'ppt',   origin: 'https://ppt.oscarstudio.cn',   configUrl: 'https://ppt.oscarstudio.cn/tools-config.json' }
+                    ]
+                });
+            }
+
+            btn.addEventListener('click', open);
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                    e.preventDefault();
+                    open();
+                }
+            });
+        })();
