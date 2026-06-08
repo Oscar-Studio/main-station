@@ -140,6 +140,22 @@ nav .logo {
             width: 100%;
         }
 
+        /* Plain links in nav (outside <ul>, e.g. right-group docs link) */
+        nav a:not(.nav-cta-btn):not(.logo) {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            opacity: 0.7;
+            position: relative;
+            padding: 0.4rem 0;
+        }
+
+        nav a:not(.nav-cta-btn):not(.logo):hover {
+            color: var(--light);
+            opacity: 1;
+        }
+
         /* Language Dropdown */
         .lang-dropdown {
             position: relative;
