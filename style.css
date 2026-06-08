@@ -151,9 +151,26 @@ nav .logo {
             padding: 0.4rem 0;
         }
 
+        nav a:not(.nav-cta-btn):not(.logo)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: all 0.3s;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
         nav a:not(.nav-cta-btn):not(.logo):hover {
             color: var(--light);
             opacity: 1;
+        }
+
+        nav a:not(.nav-cta-btn):not(.logo):hover::after {
+            width: 100%;
         }
 
         /* Language Dropdown */
