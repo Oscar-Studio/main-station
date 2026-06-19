@@ -10,6 +10,30 @@
 </head>
 
 <body>
+    <!-- SVG defs：液态玻璃滤镜（demo 2-smitter 默认参数） -->
+    <svg class="liquid-glass-defs" aria-hidden="true">
+        <defs>
+            <filter id="liquid-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+                <!-- 1) 灰度提取 -->
+                <feGaussianBlur in="SourceGraphic" stdDeviation="0" result="gray-src"/>
+                <feColorMatrix in="gray-src" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.33 0 0" result="gray"/>
+                <!-- 2) 湍流 + 灰度 = 高度场 -->
+                <feTurbulence type="fractalNoise" baseFrequency="0.005 0.01" numOctaves="4" seed="7" result="noise"/>
+                <feComposite in="noise" in2="gray" operator="arithmetic" k1="0" k2="0.7" k3="0.4" k4="0" result="height"/>
+                <!-- 3) 差分法线 -->
+                <feOffset in="height" dx="1" dy="0" result="h-shift-x"/>
+                <feOffset in="height" dx="0" dy="1" result="h-shift-y"/>
+                <feColorMatrix in="h-shift-x" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="normal-r"/>
+                <feColorMatrix in="h-shift-y" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 1 0 0 0" result="normal-g"/>
+                <feBlend in="normal-r" in2="normal-g" mode="screen" result="normal"/>
+                <!-- 4) 真位移折射 -->
+                <feDisplacementMap in="SourceGraphic" in2="normal" scale="50" xChannelSelector="R" yChannelSelector="G" result="refracted"/>
+                <!-- 5) 玻璃最终模糊 -->
+                <feGaussianBlur in="refracted" stdDeviation="2" result="final"/>
+            </filter>
+        </defs>
+    </svg>
+
     <!-- Navigation -->
     <nav id="mainNav">
         <a href="https://oscarstudio.cn" class="logo"><img src="logo.png" alt="Oscar Studio"></a>

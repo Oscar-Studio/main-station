@@ -18,6 +18,32 @@
             scroll-behavior: smooth;
         }
 
+        /* SVG defs 容器：不占位、不拦截事件 */
+        .liquid-glass-defs {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Firefox 兜底：backdrop-filter: url() 不支持时回退到普通模糊玻璃 */
+        @supports not (backdrop-filter: url(#liquid-glass)) {
+            nav,
+            .nav-cta-btn,
+            .lang-toggle,
+            .lang-menu,
+            .btn-liquid,
+            .quality-toggle,
+            .quality-menu,
+            .login-register-btn,
+            .user-avatar-btn,
+            .user-dropdown {
+                backdrop-filter: blur(10px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+            }
+        }
+
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--dark);
@@ -31,10 +57,10 @@
             top: 0;
             left: 0;
             right: 0;
-            /* 液态玻璃效果 - 高透明度低模糊 */
+            /* 液态玻璃效果 - SVG 真折射滤镜 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
             padding: 1rem 2rem;
             display: flex;
@@ -44,7 +70,7 @@
             transition: all 0.4s ease;
         }
 
-        /* 导航栏顶部高光 */
+        /* 导航栏顶部高光（saturate 加在 ::before 上，不能加在 nav 自身，会让 backdrop-filter 失效）*/
         nav::before {
             content: '';
             position: absolute;
@@ -58,6 +84,8 @@
                 rgba(255, 255, 255, 0.01) 100%
             );
             pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         /* 导航栏底部薄边框 */
@@ -190,8 +218,8 @@ nav .logo {
             background: linear-gradient(180deg, rgba(253, 224, 71, 0.2) 0%, rgba(252, 211, 77, 0.1) 100%);
             border: 1.5px solid rgba(245, 158, 11, 0.6);
             color: #fbbf24;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
             white-space: nowrap;
@@ -206,10 +234,10 @@ nav .logo {
         }
 
         .lang-toggle {
-            /* 液态玻璃样式 - 高透明度 */
+            /* 液态玻璃样式 - SVG 真折射 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
 
@@ -226,7 +254,7 @@ nav .logo {
             overflow: hidden;
         }
 
-        /* 语言按钮顶部高光 */
+        /* 语言按钮顶部高光（saturate 在 ::before） */
         .lang-toggle::before {
             content: '';
             position: absolute;
@@ -240,6 +268,8 @@ nav .logo {
                 rgba(255, 255, 255, 0.02) 100%
             );
             pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .lang-toggle:hover {
@@ -262,10 +292,10 @@ nav .logo {
             position: absolute;
             top: calc(100% + 8px);
             right: 0;
-            /* 液态玻璃菜单 - 高透明度 */
+            /* 液态玻璃菜单 - SVG 真折射 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             padding: 0.5rem;
@@ -279,7 +309,7 @@ nav .logo {
             flex-direction: column;
         }
 
-        /* 菜单顶部高光 */
+        /* 菜单顶部高光（saturate 在 ::before） */
         .lang-menu::before {
             content: '';
             position: absolute;
@@ -294,6 +324,8 @@ nav .logo {
             );
             border-radius: inherit;
             pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .lang-dropdown.open .lang-menu {
@@ -367,10 +399,10 @@ nav .logo {
 
         /* ==================== 液态玻璃 (Liquid Glass) ==================== */
         .liquid-glass {
-            /* 玻璃基础属性 - 高透明度 */
+            /* 玻璃基础属性 - SVG 真折射 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
 
@@ -378,7 +410,7 @@ nav .logo {
             position: relative;
             overflow: hidden;
 
-            /* 第一层：顶部的冷调高光 */
+            /* 第一层：顶部的冷调高光（saturate 在 ::before） */
             &::before {
                 content: '';
                 position: absolute;
@@ -393,6 +425,8 @@ nav .logo {
                 );
                 border-radius: inherit;
                 pointer-events: none;
+                filter: saturate(200%);
+                -webkit-filter: saturate(200%);
             }
 
             /* 第二层：薄边框高光 */
@@ -430,10 +464,10 @@ nav .logo {
             gap: 0.5rem;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-            /* 玻璃属性 - 高透明度低模糊 */
+            /* 玻璃属性 - SVG 真折射 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             color: var(--light);
 
@@ -441,7 +475,7 @@ nav .logo {
             position: relative;
             overflow: hidden;
 
-            /* 顶部高光层 */
+            /* 顶部高光层（saturate 加在 ::before） */
             &::before {
                 content: '';
                 position: absolute;
@@ -455,6 +489,8 @@ nav .logo {
                     rgba(255, 255, 255, 0.02) 100%
                 );
                 pointer-events: none;
+                filter: saturate(200%);
+                -webkit-filter: saturate(200%);
             }
 
             /* 薄边框光泽 */
@@ -879,14 +915,34 @@ nav .logo {
             gap: 6px;
             padding: 0.5rem 1rem;
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.15);
             border-radius: 50px;
             color: var(--light);
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* quality-toggle 顶部高光（saturate 在 ::before） */
+        .quality-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.01) 100%
+            );
+            pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .quality-toggle:hover {
@@ -903,8 +959,8 @@ nav .logo {
             top: calc(100% + 8px);
             right: 0;
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             padding: 0.5rem;
@@ -914,6 +970,26 @@ nav .logo {
             transform: translateY(-10px) scale(0.95);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 1001;
+            position: absolute;
+            overflow: hidden;
+        }
+
+        /* quality-menu 顶部高光（saturate 在 ::before） */
+        .quality-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.01) 100%
+            );
+            pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .quality-menu.open {
@@ -972,10 +1048,10 @@ nav .logo {
             text-decoration: none;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-            /* 液态玻璃属性 - 高透明度 */
+            /* 液态玻璃属性 - SVG 真折射 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             color: var(--light);
 
@@ -983,7 +1059,7 @@ nav .logo {
             overflow: hidden;
         }
 
-        /* 登录按钮顶部高光 */
+        /* 登录按钮顶部高光（saturate 在 ::before） */
         .login-register-btn::before {
             content: '';
             position: absolute;
@@ -997,6 +1073,8 @@ nav .logo {
                 rgba(255, 255, 255, 0.02) 100%
             );
             pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .login-register-btn:hover {
@@ -1009,8 +1087,8 @@ nav .logo {
         /* 用户头像按钮 */
         .user-avatar-btn {
             background: rgba(255, 255, 255, 0.03) !important;
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             cursor: pointer;
@@ -1020,7 +1098,7 @@ nav .logo {
             overflow: hidden;
         }
 
-        /* 头像按钮顶部高光 */
+        /* 头像按钮顶部高光（saturate 在 ::before） */
         .user-avatar-btn::before {
             content: '';
             position: absolute;
@@ -1035,6 +1113,8 @@ nav .logo {
             );
             border-radius: inherit;
             pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .user-avatar-btn:hover {
@@ -1063,10 +1143,10 @@ nav .logo {
             right: 0;
             width: 200px;
 
-            /* 液态玻璃效果 - 高透明度 */
+            /* 液态玻璃效果 - SVG 真折射 */
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px) saturate(100%);
-            -webkit-backdrop-filter: blur(4px) saturate(100%);
+            backdrop-filter: url(#liquid-glass);
+            -webkit-backdrop-filter: url(#liquid-glass);
             border: 0.5px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             padding: 0.5rem;
@@ -1077,7 +1157,7 @@ nav .logo {
             z-index: 1000;
         }
 
-        /* 用户菜单顶部高光 */
+        /* 用户菜单顶部高光（saturate 在 ::before） */
         .user-dropdown::before {
             content: '';
             position: absolute;
@@ -1092,6 +1172,8 @@ nav .logo {
             );
             border-radius: inherit;
             pointer-events: none;
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .user-dropdown.active {
