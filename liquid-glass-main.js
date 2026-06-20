@@ -120,6 +120,17 @@
             this.gl = gl;
             this._initGL();
             this._initBg(options.bgImageUrl);
+            // 默认渐变：scoped 模式（预览区）用明亮色，全屏模式用暗色，可通过 options 覆盖
+            if (options._gradientTop) {
+                this._gradientTop = options._gradientTop;
+                this._gradientBot = options._gradientBot || [0.06, 0.09, 0.16];
+            } else if (this.scope) {
+                this._gradientTop = [0.94, 0.58, 0.98];
+                this._gradientBot = [0.25, 0.55, 0.95];
+            } else {
+                this._gradientTop = [0.10, 0.05, 0.15];
+                this._gradientBot = [0.06, 0.09, 0.16];
+            }
             this._bindEvents();
             this.refresh();
 
@@ -160,6 +171,9 @@
                 uniform int   u_sampleSteps;
                 uniform sampler2D u_bgImage;
                 uniform float u_hasUserBg;
+                // 默认渐变色（未上传背景图时用）
+                uniform vec3 u_gradientTop;
+                uniform vec3 u_gradientBot;
 
                 float sdRoundedBox(vec2 p, vec2 b, float r) {
                     vec2 q = abs(p) - b + r;
@@ -248,9 +262,8 @@
                     if (u_hasUserBg > 0.5) {
                         bgColor = texture2D(u_bgImage, v_uv);
                     } else {
-                        // 默认明亮渐变：底蓝→顶粉，与 CSS 预览背景一致
                         float t = v_uv.y;
-                        bgColor = vec4(mix(vec3(0.25, 0.55, 0.95), vec3(0.94, 0.58, 0.98), t), 1.0);
+                        bgColor = vec4(mix(u_gradientBot, u_gradientTop, t), 1.0);
                     }
 
                     vec4 outColor = bgColor;
@@ -315,6 +328,8 @@
                 steps:  gl.getUniformLocation(prog, 'u_sampleSteps'),
                 bg:     gl.getUniformLocation(prog, 'u_bgImage'),
                 hasBg:  gl.getUniformLocation(prog, 'u_hasUserBg'),
+                gradT:  gl.getUniformLocation(prog, 'u_gradientTop'),
+                gradB:  gl.getUniformLocation(prog, 'u_gradientBot'),
             };
 
             this.rectsData = new Float32Array(MAX_RECTS * 4);
@@ -543,6 +558,8 @@
             gl.uniform1f(this.U.frost, this.params.frost);
             gl.uniform1f(this.U.ca, this.params.ca);
             gl.uniform1f(this.U.alpha, this.params.alpha);
+            gl.uniform3fv(this.U.gradT, this._gradientTop);
+            gl.uniform3fv(this.U.gradB, this._gradientBot);
             const steps = this.params.frost > 0.05 ? 3 : 1;
             gl.uniform1i(this.U.steps, steps);
 
