@@ -18,37 +18,47 @@
             scroll-behavior: smooth;
         }
 
-        /* SVG defs 容器：不占位、不拦截事件 */
-        .liquid-glass-defs {
-            position: absolute;
-            width: 0;
-            height: 0;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Firefox 兜底：backdrop-filter: url() 不支持时回退到普通模糊玻璃 */
-        @supports not (backdrop-filter: url(#liquid-glass)) {
-            nav,
-            .nav-cta-btn,
-            .lang-toggle,
-            .lang-menu,
-            .btn-liquid,
-            .quality-toggle,
-            .quality-menu,
-            .login-register-btn,
-            .user-avatar-btn,
-            .user-dropdown {
-                backdrop-filter: blur(10px) saturate(180%) !important;
-                -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
-            }
-        }
-
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--dark);
             color: var(--light);
             line-height: 1.6;
+        }
+
+        /* ==================== WebGL 液态玻璃 Canvas ==================== */
+        #liquid-glass-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 6;
+            pointer-events: none;
+        }
+
+        /* 普通正文/标题必须在 canvas 之上 */
+        #hero,
+        .tool-section,
+        footer {
+            position: relative;
+            z-index: 7;
+        }
+
+        /* ==================== 玻璃元素（WebGL 折射走 canvas） ==================== */
+        .glass-element {
+            background: transparent !important;
+        }
+
+        /* WebGL 不可用 或 低画质档：CSS 兜底（普通 backdrop-blur） */
+        .no-webgl .glass-element,
+        body.quality-low .glass-element {
+            background: rgba(255, 255, 255, 0.06) !important;
+            backdrop-filter: blur(16px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+        }
+
+        body.quality-low #liquid-glass-canvas {
+            display: none;
         }
 
         /* Navigation */
@@ -57,10 +67,8 @@
             top: 0;
             left: 0;
             right: 0;
-            /* 液态玻璃效果 - SVG 真折射滤镜 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            /* 元素本体透明（demo 模式），折射交给下方 WebGL canvas */
+            background: transparent;
             border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
             padding: 1rem 2rem;
             display: flex;
@@ -68,41 +76,41 @@
             gap: 2rem;
             z-index: 1000;
             transition: all 0.4s ease;
+            isolation: isolate;
         }
 
-        /* 导航栏顶部高光（saturate 加在 ::before 上，不能加在 nav 自身，会让 backdrop-filter 失效）*/
+        /* nav::before：默认占位（WebGL 路径下不显示折射；fallback 用于 backdrop-blur 兜底） */
         nav::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(
-                180deg,
-                rgba(255, 255, 255, 0.06) 0%,
-                rgba(255, 255, 255, 0.01) 100%
-            );
+            inset: 0;
+            z-index: -1;
             pointer-events: none;
-            filter: saturate(200%);
-            -webkit-filter: saturate(200%);
         }
 
-        /* 导航栏底部薄边框 */
+        /* nav::after：白色高光渐变 + 底部细线（合并：渐变 + 底边） */
         nav::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 0.5px;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.2) 50%,
-                transparent 100%
-            );
+            inset: 0;
             pointer-events: none;
+            z-index: -1;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    transparent 100%
+                ) bottom left / 100% 0.5px no-repeat,
+                linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.12) 0%,
+                    transparent 40%,
+                    transparent 60%,
+                    rgba(255, 255, 255, 0.04) 100%
+                );
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
 nav .logo {
@@ -215,14 +223,37 @@ nav .logo {
             font-size: 0.85rem;
             font-weight: 600;
             text-decoration: none;
-            background: linear-gradient(180deg, rgba(253, 224, 71, 0.2) 0%, rgba(252, 211, 77, 0.1) 100%);
+            background: transparent;
             border: 1.5px solid rgba(245, 158, 11, 0.6);
             color: #fbbf24;
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
             white-space: nowrap;
+            position: relative;
+            isolation: isolate;
+        }
+
+        /* ::before：占位（WebGL 折射走下方 canvas） */
+        .nav-cta-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ::after：金色渐变（按钮颜色）+ saturate */
+        .nav-cta-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(253, 224, 71, 0.2) 0%, rgba(252, 211, 77, 0.1) 100%);
+            filter: saturate(200%);
+            -webkit-filter: saturate(200%);
         }
 
         .nav-cta-btn:hover {
@@ -234,10 +265,8 @@ nav .logo {
         }
 
         .lang-toggle {
-            /* 液态玻璃样式 - SVG 真折射 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            /* 液态玻璃样式 - 元素透明，折射走 ::before（demo 结构） */
+            background: transparent;
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
 
@@ -252,22 +281,32 @@ nav .logo {
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
+            isolation: isolate;
         }
 
-        /* 语言按钮顶部高光（saturate 在 ::before） */
+        /* ::before：占位（WebGL 折射走下方 canvas） */
         .lang-toggle::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ::after：白色高光 + saturate */
+        .lang-toggle::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
             background: linear-gradient(
                 180deg,
                 rgba(255, 255, 255, 0.1) 0%,
+                transparent 40%,
+                transparent 60%,
                 rgba(255, 255, 255, 0.02) 100%
             );
-            pointer-events: none;
             filter: saturate(200%);
             -webkit-filter: saturate(200%);
         }
@@ -292,10 +331,8 @@ nav .logo {
             position: absolute;
             top: calc(100% + 8px);
             right: 0;
-            /* 液态玻璃菜单 - SVG 真折射 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            /* 元素透明，折射走 ::before（demo 结构） */
+            background: transparent;
             border: 0.5px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             padding: 0.5rem;
@@ -307,23 +344,34 @@ nav .logo {
             z-index: 1001;
             display: flex;
             flex-direction: column;
+            isolation: isolate;
         }
 
-        /* 菜单顶部高光（saturate 在 ::before） */
+        /* ::before：占位（WebGL 折射走下方 canvas） */
         .lang-menu::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
+            inset: 0;
+            border-radius: inherit;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ::after：白色高光 + saturate */
+        .lang-menu::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: -1;
             background: linear-gradient(
                 180deg,
                 rgba(255, 255, 255, 0.05) 0%,
+                transparent 40%,
+                transparent 60%,
                 rgba(255, 255, 255, 0.01) 100%
             );
-            border-radius: inherit;
-            pointer-events: none;
             filter: saturate(200%);
             -webkit-filter: saturate(200%);
         }
@@ -398,56 +446,7 @@ nav .logo {
         }
 
         /* ==================== 液态玻璃 (Liquid Glass) ==================== */
-        .liquid-glass {
-            /* 玻璃基础属性 - SVG 真折射 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
-            border: 0.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-
-            /* 液态光泽效果 */
-            position: relative;
-            overflow: hidden;
-
-            /* 第一层：顶部的冷调高光（saturate 在 ::before） */
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 50%;
-                background: linear-gradient(
-                    180deg,
-                    rgba(255, 255, 255, 0.12) 0%,
-                    rgba(255, 255, 255, 0.02) 100%
-                );
-                border-radius: inherit;
-                pointer-events: none;
-                filter: saturate(200%);
-                -webkit-filter: saturate(200%);
-            }
-
-            /* 第二层：薄边框高光 */
-            &::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                border-radius: inherit;
-                padding: 0.5px;
-                background: linear-gradient(
-                    135deg,
-                    rgba(255, 255, 255, 0.5) 0%,
-                    rgba(255, 255, 255, 0.1) 50%,
-                    rgba(255, 255, 255, 0.3) 100%
-                );
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                pointer-events: none;
-            }
-        }
+        /* 旧 .liquid-glass 块已删除：折射完全由 #liquid-glass-canvas WebGL shader 提供 */
 
         /* 液态玻璃按钮 */
         .btn-liquid {
@@ -464,58 +463,60 @@ nav .logo {
             gap: 0.5rem;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-            /* 玻璃属性 - SVG 真折射 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            /* 元素透明，折射与高光都走伪元素（demo 结构） */
+            background: transparent;
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             color: var(--light);
 
-            /* 液态光泽动效 */
             position: relative;
             overflow: hidden;
+            isolation: isolate;
 
-            /* 顶部高光层（saturate 加在 ::before） */
+            /* ::before：占位（WebGL 折射走下方 canvas） */
             &::before {
                 content: '';
                 position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 50%;
-                background: linear-gradient(
-                    180deg,
-                    rgba(255, 255, 255, 0.15) 0%,
-                    rgba(255, 255, 255, 0.02) 100%
-                );
+                inset: 0;
+                border-radius: inherit;
+                z-index: -1;
                 pointer-events: none;
-                filter: saturate(200%);
-                -webkit-filter: saturate(200%);
             }
 
-            /* 薄边框光泽 */
+            /* ::after：白色高光 + 边框光泽 + saturate */
             &::after {
                 content: '';
                 position: absolute;
                 inset: 0;
                 border-radius: inherit;
-                padding: 0.5px;
-                background: linear-gradient(
-                    135deg,
-                    rgba(255, 255, 255, 0.5) 0%,
-                    rgba(255, 255, 255, 0.1) 50%,
-                    rgba(255, 255, 255, 0.3) 100%
-                );
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
                 pointer-events: none;
+                z-index: -1;
+                background:
+                    linear-gradient(
+                        180deg,
+                        rgba(255, 255, 255, 0.15) 0%,
+                        transparent 40%,
+                        transparent 60%,
+                        rgba(255, 255, 255, 0.02) 100%
+                    );
+                filter: saturate(200%);
+                -webkit-filter: saturate(200%);
+                /* 保留薄边框光泽 */
+                box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
             }
 
             &:hover {
                 transform: translateY(-3px) scale(1.02);
-                background: rgba(255, 255, 255, 0.06);
                 border-color: rgba(255, 255, 255, 0.35);
+            }
+
+            &:hover::after {
+                background: linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.22) 0%,
+                    transparent 40%,
+                    transparent 60%,
+                    rgba(255, 255, 255, 0.04) 100%
+                );
             }
 
             &:active {
@@ -525,49 +526,69 @@ nav .logo {
 
         /* 液态玻璃按钮 - 主要色变体 */
         .btn-liquid-primary {
-            background: rgba(99, 102, 241, 0.08);
             border-color: rgba(99, 102, 241, 0.3);
 
-            &::before {
+            &::after {
                 background: linear-gradient(
                     180deg,
-                    rgba(99, 102, 241, 0.15) 0%,
+                    rgba(99, 102, 241, 0.18) 0%,
+                    transparent 40%,
+                    transparent 60%,
                     rgba(99, 102, 241, 0.02) 100%
                 );
+                box-shadow: inset 0 0 0 0.5px rgba(99, 102, 241, 0.25);
             }
 
             &:hover {
-                background: rgba(99, 102, 241, 0.15);
                 border-color: rgba(99, 102, 241, 0.5);
+            }
+
+            &:hover::after {
+                background: linear-gradient(
+                    180deg,
+                    rgba(99, 102, 241, 0.28) 0%,
+                    transparent 40%,
+                    transparent 60%,
+                    rgba(99, 102, 241, 0.05) 100%
+                );
             }
         }
 
         /* 液态玻璃按钮 - 次要色变体 */
         .btn-liquid-secondary {
-            background: rgba(236, 72, 153, 0.08);
             border-color: rgba(236, 72, 153, 0.3);
 
-            &::before {
+            &::after {
                 background: linear-gradient(
                     180deg,
-                    rgba(236, 72, 153, 0.15) 0%,
+                    rgba(236, 72, 153, 0.18) 0%,
+                    transparent 40%,
+                    transparent 60%,
                     rgba(236, 72, 153, 0.02) 100%
                 );
+                box-shadow: inset 0 0 0 0.5px rgba(236, 72, 153, 0.25);
             }
 
             &:hover {
-                background: rgba(236, 72, 153, 0.15);
                 border-color: rgba(236, 72, 153, 0.5);
+            }
+
+            &:hover::after {
+                background: linear-gradient(
+                    180deg,
+                    rgba(236, 72, 153, 0.28) 0%,
+                    transparent 40%,
+                    transparent 60%,
+                    rgba(236, 72, 153, 0.05) 100%
+                );
             }
         }
 
-        /* 液态玻璃按钮 - 幽灵变体（透明背景） */
+        /* 液态玻璃按钮 - 幽灵变体 */
         .btn-liquid-ghost {
-            background: transparent;
             border-color: rgba(255, 255, 255, 0.2);
 
             &:hover {
-                background: rgba(255, 255, 255, 0.06);
                 border-color: rgba(255, 255, 255, 0.4);
             }
         }
@@ -867,175 +888,6 @@ nav .logo {
             }
         }
 
-        /* ==================== WebGL 液态玻璃 Canvas ==================== */
-        #liquid-glass-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 6;
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        #liquid-glass-canvas.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* ==================== 画质设置下拉菜单 ==================== */
-
-        /* WebGL 高画质模式 - 隐藏 CSS 玻璃，只保留文字 */
-        .plain-element {
-            background: rgba(255, 255, 255, 0.02) !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        .plain-element::before,
-        .plain-element::after {
-            display: none !important;
-        }
-
-        nav.plain-element {
-            background: transparent !important;
-            border-bottom: none !important;
-        }
-        .quality-dropdown {
-            position: relative;
-        }
-
-        .quality-toggle {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
-            border: 0.5px solid rgba(255, 255, 255, 0.15);
-            border-radius: 50px;
-            color: var(--light);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* quality-toggle 顶部高光（saturate 在 ::before） */
-        .quality-toggle::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(
-                180deg,
-                rgba(255, 255, 255, 0.08) 0%,
-                rgba(255, 255, 255, 0.01) 100%
-            );
-            pointer-events: none;
-            filter: saturate(200%);
-            -webkit-filter: saturate(200%);
-        }
-
-        .quality-toggle:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        .quality-icon {
-            font-size: 1rem;
-        }
-
-        .quality-menu {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
-            border: 0.5px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 0.5rem;
-            min-width: 180px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px) scale(0.95);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 1001;
-            position: absolute;
-            overflow: hidden;
-        }
-
-        /* quality-menu 顶部高光（saturate 在 ::before） */
-        .quality-menu::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(
-                180deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.01) 100%
-            );
-            pointer-events: none;
-            filter: saturate(200%);
-            -webkit-filter: saturate(200%);
-        }
-
-        .quality-menu.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-
-        .quality-option {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-            padding: 0.7rem 1rem;
-            background: none;
-            border: none;
-            color: var(--light);
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 10px;
-            text-align: left;
-        }
-
-        .quality-option:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .quality-option.active {
-            background: rgba(99, 102, 241, 0.15);
-        }
-
-        .quality-option .quality-name {
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .quality-option .quality-desc {
-            font-size: 0.75rem;
-            color: var(--gray);
-            margin-top: 2px;
-        }
-
-        .quality-option.active .quality-name {
-            color: var(--primary);
-        }
-
         /* ==================== 登录按钮液态玻璃样式 ==================== */
         .login-register-btn {
             display: inline-flex;
@@ -1048,31 +900,39 @@ nav .logo {
             text-decoration: none;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-            /* 液态玻璃属性 - SVG 真折射 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            /* 元素透明，折射走 ::before（demo 结构） */
+            background: transparent;
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             color: var(--light);
 
             position: relative;
             overflow: hidden;
+            isolation: isolate;
         }
 
-        /* 登录按钮顶部高光（saturate 在 ::before） */
+        /* ::before：占位（WebGL 折射走下方 canvas） */
         .login-register-btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ::after：白色高光 + saturate */
+        .login-register-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
             background: linear-gradient(
                 180deg,
                 rgba(255, 255, 255, 0.1) 0%,
+                transparent 40%,
+                transparent 60%,
                 rgba(255, 255, 255, 0.02) 100%
             );
-            pointer-events: none;
             filter: saturate(200%);
             -webkit-filter: saturate(200%);
         }
@@ -1086,9 +946,7 @@ nav .logo {
 
         /* 用户头像按钮 */
         .user-avatar-btn {
-            background: rgba(255, 255, 255, 0.03) !important;
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            background: transparent !important;
             border: 0.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             cursor: pointer;
@@ -1096,23 +954,34 @@ nav .logo {
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
+            isolation: isolate;
         }
 
-        /* 头像按钮顶部高光（saturate 在 ::before） */
+        /* ::before：占位（WebGL 折射走下方 canvas） */
         .user-avatar-btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
+            inset: 0;
+            border-radius: inherit;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ::after：白色高光 + saturate */
+        .user-avatar-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: -1;
             background: linear-gradient(
                 180deg,
                 rgba(255, 255, 255, 0.1) 0%,
+                transparent 40%,
+                transparent 60%,
                 rgba(255, 255, 255, 0.02) 100%
             );
-            border-radius: inherit;
-            pointer-events: none;
             filter: saturate(200%);
             -webkit-filter: saturate(200%);
         }
@@ -1143,10 +1012,8 @@ nav .logo {
             right: 0;
             width: 200px;
 
-            /* 液态玻璃效果 - SVG 真折射 */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: url(#liquid-glass);
-            -webkit-backdrop-filter: url(#liquid-glass);
+            /* 元素透明，折射走 ::before（demo 结构） */
+            background: transparent;
             border: 0.5px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             padding: 0.5rem;
@@ -1155,23 +1022,34 @@ nav .logo {
             transform: translateY(-10px) scale(0.95);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 1000;
+            isolation: isolate;
         }
 
-        /* 用户菜单顶部高光（saturate 在 ::before） */
+        /* ::before：占位（WebGL 折射走下方 canvas） */
         .user-dropdown::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
+            inset: 0;
+            border-radius: inherit;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ::after：白色高光 + saturate */
+        .user-dropdown::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: -1;
             background: linear-gradient(
                 180deg,
                 rgba(255, 255, 255, 0.05) 0%,
+                transparent 40%,
+                transparent 60%,
                 rgba(255, 255, 255, 0.01) 100%
             );
-            border-radius: inherit;
-            pointer-events: none;
             filter: saturate(200%);
             -webkit-filter: saturate(200%);
         }
@@ -1226,3 +1104,4 @@ nav .logo {
         .user-dropdown-item:hover {
             background: rgba(248, 81, 73, 0.1);
         }
+
