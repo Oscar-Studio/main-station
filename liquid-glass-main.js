@@ -371,10 +371,11 @@
         }
 
         setBg(url) {
-            if (!this.gl) return;
+            const gl = this.gl;
+            if (!gl) return;
             if (!url) {
                 this.hasUserBg = false;
-                this.gl.uniform1f(this.U.hasBg, 0.0);
+                gl.uniform1f(this.U.hasBg, 0.0);
                 this.refresh();
                 return;
             }
@@ -384,8 +385,8 @@
             img.onload = () => {
                 if (!this.gl) return;
                 console.log('[LiquidGlass] 背景加载成功:', img.width, 'x', img.height);
-                this.gl.bindTexture(gl.TEXTURE_2D, this.tex);
-                this.gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
+                this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, img);
                 this.hasUserBg = true;
                 this.gl.uniform1f(this.U.hasBg, 1.0);
                 this.refresh();
