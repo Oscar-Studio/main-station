@@ -557,6 +557,9 @@
             if (this.canvas.style.height !== cssH + 'px') this.canvas.style.height = cssH + 'px';
 
             gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+            // 清除为透明黑色（canvas 透明，CSS 背景透出）
+            gl.clearColor(0.0, 0.0, 0.0, 0.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
 
             const count = this._collectRects();
             gl.uniform2f(this.U.res, this.canvas.width, this.canvas.height);
