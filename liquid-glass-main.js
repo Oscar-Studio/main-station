@@ -240,31 +240,58 @@
                 }
 
                 void main() {
-                    // fragCoord: 像素坐标（WebGL 默认 bottom-left 原点）
-                    // JS 中所有 rect.cy 已经翻转成 bottom-up，跟这里一致
                     vec2 fragCoord = v_uv * u_resolution;
 
-                    vec4 bgColor;
-                    if (u_hasUserBg > 0.5) {
-                        bgColor = texture2D(u_bgImage, v_uv);
-                    } else {
-                        float t = v_uv.y;
-                        bgColor = vec4(mix(vec3(0.06, 0.09, 0.16), vec3(0.10, 0.05, 0.15), t), 1.0);
-                    }
-
-                    vec4 outColor = bgColor;
                     bool painted = false;
+                    vec4 outColor = vec4(0.0);
+                    float outAlpha = 0.0;
+
                     for (int i = 0; i < ${MAX_RECTS}; i++) {
                         if (i >= u_rectCount) break;
                         vec4 rect = u_rects[i];
                         vec2 p = fragCoord - rect.xy;
                         float sdf = sdRoundedBox(p, rect.zw, u_radius[i]);
                         if (sdf <= 0.0 && !painted) {
-                            outColor = sampleRect(fragCoord, rect, u_radius[i]);
+                            // 在玻璃内部：计算边缘距和折射
+                            float distToEdge = -sdf;
+                            float edgeAmt = clamp(1.0 - distToEdge / max(u_edgeThickness, 1.0), 0.0, 1.0);
+                            float distMag = u_refractionStrength * pow(edgeAmt, u_distortionCurve);
+                            vec2 normDir = (length(p) > 0.001) ? normalize(-p) : vec2(0.0);
+
+                            // 从背景纹理采样折射后的颜色
+                            vec4 refColor;
+                            if (u_hasUserBg > 0.5) {
+                                vec2 uv2 = (fragCoord + normDir * distMag) / u_resolution;
+                                refColor = texture2D(u_bgImage, uv2);
+                            } else {
+                                vec2 uv2 = (fragCoord + normDir * distMag) / u_resolution;
+                                float t = clamp(uv2.y, 0.0, 1.0);
+                                refColor = vec4(mix(vec3(0.06, 0.09, 0.16), vec3(0.10, 0.05, 0.15), t), 1.0);
+                            }
+
+                            // 边缘 rim glow + 色散色边
+                            float rimGlow = pow(edgeAmt, 3.0) * 0.45;
+                            // CA：边缘 R/G/B 偏移产生彩虹色散
+                            float caAmount = u_chromaticAmount * edgeAmt * 0.5;
+                            float caR = 0.0, caG = 0.0, caB = 0.0;
+                            if (caAmount > 0.5) {
+                                caR =  caAmount * 0.008;
+                                caG =  0.0;
+                                caB = -caAmount * 0.008;
+                            }
+                            outColor.rgb = refColor.rgb + vec3(rimGlow + caR, rimGlow + caG, rimGlow + caB);
+
+                            // 玻璃 tint：中心用高 alpha 提供明显的玻璃质感
+                            float tintStrength = u_glassAlpha + (1.0 - edgeAmt) * 0.15;
+                            outColor.rgb = mix(outColor.rgb, vec3(1.0), tintStrength);
+                            outColor.a = 1.0;
+                            outAlpha = 1.0;
                             painted = true;
                         }
                     }
-                    gl_FragColor = vec4(outColor.rgb, 1.0);
+
+                    if (outAlpha < 0.5) discard;
+                    gl_FragColor = vec4(outColor.rgb, outAlpha);
                 }
             `;
 
@@ -490,19 +517,21 @@
             return count;
         }
 
-        refresh() {
-            if (!this.gl) return;
-            if (this.quality === 'low') return;
-            if (this.pendingFrame) return;
-            this.pendingFrame = true;
-            // 同步渲染一次（确保 canvas 立即被画，避免 rAF 错过或延迟）
-            try { this._render(); } catch (e) { /* 同步失败也要继续排 rAF */ }
-            // 再排 rAF 兜底（处理异步资源 — 字体、bg 图等）
-            requestAnimationFrame(() => {
-                this.pendingFrame = false;
-                try { this._render(); } catch (e) { /* ignore */ }
-            });
-        }
+            refresh() {
+                if (!this.gl) return;
+                if (this.quality === 'low') return;
+                if (this.pendingFrame) return;
+                this.pendingFrame = true;
+                try {
+                    this._render();
+                } catch (e) {
+                    console.warn('[LiquidGlass] refresh failed:', e);
+                }
+                requestAnimationFrame(() => {
+                    this.pendingFrame = false;
+                    try { this._render(); } catch (e) { /* ignore */ }
+                });
+            }
 
         _render() {
             this.pendingFrame = false;
