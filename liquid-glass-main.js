@@ -27,6 +27,8 @@
         if (!canvas) return;
         const scope = canvas.getAttribute('data-lg-scope') || null;
         const bgUrl = canvas.getAttribute('data-lg-bg') || null;
+        // 若 canvas 上有 data-lg-scope，让页面 JS 自己 init（带 bgImageUrl），我们不抢先
+        if (scope && !canvas.hasAttribute('data-lg-auto')) return;
         const inst = LiquidGlass.init({
             canvas,
             scope: scope ? document.querySelector(scope) : null,
@@ -334,6 +336,7 @@
             const css = document.body.style.backgroundImage || '';
             if (css === this.lastBgCss) return;
             this.lastBgCss = css;
+            console.log('[LiquidGlass] body bg 变化 →', css.slice(0, 80));
             const m = css.match(/url\(["']?(.+?)["']?\)/);
             if (m) this.setBg(m[1]);
             else {
@@ -351,18 +354,20 @@
                 this.refresh();
                 return;
             }
+            console.log('[LiquidGlass] 加载背景:', url);
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = () => {
                 if (!this.gl) return;
+                console.log('[LiquidGlass] 背景加载成功:', img.width, 'x', img.height);
                 this.gl.bindTexture(gl.TEXTURE_2D, this.tex);
                 this.gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
                 this.hasUserBg = true;
                 this.gl.uniform1f(this.U.hasBg, 1.0);
                 this.refresh();
             };
-            img.onerror = () => {
-                console.warn('[LiquidGlass] 背景图加载失败:', url);
+            img.onerror = (e) => {
+                console.warn('[LiquidGlass] 背景图加载失败:', url, e && e.message);
                 this.hasUserBg = false;
                 if (this.gl) this.gl.uniform1f(this.U.hasBg, 0.0);
                 this.refresh();
@@ -554,12 +559,23 @@
     let instance = null;
     const LiquidGlass = {
         init(options = {}) {
-            if (instance) return instance;
             const canvas = options.canvas || document.getElementById('liquid-glass-canvas');
             if (!canvas) {
                 console.warn('[LiquidGlass] 找不到 canvas');
                 return null;
             }
+            // 已有实例 + 同一 canvas + 同一 scope：返回现有
+            if (instance && instance.canvas === canvas && !options.force) {
+                // 若提供了新参数，覆盖
+                if (options.scope !== undefined || options.bgImageUrl !== undefined) {
+                    if (options.scope !== undefined) instance.scope = options.scope;
+                    if (options.bgImageUrl !== undefined) instance.setBg(options.bgImageUrl || null);
+                    instance.refresh();
+                }
+                return instance;
+            }
+            // 不同 canvas 或强制：销毁旧的
+            if (instance) instance.destroy();
             try {
                 instance = new LiquidGlassInstance(canvas, options);
                 if (!instance.gl) instance = null;
