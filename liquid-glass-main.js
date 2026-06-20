@@ -446,8 +446,9 @@
 
             // scope 模式：canvas 像素坐标基于 scope 元素位置
             let offsetX = 0, offsetY = 0;
+            let sr = null;
             if (this.scope) {
-                const sr = this.scope.getBoundingClientRect();
+                sr = this.scope.getBoundingClientRect();
                 offsetX = -sr.left;
                 offsetY = -sr.top;
             }
@@ -460,9 +461,13 @@
                 const cs = getComputedStyle(el);
                 if (cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') continue;
 
-                // scope 模式下：跳过超出 scope 边界的元素
+                // scope 模式下：跳过超出 scope 边界的元素（使用相对 scope 的坐标）
                 if (this.scope) {
-                    if (r.right < 0 || r.bottom < 0 || r.left > cw || r.top > ch) continue;
+                    const relLeft = r.left - sr.left;
+                    const relRight = r.right - sr.left;
+                    const relTop = r.top - sr.top;
+                    const relBottom = r.bottom - sr.top;
+                    if (relRight < 0 || relBottom < 0 || relLeft > cw || relTop > ch) continue;
                 } else {
                     if (r.bottom < -50 || r.top > ch + 50) continue;
                 }
