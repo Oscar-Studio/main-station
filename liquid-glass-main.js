@@ -495,7 +495,13 @@
             if (this.quality === 'low') return;
             if (this.pendingFrame) return;
             this.pendingFrame = true;
-            requestAnimationFrame(() => this._render());
+            // 同步渲染一次（确保 canvas 立即被画，避免 rAF 错过或延迟）
+            try { this._render(); } catch (e) { /* 同步失败也要继续排 rAF */ }
+            // 再排 rAF 兜底（处理异步资源 — 字体、bg 图等）
+            requestAnimationFrame(() => {
+                this.pendingFrame = false;
+                try { this._render(); } catch (e) { /* ignore */ }
+            });
         }
 
         _render() {
