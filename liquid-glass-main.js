@@ -386,7 +386,10 @@
                 if (!this.gl) return;
                 console.log('[LiquidGlass] 背景加载成功:', img.width, 'x', img.height);
                 this.gl.bindTexture(this.gl.TEXTURE_2D, this.tex);
+                // HTML5 Image 是 top-down，WebGL texture 是 bottom-up，需要翻转 Y
+                this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, true);
                 this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, img);
+                this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, false);
                 this.hasUserBg = true;
                 this.gl.uniform1f(this.U.hasBg, 1.0);
                 this.refresh();
