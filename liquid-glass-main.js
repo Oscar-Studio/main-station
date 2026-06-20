@@ -46,8 +46,13 @@
         try {
             const cached = localStorage.getItem('lg-params');
             const cachedQ = localStorage.getItem('lg-quality');
+            const cachedBg = localStorage.getItem('lg-bg');
             if (cachedQ) inst.setQuality(cachedQ);
             if (cached) inst.setParams(JSON.parse(cached));
+            // 本地缓存的背景 URL（来自上一次访问时的后端配置）
+            if (cachedBg && !inst.scope) {
+                inst.setBg(cachedBg);
+            }
         } catch {}
         // 后台异步拉后端配置（覆盖 localStorage）
         try {
@@ -56,15 +61,34 @@
             const API_BASE = (window.API_BASE || 'https://api.oscarstudio.cn') + '/api';
             const resp = await fetch(`${API_BASE}/ui`, { credentials: 'include' });
             const data = await resp.json();
-            if (!data.success || !data.ui || !data.ui.liquidGlass) return;
-            const g = data.ui.liquidGlass;
-            if (g.quality) inst.setQuality(g.quality);
-            if (g.params) inst.setParams(g.params);
-            // 缓存到 localStorage
-            try {
-                localStorage.setItem('lg-quality', g.quality || 'high');
-                localStorage.setItem('lg-params', JSON.stringify(g.params || DEFAULT_PARAMS));
-            } catch {}
+            if (!data.success || !data.ui) return;
+            const ui = data.ui;
+
+            // 应用玻璃参数
+            if (ui.liquidGlass) {
+                const g = ui.liquidGlass;
+                if (g.quality) inst.setQuality(g.quality);
+                if (g.params) inst.setParams(g.params);
+                try {
+                    localStorage.setItem('lg-quality', g.quality || 'high');
+                    localStorage.setItem('lg-params', JSON.stringify(g.params || DEFAULT_PARAMS));
+                } catch {}
+            }
+
+            // 直接应用背景图（防御 user-button.js 失败/延迟的情况）
+            if (ui.backgroundImage && !inst.scope) {
+                const fullUrl = (window.UPLOAD_BASE || 'https://api.oscarstudio.cn') + ui.backgroundImage;
+                inst.setBg(fullUrl);
+                try { localStorage.setItem('lg-bg', fullUrl); } catch {}
+                // 同步 body style（确保 user-button.js 后续也能看到）
+                if (!document.body.style.backgroundImage.includes(ui.backgroundImage)) {
+                    document.body.style.backgroundImage = `url(${fullUrl})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundRepeat = 'no-repeat';
+                    document.body.style.backgroundAttachment = 'fixed';
+                }
+            }
         } catch (e) { /* 静默失败 */ }
     }
 
