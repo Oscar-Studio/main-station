@@ -614,10 +614,7 @@
     const LiquidGlass = {
         init(options = {}) {
             const canvas = options.canvas || document.getElementById('liquid-glass-canvas');
-            if (!canvas) {
-                console.warn('[LiquidGlass] 找不到 canvas');
-                return null;
-            }
+            if (!canvas) return null;
             // 已有实例 + 同一 canvas + 同一 scope：返回现有
             if (instance && instance.canvas === canvas && !options.force) {
                 // 若提供了新参数，覆盖
