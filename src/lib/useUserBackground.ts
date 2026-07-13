@@ -14,6 +14,7 @@ declare global {
 const DEFAULT_API_BASE = 'https://api.oscarstudio.cn';
 const DEFAULT_UPLOAD_BASE = 'https://api.oscarstudio.cn';
 const BG_STORAGE_KEY = 'lg-bg';
+const DEFAULT_BG = '/default-bg.jpeg';
 
 function readCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
@@ -90,9 +91,15 @@ export function useUserBackground() {
     };
 
     loadFromApi().then((url) => {
-      if (cancelled || !url) return;
-      applyBackground(url);
-      persist(url);
+      if (cancelled) return;
+      if (url) {
+        applyBackground(url);
+        persist(url);
+        return;
+      }
+      // 无用户背景时使用默认背景
+      const alreadySet = window.localStorage.getItem(BG_STORAGE_KEY);
+      if (!alreadySet) applyBackground(DEFAULT_BG);
     });
 
     return () => {
