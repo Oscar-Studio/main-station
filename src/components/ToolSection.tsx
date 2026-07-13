@@ -46,13 +46,23 @@ export default function ToolSection({
         <div className="tool-icon">{icon}</div>
         <h2>{t(titleKey)}</h2>
         <p>{t(descKey)}</p>
-        <a
-          href={href}
-          {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-          className="btn-liquid btn-liquid-ghost"
+        <Glass
+          style={{
+            display: 'inline-flex',
+            borderRadius: 50,
+            padding: 0,
+            background: 'rgba(255,255,255,0.06)',
+          }}
+          optics={{ brightness: 0.06, sheen: 0.5, sheenWidth: 60 }}
         >
-          {t(actionKey)}
-        </a>
+          <a
+            href={href}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="btn-liquid btn-liquid-ghost"
+          >
+            {t(actionKey)}
+          </a>
+        </Glass>
       </Glass>
     </section>
   );
