@@ -19,9 +19,17 @@ function useExternalScripts() {
   }, []);
 }
 
+function useBrowserClass() {
+  useEffect(() => {
+    const isChromium = /Chrome|Chromium|Edg\//.test(navigator.userAgent) && !/CriOS|EdgiOS/.test(navigator.userAgent);
+    if (!isChromium) document.body.classList.add('no-lg-refraction');
+  }, []);
+}
+
 export default function App() {
   useExternalScripts();
   useUserBackground();
+  useBrowserClass();
   return (
     <>
       <Navbar />
