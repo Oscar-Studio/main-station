@@ -1,109 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Oscar Studio</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <!-- WebGL 全屏液态玻璃 canvas（z-index:6，pointer-events:none） -->
-    <canvas id="liquid-glass-canvas" aria-hidden="true"></canvas>
-
-    <!-- Navigation -->
-    <nav id="mainNav" class="glass-element">
-        <a href="https://oscarstudio.cn" class="logo"><img src="logo.png" alt="Oscar Studio"></a>
-        <ul>
-            <li><a href="#ai">AI 工具</a></li>
-            <li><a href="#teaching-tools">教学工具</a></li>
-            <li><a href="#html-ppt">HTML-PPT</a></li>
-            <li><a href="#games">益智游戏</a></li>
-            <li><a href="https://api.oscarstudio.cn/feedback" target="_blank" rel="noopener">反馈</a></li>
-        </ul>
-        <div class="nav-right-group">
-            <a href="https://docs.oscarstudio.cn" target="_blank" rel="noopener">文档</a>
-            <a href="https://api.oscarstudio.cn/user/settings" class="nav-cta-btn glass-element">Oscar Studio 高定服务</a>
-            <button class="opilot-trigger glass-element" id="opilotTrigger" title="Opilot (⌘K)">
-                <span class="opilot-trigger-icon">✨</span>
-                <span>Opilot</span>
-                <kbd>⌘K</kbd>
-            </button>
-            <div class="lang-dropdown">
-                <button class="lang-toggle glass-element">简体中文</button>
-                <ul class="lang-menu glass-element">
-                    <li><button class="active" data-lang="zh">简体中文</button></li>
-                    <li><button data-lang="en">English</button></li>
-                </ul>
-            </div>
-            <div id="userButtonContainer" class="glass-element"></div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="hero">
-        <h1>Oscar Studio</h1>
-        <p>专注于提升教学和学习质量</p>
-        <div class="hero-buttons">
-            <a href="#ai" class="btn-liquid btn-liquid-primary glass-element">开始探索</a>
-            <a href="https://github.com/oscarstudio" target="_blank" class="btn-liquid btn-liquid-ghost glass-element">加入我们</a>
-        </div>
-    </section>
-
-    <!-- AI 工具 Section -->
-    <section id="ai" class="tool-section">
-        <div class="tool-content glass-element">
-            <div class="tool-icon">🤖</div>
-            <h2>AI 工具</h2>
-            <p>集成多种先进 AI 模型，包括 DeepSeek 和 MiniMax，为您提供智能问答、文本生成、语音合成等全方位 AI 服务。简洁易用的界面让您轻松享受人工智能带来的便利，无论是学习、工作还是创意写作，都能为您提供有力的支持。</p>
-            <a href="https://ai.oscarstudio.cn" target="_blank" class="btn-liquid btn-liquid-ghost glass-element">Explore</a>
-        </div>
-    </section>
-
-    <!-- 教学工具 Section -->
-    <section id="teaching-tools" class="tool-section">
-        <div class="tool-content glass-element">
-            <div class="tool-icon">📚</div>
-            <h2>教学工具</h2>
-            <p>丰富的 HTML 演示工具，专为教师和学生设计。包含函数图像绘制、几何图形演示、化学方程式配平、计时器、抽签器等多种实用工具，让抽象的知识变得直观可见，使课堂教学更加生动有趣，提升学习效率。</p>
-            <a href="https://tools.oscarstudio.cn" target="_blank" class="btn-liquid btn-liquid-ghost glass-element">Explore</a>
-        </div>
-    </section>
-
-    <!-- HTML-PPT Section -->
-    <section id="html-ppt" class="tool-section">
-        <div class="tool-content glass-element">
-            <div class="tool-icon">📊</div>
-            <h2>HTML-PPT</h2>
-            <p>创新的网页版 PPT 演示方案，使用纯 HTML、CSS 和 JavaScript 构建。无需安装任何软件，直接在浏览器中展示您的演示文稿。支持动画效果、响应式布局，让您的演讲更加流畅专业。跨越平台限制，随时随地精彩呈现。</p>
-            <a href="https://ppt.oscarstudio.cn" target="_blank" class="btn-liquid btn-liquid-ghost glass-element">Explore</a>
-        </div>
-    </section>
-
-    <!-- 益智游戏 Section -->
-    <section id="games" class="tool-section">
-        <div class="tool-content glass-element">
-            <div class="tool-icon">🎮</div>
-            <h2>益智游戏</h2>
-            <p>精心设计的益智游戏集合，包括中国象棋、国际象棋、五子棋、24点等多种经典游戏。在娱乐中锻炼思维能力和逻辑推理能力，适合各个年龄段的用户。简洁美观的界面和流畅的操作体验，让游戏时光更加愉快。</p>
-            <a href="https://games.oscarstudio.cn" target="_blank" class="btn-liquid btn-liquid-ghost glass-element">Explore</a>
-        </div>
-    </section>
-
-    <footer>
-        <p>Oscar Studio &copy; 2026</p>
-        <p><a href="https://github.com/oscarstudio" target="_blank" rel="noopener noreferrer">GitHub 仓库</a> | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">粤ICP备2026012488号-1</a></p>
-    </footer>
-
-    <button id="back-to-top" class="glass-element" aria-label="回到顶部">↑</button>
-
-    <link rel="stylesheet" href="https://ai.oscarstudio.cn/opilot.css">
-    <script src="https://ai.oscarstudio.cn/opilot.js?v=f5a49cc"></script>
-    <script src="liquid-glass-main.js"></script>
-    <script src="script.js"></script>
-    <script src="https://ai.oscarstudio.cn/user-button.js" crossorigin="anonymous"></script>
-</body>
-
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://ai.oscarstudio.cn/opilot.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script src="https://ai.oscarstudio.cn/opilot.js?v=f5a49cc" defer></script>
+  </body>
 </html>
