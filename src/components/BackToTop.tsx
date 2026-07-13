@@ -47,7 +47,7 @@ export default function BackToTop() {
         transition: 'opacity 0.3s, transform 0.3s, visibility 0.3s',
         zIndex: 999,
       }}
-      className={`back-to-top${visible ? ' visible' : ''}`}
+      className={`glass-element back-to-top${visible ? ' visible' : ''}`}
       optics={{ brightness: 0.1, sheen: 0.7, sheenWidth: 70, specular: 1.2, ...gc }}
     >
       <button

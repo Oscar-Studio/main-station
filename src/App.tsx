@@ -5,6 +5,7 @@ import ToolSection from './components/ToolSection';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 import { useUserBackground } from './lib/useUserBackground';
+import { initWebGLGlass, destroyWebGLGlass } from './lib/webglGlass';
 
 function useExternalScripts() {
   useEffect(() => {
@@ -22,7 +23,10 @@ function useExternalScripts() {
 function useBrowserClass() {
   useEffect(() => {
     const isChromium = /Chrome|Chromium|Edg\//.test(navigator.userAgent) && !/CriOS|EdgiOS/.test(navigator.userAgent);
-    if (!isChromium) document.body.classList.add('no-lg-refraction');
+    if (isChromium) return;
+    document.body.classList.add('no-lg-refraction');
+    initWebGLGlass();
+    return () => destroyWebGLGlass();
   }, []);
 }
 

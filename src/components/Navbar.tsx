@@ -50,6 +50,7 @@ export default function Navbar() {
         <a href="https://docs.oscarstudio.cn" target="_blank" rel="noopener">{t('navDocs')}</a>
 
         <Glass
+          className="glass-element"
           style={{
             display: 'inline-flex',
             borderRadius: 50,
@@ -67,6 +68,7 @@ export default function Navbar() {
         </Glass>
 
         <Glass
+          className="glass-element"
           style={{
             display: 'inline-flex',
             borderRadius: 50,
@@ -93,6 +95,7 @@ export default function Navbar() {
           className={`lang-dropdown${open ? ' open' : ''}`}
         >
           <Glass
+            className="glass-element"
             style={{
               display: 'inline-flex',
               borderRadius: 50,
@@ -124,7 +127,7 @@ export default function Navbar() {
               minWidth: 140,
               zIndex: 1001,
             }}
-            className="lang-menu-glass"
+            className="glass-element lang-menu-glass"
             optics={{ brightness: 0.08, sheen: 0.55, sheenWidth: 60, depth: 0.6, ...gc }}
           >
             <ul className="lang-menu">

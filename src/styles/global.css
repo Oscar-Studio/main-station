@@ -696,9 +696,26 @@ footer a:hover {
   }
 }
 
-/* ===================== Safari / Firefox — CSS 增强玻璃效果 ===================== */
-/* 非 Chromium 浏览器不支持 backdrop-filter: url()，无折射/弯曲。
-   用纯 CSS 模拟更丰富的玻璃质感：动画高光带 + 内发光 + 双边缘光。 */
+/* ===================== Safari / Firefox — WebGL canvas + CSS 增强 ===================== */
+/* 非 Chromium 浏览器用 WebGL canvas 渲染折射，同时禁用 samasante 的 backdrop-filter
+   避免 WebGL 渲染的折射被 CSS blur 覆盖。 */
+
+/* 禁用 samasante Glass 的 backdrop-filter（改由 WebGL canvas 渲染折射） */
+.no-lg-refraction [data-liquid-glass="material"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* WebGL canvas 在内容最底层 */
+#lg-webgl-canvas {
+  z-index: 0 !important;
+}
+
+/* z-index 修复：玻璃元素必须 > canvas 的 z-index */
+.no-lg-refraction .glass-element {
+  position: relative;
+  z-index: 1;
+}
 
 /* —— 按钮级玻璃增强 —— */
 .no-lg-refraction .btn-liquid::before {

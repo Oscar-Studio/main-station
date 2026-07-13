@@ -27,7 +27,7 @@ export default function ToolSection({
   return (
     <section id={id} className="tool-section">
       <Glass
-        className="tool-content glass-fallback"
+        className="glass-element tool-content glass-fallback"
         style={{
           background: 'rgba(255,255,255,0.06)',
           borderRadius: 16,
@@ -50,6 +50,7 @@ export default function ToolSection({
         <h2>{t(titleKey)}</h2>
         <p>{t(descKey)}</p>
         <Glass
+          className="glass-element"
           style={{
             display: 'inline-flex',
             borderRadius: 50,

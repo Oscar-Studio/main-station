@@ -11,6 +11,7 @@ export default function Hero() {
       <p>{t('heroSubtitle')}</p>
       <div className="hero-buttons">
         <Glass
+          className="glass-element"
           style={{
             display: 'inline-flex',
             borderRadius: 50,
@@ -25,6 +26,7 @@ export default function Hero() {
           </a>
         </Glass>
         <Glass
+          className="glass-element"
           style={{
             display: 'inline-flex',
             borderRadius: 50,
