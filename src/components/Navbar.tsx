@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Glass } from '@samasante/liquid-glass';
 import { useI18n } from '../i18n/I18nProvider';
+import { useGlassConfig } from '../lib/useUserGlassConfig';
 import type { Lang } from '../i18n/translations';
 
 declare global {
@@ -11,6 +12,7 @@ declare global {
 
 export default function Navbar() {
   const { t, lang, setLang } = useI18n();
+  const gc = useGlassConfig();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +56,7 @@ export default function Navbar() {
             padding: 0,
             background: 'rgba(253,224,71,0.12)',
           }}
-          optics={{ brightness: 0.08, sheen: 0.6, sheenWidth: 60 }}
+          optics={{ brightness: 0.08, sheen: 0.6, sheenWidth: 60, ...gc }}
         >
           <a
             href="https://api.oscarstudio.cn/user/settings"
@@ -71,7 +73,7 @@ export default function Navbar() {
             padding: 0,
             background: 'rgba(255,255,255,0.05)',
           }}
-          optics={{ brightness: 0.05, sheen: 0.5, sheenWidth: 50 }}
+          optics={{ brightness: 0.05, sheen: 0.5, sheenWidth: 50, ...gc }}
         >
           <button
             type="button"
@@ -97,7 +99,7 @@ export default function Navbar() {
               padding: 0,
               background: 'rgba(255,255,255,0.05)',
             }}
-            optics={{ brightness: 0.05, sheen: 0.5, sheenWidth: 50 }}
+            optics={{ brightness: 0.05, sheen: 0.5, sheenWidth: 50, ...gc }}
           >
             <button
               type="button"
@@ -123,7 +125,7 @@ export default function Navbar() {
               zIndex: 1001,
             }}
             className="lang-menu-glass"
-            optics={{ brightness: 0.08, sheen: 0.55, sheenWidth: 60, depth: 0.6 }}
+            optics={{ brightness: 0.08, sheen: 0.55, sheenWidth: 60, depth: 0.6, ...gc }}
           >
             <ul className="lang-menu">
               <li>

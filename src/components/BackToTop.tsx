@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Glass } from '@samasante/liquid-glass';
 import { useI18n } from '../i18n/I18nProvider';
+import { useGlassConfig } from '../lib/useUserGlassConfig';
 
 export default function BackToTop() {
   const { t } = useI18n();
+  const gc = useGlassConfig();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function BackToTop() {
         zIndex: 999,
       }}
       className={`back-to-top${visible ? ' visible' : ''}`}
-      optics={{ brightness: 0.1, sheen: 0.7, sheenWidth: 70, specular: 1.2 }}
+      optics={{ brightness: 0.1, sheen: 0.7, sheenWidth: 70, specular: 1.2, ...gc }}
     >
       <button
         type="button"

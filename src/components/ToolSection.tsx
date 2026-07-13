@@ -1,5 +1,6 @@
 import { Glass } from '@samasante/liquid-glass';
 import { useI18n } from '../i18n/I18nProvider';
+import { useGlassConfig } from '../lib/useUserGlassConfig';
 import type { TranslationKey } from '../i18n/translations';
 
 type Props = {
@@ -22,6 +23,7 @@ export default function ToolSection({
   external,
 }: Props) {
   const { t } = useI18n();
+  const gc = useGlassConfig();
   return (
     <section id={id} className="tool-section">
       <Glass
@@ -41,6 +43,7 @@ export default function ToolSection({
           glow: 0.3,
           glowSpread: 0.18,
           depth: 0.7,
+          ...gc,
         }}
       >
         <div className="tool-icon">{icon}</div>
@@ -53,7 +56,7 @@ export default function ToolSection({
             padding: 0,
             background: 'rgba(255,255,255,0.06)',
           }}
-          optics={{ brightness: 0.06, sheen: 0.5, sheenWidth: 60 }}
+          optics={{ brightness: 0.06, sheen: 0.5, sheenWidth: 60, ...gc }}
         >
           <a
             href={href}
