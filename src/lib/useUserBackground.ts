@@ -14,7 +14,7 @@ declare global {
 const DEFAULT_API_BASE = 'https://api.oscarstudio.cn';
 const DEFAULT_UPLOAD_BASE = 'https://api.oscarstudio.cn';
 const BG_STORAGE_KEY = 'lg-bg';
-const DEFAULT_BG = '/default-bg.jpeg';
+const DEFAULT_BG = 'https://api.oscarstudio.cn/default-bg.jpeg';
 
 function readCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
