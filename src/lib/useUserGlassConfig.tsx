@@ -4,12 +4,12 @@ import type { GlassOptics } from '@samasante/liquid-glass';
 const API_BASE = 'https://api.oscarstudio.cn/api';
 
 const DEFAULT_OPTICS: Partial<GlassOptics> = {
-  sheenWidth: 80,
-  strength: 0.7,
-  curvature: 0.5,
-  frost: 4,
-  dispersion: 0.3,
-  brightness: 0.06,
+  sheenWidth: 30,
+  strength: 0.15,
+  curvature: 0.15,
+  frost: 3,
+  dispersion: 0.10,
+  brightness: 0.04,
 };
 
 const GlassConfigContext = createContext<Partial<GlassOptics>>(DEFAULT_OPTICS);

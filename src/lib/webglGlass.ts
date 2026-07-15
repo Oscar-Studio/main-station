@@ -10,7 +10,7 @@ interface Params {
 }
 
 const DEFAULT_PARAMS: Params = {
-  edge: 60, refr: 60, curve: 2.0, frost: 4, ca: 12, alpha: 0.12,
+  edge: 30, refr: 15, curve: 0.75, frost: 0.15, ca: 6, alpha: 0.04,
 };
 
 let instance: WebGLGlass | null = null;
