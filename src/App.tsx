@@ -53,7 +53,7 @@ export default function App() {
         titleKey="teachingTitle"
         descKey="teachingDesc"
         actionKey="teachingAction"
-        href="https://tools.oscarstudio.cn"
+        href="https://edu.oscarstudio.cn"
         external
       />
       <ToolSection
