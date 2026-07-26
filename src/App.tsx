@@ -5,6 +5,7 @@ import ToolSection from './components/ToolSection';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 import { useUserBackground } from './lib/useUserBackground';
+import { useGlassConfig } from './lib/useUserGlassConfig';
 import { initWebGLGlass, destroyWebGLGlass } from './lib/webglGlass';
 
 function useExternalScripts() {
@@ -21,13 +22,14 @@ function useExternalScripts() {
 }
 
 function useBrowserClass() {
+  const gc = useGlassConfig();
   useEffect(() => {
     const isChromium = /Chrome|Chromium|Edg\//.test(navigator.userAgent) && !/CriOS|EdgiOS/.test(navigator.userAgent);
     if (isChromium) return;
     document.body.classList.add('no-lg-refraction');
-    initWebGLGlass();
+    initWebGLGlass(gc);
     return () => destroyWebGLGlass();
-  }, []);
+  }, [gc]);
 }
 
 export default function App() {

@@ -13,10 +13,49 @@ const DEFAULT_PARAMS: Params = {
   edge: 30, refr: 15, curve: 0.75, frost: 0.15, ca: 6, alpha: 0.04,
 };
 
+const BOOST = {
+  refr: 2.0,
+  frost: 5.0,
+  ca: 1.5,
+};
+
+export interface WebGLOptics {
+  strength?: number;
+  curvature?: number;
+  frost?: number;
+  dispersion?: number;
+  brightness?: number;
+  sheenWidth?: number;
+  depth?: number;
+}
+
+export function mapOpticsToParams(optics: WebGLOptics | undefined): Params {
+  const o = optics ?? {};
+  const strength = o.strength ?? 0.15;
+  const frost = o.frost ?? 3;
+  const dispersion = o.dispersion ?? 0.10;
+  const brightness = o.brightness ?? 0.04;
+  const sheenWidth = o.sheenWidth ?? 30;
+  const depth = o.depth ?? 0.5;
+
+  return {
+    edge: sheenWidth * (0.5 + depth),
+    refr: strength * 100 * BOOST.refr,
+    curve: DEFAULT_PARAMS.curve,
+    frost: frost * BOOST.frost,
+    ca: dispersion * 60 * BOOST.ca,
+    alpha: Math.max(0, Math.min(1, brightness)),
+  };
+}
+
 let instance: WebGLGlass | null = null;
 
-export function initWebGLGlass(params?: Partial<Params>): WebGLGlass | null {
-  if (instance) return instance;
+export function initWebGLGlass(optics?: WebGLOptics): WebGLGlass | null {
+  const params = mapOpticsToParams(optics);
+  if (instance) {
+    instance.setParams(params);
+    return instance;
+  }
   instance = new WebGLGlass(params);
   if (!instance.gl) { instance = null; return null; }
   return instance;
