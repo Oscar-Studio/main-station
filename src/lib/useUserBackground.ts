@@ -22,19 +22,15 @@ function readCookie(name: string): string | null {
   return m ? decodeURIComponent(m[1]) : null;
 }
 
-function applyBackground(url: string) {
+// 把背景图放到 fixed 层而不是 body.style.backgroundImage，
+// 这样 filter: blur 只作用于背景，前景不受影响。
+// 遮罩是另一个 fixed 层（半透明黑色叠加）。
+function applyBackgroundFx(ui: { backgroundImage?: string | null; backgroundOverlay?: number; backgroundBlur?: number }) {
   if (typeof document === 'undefined') return;
-  const body = document.body;
-  body.style.backgroundImage = `url(${url})`;
-  body.style.backgroundSize = 'cover';
-  body.style.backgroundPosition = 'center';
-  body.style.backgroundRepeat = 'no-repeat';
-  body.style.backgroundAttachment = 'fixed';
-  body.dataset.bgReady = '1';
-}
-
-function clearBackground() {
-  if (typeof document === 'undefined') return;
+  const oldLayer = document.getElementById('userBgLayer');
+  const oldMask = document.getElementById('userBgMask');
+  if (oldLayer) oldLayer.remove();
+  if (oldMask) oldMask.remove();
   const body = document.body;
   body.style.backgroundImage = '';
   body.style.backgroundSize = '';
@@ -42,6 +38,56 @@ function clearBackground() {
   body.style.backgroundRepeat = '';
   body.style.backgroundAttachment = '';
   delete body.dataset.bgReady;
+
+  if (!ui.backgroundImage) return;
+
+  const uploadBase = window.UPLOAD_BASE || DEFAULT_UPLOAD_BASE;
+  const bgUrl = uploadBase + ui.backgroundImage;
+  const overlay = typeof ui.backgroundOverlay === 'number' && Number.isFinite(ui.backgroundOverlay) ? ui.backgroundOverlay : 0;
+  const blur = typeof ui.backgroundBlur === 'number' && Number.isFinite(ui.backgroundBlur) ? ui.backgroundBlur : 0;
+
+  const layer = document.createElement('div');
+  layer.id = 'userBgLayer';
+  layer.style.cssText = [
+    'position:fixed',
+    'inset:0',
+    'z-index:-1',
+    'pointer-events:none',
+    `background-image:url(${bgUrl})`,
+    'background-size:cover',
+    'background-position:center',
+    'background-repeat:no-repeat',
+    'background-attachment:fixed',
+    blur > 0 ? `filter:blur(${blur}px)` : '',
+  ].filter(Boolean).join(';');
+  document.body.appendChild(layer);
+
+  if (overlay > 0) {
+    const mask = document.createElement('div');
+    mask.id = 'userBgMask';
+    mask.style.cssText = [
+      'position:fixed',
+      'inset:0',
+      'z-index:-1',
+      'pointer-events:none',
+      'background:#000',
+      `opacity:${overlay}`,
+    ].join(';');
+    document.body.appendChild(mask);
+  }
+
+  body.style.position = 'relative';
+  body.style.isolation = 'isolate';
+  body.style.background = 'transparent';
+  body.dataset.bgReady = '1';
+}
+
+function applyBackground(url: string) {
+  applyBackgroundFx({ backgroundImage: url });
+}
+
+function clearBackground() {
+  applyBackgroundFx({ backgroundImage: null });
 }
 
 function persist(url: string) {
@@ -52,7 +98,7 @@ function persist(url: string) {
   }
 }
 
-async function loadFromApi(): Promise<string | null> {
+async function loadFromApi(): Promise<{ backgroundImage: string; backgroundOverlay?: number; backgroundBlur?: number } | null> {
   const token = window.localStorage.getItem('ai_token') || readCookie('userToken');
   if (!token) return null;
   const apiBase = (window.API_BASE || DEFAULT_API_BASE) + '/api';
@@ -62,7 +108,11 @@ async function loadFromApi(): Promise<string | null> {
     const data = await resp.json().catch(() => null);
     if (!data?.success || !data.ui?.backgroundImage) return null;
     const uploadBase = window.UPLOAD_BASE || DEFAULT_UPLOAD_BASE;
-    return uploadBase + data.ui.backgroundImage;
+    return {
+      backgroundImage: uploadBase + data.ui.backgroundImage,
+      backgroundOverlay: data.ui.backgroundOverlay,
+      backgroundBlur: data.ui.backgroundBlur,
+    };
   } catch {
     return null;
   }
@@ -90,11 +140,11 @@ export function useUserBackground() {
       },
     };
 
-    loadFromApi().then((url) => {
+    loadFromApi().then((cfg) => {
       if (cancelled) return;
-      if (url) {
-        applyBackground(url);
-        persist(url);
+      if (cfg) {
+        applyBackgroundFx(cfg);
+        persist(cfg.backgroundImage);
         return;
       }
       // 无用户背景时使用默认背景
