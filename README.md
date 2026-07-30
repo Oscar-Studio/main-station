@@ -47,4 +47,4 @@ main-station/
 `index.html` 保留两个 CDN 脚本直引（不在 React 树内）：
 
 - `https://ai.oscarstudio.cn/opilot.js` + `opilot.css` — Opilot 面板（⌘K）
-- `https://ai.oscarstudio.cn/user-button.js` — 用户登录按钮；`App.tsx` 在挂载后动态注入
+- `https://api.oscarstudio.cn/user-button.js` — 用户登录按钮；`App.tsx` 在挂载后动态注入（SDK 由 API 仓库 `public/` 静态托管）
