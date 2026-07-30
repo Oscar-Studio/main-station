@@ -36,6 +36,13 @@ body {
   min-height: 100vh;
 }
 
+/* user-button.js 会将 body 设成 background:transparent。
+   这里若 body 有自己的 background，需让 userBgLayer(0) 仍位于最底：
+   userBgLayer=0 → userBgMask=1 → 内容=2+。 */
+body:has(#userBgLayer) {
+  background: transparent !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -61,6 +68,26 @@ img {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border: 0.5px solid var(--glass-border-soft);
+}
+
+/* ===================== 背景层与页面内容分层 ===================== */
+/* userBgLayer(z=0) / userBgMask(z=1) 由 user-button.js 创建。
+ * 所有页面内容必须 > 1，否则会被遮罩盖住。 */
+#root,
+main,
+.nav-container {
+  position: relative;
+  z-index: 2;
+}
+
+/* page-internal 容器确保都在遮罩之上 */
+footer,
+.section,
+.tool-section,
+.hero,
+.tool-section {
+  position: relative;
+  z-index: 2;
 }
 
 /* ===================== Navigation ===================== */
@@ -708,16 +735,22 @@ footer a:hover {
   -webkit-backdrop-filter: none !important;
 }
 
-/* WebGL canvas 在内容最底层 */
-#lg-webgl-canvas {
-  z-index: 0 !important;
+/* WebGL canvas 位于 userBgLayer(0) / userBgMask(1) 之上，但仍低于玻璃元素。
+ * 使用 !important 是因为 webglGlass.ts 会通过 inline style 写入 z-index，
+ * 同时也兜住部分旧页面里 #liquid-glass-canvas 选择的样式。 */
+#lg-webgl-canvas,
+#liquid-glass-canvas {
+  z-index: 3 !important;
 }
 
 /* z-index 修复：玻璃元素必须 > canvas 的 z-index */
 .no-lg-refraction .glass-element {
   position: relative;
-  z-index: 1;
+  z-index: 4;
 }
+
+/* 玻璃元素本体需要透出 userBgMask(1) 之上。
+   注意：此处只针对 .no-lg-refraction 的 WebGL fallback 路径。 */
 
 /* —— 按钮级玻璃增强 —— */
 .no-lg-refraction .btn-liquid::before {

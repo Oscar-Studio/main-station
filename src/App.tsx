@@ -24,8 +24,16 @@ function useExternalScripts() {
 function useBrowserClass() {
   const gc = useGlassConfig();
   useEffect(() => {
-    const isChromium = /Chrome|Chromium|Edg\//.test(navigator.userAgent) && !/CriOS|EdgiOS/.test(navigator.userAgent);
-    if (isChromium) return;
+    // 用 feature detection 代替 UA 嗅探：Safari 自 9 起支持
+    // `-webkit-backdrop-filter`，但 @samasante/liquid-glass 在不支持
+    // `backdrop-filter` 的浏览器里需要回落到 WebGL canvas 渲染折射。
+    // 同时检查 unprefixed 与 webkit 形式，避免漏判。
+    const supportsBD = (): boolean => {
+      if (typeof CSS === 'undefined' || !CSS.supports) return false;
+      return CSS.supports('backdrop-filter', 'blur(1px)')
+        || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
+    };
+    if (supportsBD()) return;
     document.body.classList.add('no-lg-refraction');
     initWebGLGlass(gc);
     return () => destroyWebGLGlass();

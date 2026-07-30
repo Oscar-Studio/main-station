@@ -46,12 +46,17 @@ function applyBackgroundFx(ui: { backgroundImage?: string | null; backgroundOver
   const overlay = typeof ui.backgroundOverlay === 'number' && Number.isFinite(ui.backgroundOverlay) ? ui.backgroundOverlay : 0;
   const blur = typeof ui.backgroundBlur === 'number' && Number.isFinite(ui.backgroundBlur) ? ui.backgroundBlur : 0;
 
+  // 使用正 z-index 分层而不是负值，避免 Safari 中 body 上 stacking context
+  // 把 z-index:-1 误压在 body 背景下、导致整层背景消失。
+  //   userBgLayer : 0
+  //   userBgMask  : 1
+  //   内容（依赖外部 CSS 的 z-index）必须 ≥ 2
   const layer = document.createElement('div');
   layer.id = 'userBgLayer';
   layer.style.cssText = [
     'position:fixed',
     'inset:0',
-    'z-index:-1',
+    'z-index:0',
     'pointer-events:none',
     `background-image:url(${bgUrl})`,
     'background-size:cover',
@@ -59,6 +64,10 @@ function applyBackgroundFx(ui: { backgroundImage?: string | null; backgroundOver
     'background-repeat:no-repeat',
     'background-attachment:fixed',
     blur > 0 ? `filter:blur(${blur}px)` : '',
+    blur > 0 ? '-webkit-filter:blur(' + blur + 'px)' : '',
+    // 防止 blur 触发整页重绘导致 Safari 丢帧
+    blur > 0 ? 'will-change:transform' : '',
+    blur > 0 ? 'transform:translateZ(0)' : '',
   ].filter(Boolean).join(';');
   document.body.appendChild(layer);
 
@@ -68,7 +77,7 @@ function applyBackgroundFx(ui: { backgroundImage?: string | null; backgroundOver
     mask.style.cssText = [
       'position:fixed',
       'inset:0',
-      'z-index:-1',
+      'z-index:1',
       'pointer-events:none',
       'background:#000',
       `opacity:${overlay}`,
@@ -76,8 +85,8 @@ function applyBackgroundFx(ui: { backgroundImage?: string | null; backgroundOver
     document.body.appendChild(mask);
   }
 
-  body.style.position = 'relative';
-  body.style.isolation = 'isolate';
+  // 让页面内容（默认 z-index:auto 同级）位于 userBgLayer 之上。
+  // 调用方不需要再设 isolation:isolate，但保持兼容历史。
   body.style.background = 'transparent';
   body.dataset.bgReady = '1';
 }
