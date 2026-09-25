@@ -1,0 +1,334 @@
+/* =============================================================
+ * Atlas (crazy/4) globals — scoped to #atlas-scope
+ * =============================================================
+ *
+ * Tailwind preflight 关闭（main-station/tailwind.config.ts
+ * corePlugins.preflight: false），所以不会有全局 reset 冲掉主站。
+ *
+ * CSS 变量放在 :root(全局),但变量名跟 main-station 不冲突
+ * （--paper / --ink / --accent / --accent-2 等,main-station 用
+ *  --primary / --dark / --light / --gray）。
+ *
+ * body 相关的 reset / background / color 全部搬到 #atlas-scope
+ * 上,避免覆盖主站 classic 主题的 body 样式。
+ *
+ * @tailwind utilities/components 由 Tailwind 通过 important:
+ * '#atlas-scope' 自动加前缀,所以 Atlas 子树里的 flex / p-6 等
+ * utility 不会泄露到主站。
+ * ============================================================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:where(#atlas-scope),
+[data-theme='paper']:where(#atlas-scope) {
+  --paper: #FAFAF7;
+  --paper-2: #F2F2EE;
+  --paper-3: #E8E8E2;
+  --paper-rgb: 250 250 247;
+  --paper-2-rgb: 242 242 238;
+  --paper-3-rgb: 232 232 226;
+  --ink: #0A0A0A;
+  --ink-2: #1A1A1A;
+  --hairline: rgba(10, 10, 10, 0.08);
+  --hairline-strong: rgba(10, 10, 10, 0.16);
+  --gray-500: #888;
+  --gray-400: #A8A8A8;
+  --gray-300: #CCCCCC;
+  --accent: #3D5AFE;
+  --accent-2: #2540E0;
+  --accent-soft: #E2E8FF;
+  --green: #1FAB6A;
+  --bg-canvas: #FAFAF7;
+  --bg-card: rgba(255, 255, 255, 0.55);
+  color-scheme: light;
+}
+
+[data-theme='ink']:where(#atlas-scope) {
+  --paper: #0A0A0A;
+  --paper-2: #111111;
+  --paper-3: #1A1A1A;
+  --paper-rgb: 10 10 10;
+  --paper-2-rgb: 17 17 17;
+  --paper-3-rgb: 26 26 26;
+  --ink: #FAFAF7;
+  --ink-2: #E8E8E2;
+  --hairline: rgba(255, 255, 255, 0.10);
+  --hairline-strong: rgba(255, 255, 255, 0.20);
+  --gray-500: #9A9A9A;
+  --gray-400: #BBBBBB;
+  --gray-300: #DDDDDD;
+  --accent: #5C7BFF;
+  --accent-2: #3D5AFE;
+  --accent-soft: rgba(61, 90, 254, 0.16);
+  --green: #2DDB87;
+  --bg-canvas: #0A0A0A;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  color-scheme: dark;
+}
+
+/* ---------- scoped reset ---------- */
+#atlas-scope,
+#atlas-scope *,
+#atlas-scope *::before,
+#atlas-scope *::after {
+  box-sizing: border-box;
+}
+
+/* Override main-station/src/styles/global.css 里 #hero h1 的渐变文字效果
+   (那条规则是给 classic 主题的 hero 标题用的 — -webkit-text-fill-color: transparent),
+   atlas 子树里要恢复普通文字。
+   加 #atlas-scope 提升 specificity,加 !important 覆盖 raw CSS。 */
+#atlas-scope #hero h1,
+#atlas-scope #hero h2,
+#atlas-scope #hero h3 {
+  -webkit-text-fill-color: var(--ink) !important;
+  background: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  color: var(--ink);
+}
+#atlas-scope #hero h1 {
+  background: var(--linear-hero, none) !important;
+}
+#atlas-scope #hero h1,
+#atlas-scope #hero h2,
+#atlas-scope #hero h3 {
+  margin-bottom: revert;
+}
+
+#atlas-scope {
+  margin: 0;
+  padding: 0;
+  /* 覆盖主站 body 的 dark 背景 */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1), color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#atlas-scope ::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+#atlas-scope a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#atlas-scope button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---------- typography helpers ---------- */
+#atlas-scope .mono,
+#atlas-scope .font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-feature-settings: 'tnum';
+}
+
+#atlas-scope .mono-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+#atlas-scope .italic {
+  font-style: italic;
+  font-family: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+  font-feature-settings: 'ss01';
+}
+
+/* ---------- container ---------- */
+#atlas-scope .container-x {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  #atlas-scope .container-x {
+    padding: 0 24px;
+  }
+}
+
+/* ---------- reveal ---------- */
+#atlas-scope .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#atlas-scope .reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- keyframes (global, namespaced) ---------- */
+@keyframes markPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(61, 90, 254, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(61, 90, 254, 0); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+@keyframes wordIn {
+  from { opacity: 0; transform: translateY(0.4em); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes hintScroll {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.3) translateY(8px); opacity: 0.4; }
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes charIn {
+  from { opacity: 0; transform: translateY(0.4em); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes barsUp {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes circularSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes statusPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(31, 171, 106, 0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(31, 171, 106, 0); }
+}
+
+/* ---------- split text char stagger (fallback when GSAP is unavailable) ---------- */
+#atlas-scope [data-split] .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  animation: charIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--i, 0) * var(--stagger, 18ms));
+  white-space: pre;
+}
+
+/* ---------- magnet wrapper styles ---------- */
+#atlas-scope [data-magnet] {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#atlas-scope [data-electric] {
+  position: relative;
+}
+
+/* ---------- spark dot ---------- */
+#atlas-scope .spark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--accent);
+  pointer-events: none;
+  mix-blend-mode: difference;
+  z-index: 9999;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+  #atlas-scope .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+  #atlas-scope .ai-grid,
+  #atlas-scope .games-layout {
+    grid-template-columns: 1fr !important;
+  }
+  #atlas-scope .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  #atlas-scope .index-grid,
+  #atlas-scope .tools-grid,
+  #atlas-scope .games-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ---------- prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  #atlas-scope *, #atlas-scope *::before, #atlas-scope *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+  #atlas-scope .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- link-arrow underline ---------- */
+#atlas-scope .link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  transition: gap 0.3s ease;
+}
+
+#atlas-scope .link-arrow span {
+  transition: transform 0.3s ease;
+}
+
+#atlas-scope .link-arrow:hover {
+  gap: 12px;
+}
+
+#atlas-scope .link-arrow:hover span {
+  transform: translateX(4px);
+}
+
+/* ---------- mono bullet ---------- */
+#atlas-scope .bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--accent);
+  flex-shrink: 0;
+}

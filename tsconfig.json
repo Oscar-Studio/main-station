@@ -19,7 +19,7 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/atlas/*", "src/*"]
+      "@/*": ["src/themes/atlas/*", "src/*"]
     }
   },
   "include": ["src"]

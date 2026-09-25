@@ -1,0 +1,9 @@
+/* SplitText base styles */
+.split-text {
+  display: inline-block;
+}
+
+.split-token {
+  display: inline-block;
+  will-change: transform, opacity;
+}

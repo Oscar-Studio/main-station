@@ -46,7 +46,14 @@ const MyMath = (function MyMathFactory(Math) {
 	MyMath.random = (min, max) => Math.random() * (max - min) + min;
 
 	// Generates a random integer between and possibly including min and max values
-	MyMath.randomInt = (min, max) => ((Math.random() * (max - min + 1)) | 0) + min;
+	// 修复: min > max 时交换参数，避免返回"反向范围"的奇怪值
+	MyMath.randomInt = (min, max) => {
+		if (typeof min !== 'number' || typeof max !== 'number' || isNaN(min) || isNaN(max)) {
+			return NaN;
+		}
+		if (min > max) { const t = min; min = max; max = t; }
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	};
 
 	// Returns a random element from an array, or simply the set of provided arguments when called
 	MyMath.randomChoice = function randomChoice(choices) {
@@ -70,6 +77,15 @@ const MyMath = (function MyMathFactory(Math) {
 	 * @returns {Array} 点阵数组
 	 */
 	MyMath.literalLattice = function literalLattice(text, density = 3, fontFamily = "Georgia", fontSize = "60px") {
+		// 修复: 空文本直接返回（避免后续 canvas.width=0 死循环）
+		if (typeof text !== 'string' || text.length === 0) {
+			return [];
+		}
+		// 修复: density 必须为正整数（避免 y += 0 或 y += -1 导致死循环）
+		if (typeof density !== 'number' || !isFinite(density) || density < 1) {
+			density = 3;
+		}
+		density = Math.floor(density);
 		// 创建一个空的点阵数组
 		var dots = [];
 		// 创建一个画布

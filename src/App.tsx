@@ -7,9 +7,9 @@ import BackToTop from './components/BackToTop';
 import { useUserBackground } from './lib/useUserBackground';
 import { useHomeTheme } from './hooks/useHomeTheme';
 
-// Atlas（crazy/3 实验主题）整棵子树懒加载。
-// 没选 Atlas 的用户首屏不会下载 framer-motion 和那 ~110kb JS。
-const AtlasApp = lazy(() => import('./atlas/AtlasApp'));
+// Atlas（crazy/4 实验主题）整棵子树懒加载。
+// 没选 Atlas 的用户首屏不会下载 three.js / framer-motion 等 ~150kb JS。
+const AtlasApp = lazy(() => import('./themes/atlas/ThemeApp'));
 
 function useExternalScripts() {
   useEffect(() => {
@@ -18,7 +18,9 @@ function useExternalScripts() {
     const s = document.createElement('script');
     s.id = id;
     s.src = 'https://api.oscarstudio.cn/user-button.js';
-    s.crossOrigin = 'anonymous';
+    // 不设 crossOrigin:api.oscarstudio.cn 的静态资源 CORS 白名单只覆盖
+    // oscarstudio.cn 域,dev 跑 localhost 时会触发 CORS 拒绝。script 标签
+    // 默认不发 Origin header 所以不触发 CORS,反而是干净的跨域加载。
     s.async = true;
     document.body.appendChild(s);
   }, []);

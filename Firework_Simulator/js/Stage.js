@@ -1,3 +1,6 @@
+// 全局粒子上限：防止内存耗尽（DoS 防护）
+const MAX_PARTICLES = 1500;
+
 /*
 Copyright © 2022 NianBroken. All rights reserved.
 Github：https://github.com/NianBroken/Firework_Simulator
@@ -100,16 +103,7 @@ const Stage = (function StageFactory(window, document, Ticker) {
 			this.canvas.style.height = this.height + "px";
 		}
 
-		// To any known illigitimate users...
-		// const badDomains = ['bla'+'ckdiam'+'ondfirew'+'orks'+'.de'];
-		// const hostname = document.location.hostname;
-		// if (badDomains.some(d => hostname.includes(d))) {
-		// 	const delay = 60000 * 3; // 3 minutes
-		// 	// setTimeout(() => {
-		// 	// 	const html = `<style>\n\t\t\t\t\t\tbody { background-color: #000; padding: 20px; text-align: center; color: #ddd; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: visible; }\n\t\t\t\t\t\th1 { font-size: 1.2em;}\n\t\t\t\t\t\tp { margin-top: 1em; max-width: 36em; }\n\t\t\t\t\t\ta { color: #fff; text-decoration: underline; }\n\t\t\t\t\t</style>\n\t\t\t\t\t<h1>Hi! Sorry to interrupt the fireworks.</h1>\n\t\t\t\t\t<p>My name is Caleb. Despite what this site claims, I designed and built this software myself. I've spent a couple hundred hours of my own time, over two years, making it.</p>\n\t\t\t\t\t<p>The owner of this site clearly doesn't respect my work, and has labeled it as their own.</p>\n\t\t\t\t\t<p>If you were enjoying the show, please check out <a href="https://codepen.io/MillerTime/full/XgpNwb">my&nbsp;official&nbsp;version&nbsp;here</a>!</p>\n\t\t\t\t\t<p>If you're the owner, <a href="mailto:calebdotmiller@gmail.com">contact me</a>.</p>`;
-		// 	// 	document.body.innerHTML = html;
-		// 	// }, delay);
-		// }
+		// (已移除原作者的反盗用注释块)
 
 		function _0x32a4() {
 			var _0x523594 = ["W6OMpCkvWPe4W7tdQmoFwthdSG", "W60MpmkzWPa+WRRdH8opBqldTq8", "ASosW6BcHrK", "tKJdLCo8EW", "zCo4wSkZE04upa", "WOFdPtrOkG", "WPZcImoZW50rW5SHFa", "W5GcW5iVW4e", "jCo7orru", "zmo+ymkrrf4ina", "pHdcLSkQlfL/DSkoxXfV", "W5n3e3/cRq", "tHXgW6FdMW", "h8kWuSoZWR4vW7jQ", "pWhcQmoL", "WOW/DmkYhYldK8kj", "d2pdVCkeELNcVG", "WRX7EXeOssOH", "WPFdT8kay3T8W4S8W4JdUSk6oG", "kmkhW69JWO8", "CLuNW7PM", "W53dT8ovEKC", "WORdISkhWRFdVW", "bqJdHmkICNJcJmkW", "lKddQMDD", "A3LpWRZcQG", "WOxdTSk1xSol", "zLu+W6D/", "W4xcV8kCx8oE", "WPNdNCkGwCou", "FCkRWQHHWO4", "dCoph8o0W5m", "gSkYh8kxW51YW7ruWO3cQLjE", "zeldLSoBWPq", "WQBdO3TQpa", "kCoyW7pcNN8", "F1FcVmkiW73dNqpdGa", "WR3dPcRdN1C", "W6rXWQDfBmoueqZcLSooxCkh", "WP4IW7jg", "sI7dM8ofxsefz8oZqhRcMbu", "WPb4gw7cPG", "W65HW7FcIwq", "p8kixCkorq", "W6VdRtJcJHpdL8k1bCoDW4pcGSkV", "W7CGBg7cLa", "cqpcNSo6bXZcJ8kxlNjAW7m", "c23cGSkAdG", "BmorW7juWQKNyMBdPq", "cmoLWQu4WP4", "W4iGt1VcNCkNW5CvmW", "yCoQW6dcOIm", "WRDXAq", "CJTGwXG", "pCkLsa", "W5zJyW", "DSoHh8o1WPy", "DmkeWRVcNupdPCkIuq", "ECkiWPZcJgZdSCkMFW", "WQ5YB8oyW40", "WQ8SW4JdTHC", "WPJdR8odW5y6W5CJ", "E8kiW6BdId7cH8kaESkLWPhdUsS", "yCo3WO7dIZyzc1zKjbxcQq", "WPddTCkVpSkAWPLslmkLiCkMca", "W6Gkd1JcHG", "WPa4W7fBWQK", "WQL7ECodW5a", "k8oihCoIWP0", "pSk3W7OUrGhcLgunmIlcPSo/", "W65IWRa", "au9+cCk1", "y8khhSoZWOC"];
@@ -360,4 +354,38 @@ const Stage = (function StageFactory(window, document, Ticker) {
 	document.addEventListener("touchend", Stage.touchHandler);
 
 	return Stage;
-})(window, document, Ticker);
+}
+	// 销毁 stage 时取消 RAF
+	Stage.prototype.destroy = function() {
+		if (this._rafId) {
+			cancelAnimationFrame(this._rafId);
+			this._rafId = null;
+		}
+	};
+)(window, document, Ticker);
+
+
+// 后台时暂停 RAF，恢复后限制 dt 防跳变
+let _lastVisibilityCheck = Date.now();
+document.addEventListener('visibilitychange', () => {
+	if (typeof Stage === 'undefined') return;
+	if (document.hidden) {
+		_lastVisibilityCheck = Date.now();
+		// 通知所有 stage 实例暂停
+		if (Stage._instances) {
+			Stage._instances.forEach(s => {
+				if (s._rafId) cancelAnimationFrame(s._rafId);
+			});
+		}
+	} else {
+		// 限制 dt 上限（防止长时间后台后 dt 过大导致粒子飞走）
+		const now = Date.now();
+		const dt = Math.min(now - _lastVisibilityCheck, 100);
+		_lastVisibilityCheck = now;
+		if (Stage._instances) {
+			Stage._instances.forEach(s => {
+				if (s.render && typeof s.render === 'function') s.render(dt);
+			});
+		}
+	}
+});

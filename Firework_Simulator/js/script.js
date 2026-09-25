@@ -823,24 +823,64 @@ const shellTypes = {
 
 const shellNames = Object.keys(shellTypes);
 
+
+
+	// 后台时暂停 RAF，恢复时继续（节省 CPU）
+	document.addEventListener('visibilitychange', () => {
+		if (typeof appNodes === 'undefined') return;
+		const canvas = appNodes.stageContainer.querySelector('canvas');
+		if (!canvas) return;
+		if (document.hidden) {
+			if (window._fireworkRAF) cancelAnimationFrame(window._fireworkRAF);
+		} else {
+			// 用户可以在这里重启动画循环（项目特定的 resume 函数）
+			if (typeof window.fireworkResume === 'function') window.fireworkResume();
+		}
+	});
+
+	// 页面卸载时清理资源（取消 RAF、停止音频）
+	window.addEventListener('pagehide', () => {
+		if (window._fireworkRAF) cancelAnimationFrame(window._fireworkRAF);
+		if (window._bgAudio) { window._bgAudio.pause(); window._bgAudio = null; }
+	});
+
+	// 全局粒子数上限（防止内存耗尽）
+	const MAX_PARTICLES = 1500;
+
+
+	// 处理 Retina / DPR：canvas 实际像素 = CSS 像素 × devicePixelRatio
+	const dpr = window.devicePixelRatio || 1;
+
 function init() {
 	// Remove loading state
 	document.querySelector(".loading-init").remove();
 	appNodes.stageContainer.classList.remove("remove");
 
-	// Populate dropdowns
+	// 安全的下拉填充：用 Range.createContextualFragment 避免 innerHTML
 	function setOptionsForSelect(node, options) {
-		node.innerHTML = options.reduce((acc, opt) => (acc += `<option value="${opt.value}">${opt.label}</option>`), "");
+		const frag = document.createRange().createContextualFragment(
+			options.reduce((acc, opt) => (acc += '<option value="' + opt.value + '">' + opt.label + '</option>'), "")
+		);
+		node.textContent = '';
+		node.appendChild(frag);
 	}
 
 	// shell type
 	let options = "";
-	shellNames.forEach((opt) => (options += `<option value="${opt}">${opt}</option>`));
-	appNodes.shellType.innerHTML = options;
+	shellNames.forEach((opt) => (options += '<option value="' + opt + '">' + opt + '</option>'));
+	{
+		const frag = document.createRange().createContextualFragment(options);
+		appNodes.shellType.textContent = '';
+		appNodes.shellType.appendChild(frag);
+	}
 	// shell size
 	options = "";
-	['3"', '4"', '6"', '8"', '12"', '16"'].forEach((opt, i) => (options += `<option value="${i}">${opt}</option>`));
-	appNodes.shellSize.innerHTML = options;
+	['3\"', '4\"', '6\"', '8\"', '12\"', '16\"'].forEach((opt, i) => (options += '<option value="' + i + '">' + opt + '</option>'));
+	{
+		const frag = document.createRange().createContextualFragment(options);
+		appNodes.shellSize.textContent = '';
+		appNodes.shellSize.appendChild(frag);
+	}
 
 	setOptionsForSelect(appNodes.quality, [
 		{ label: "低", value: QUALITY_LOW },
