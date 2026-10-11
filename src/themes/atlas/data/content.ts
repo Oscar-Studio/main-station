@@ -121,7 +121,7 @@ export const UTILS = [
   { name: '白板', desc: '基于 tldraw 的无限画布:画笔、形状、文本、图片、自动保存,登录后云端同步。', icon: '🎨', slug: 'whiteboard' },
   { name: 'Markdown 编辑器', desc: '支持 LaTeX 公式,可导出图片,自定义配色,适合写文档和笔记。', icon: '📝', slug: 'markdown-editor' },
   { name: '待办清单', desc: '极简待办:优先级、截止、分组、子任务、标签、Markdown 备注。本地保存,登录后云同步。', icon: '✅', slug: 'todo' },
-  { name: 'JSON 工具', desc: '格式化、校验、路径查询 (JSONPath)、差异对比、模拟生成,开发日常一键到位。', icon: '🧩', slug: 'json' },
+  { name: '字数统计', desc: '实时统计中文字符、英文单词、段落、行数与阅读时长,支持多文稿和文件导入导出。', icon: '✍️', slug: 'word-counter' },
 ] as const;
 
 export const DECK_SLIDES = [
