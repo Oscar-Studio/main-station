@@ -1,0 +1,789 @@
+[
+  {
+    "id": "ai-studio",
+    "name": "AI Studio",
+    "description": "多模型 AI 对话，让想法继续生长。",
+    "category": "ai",
+    "href": "https://ai.oscarstudio.cn/",
+    "keywords": [
+      "AI",
+      "人工智能",
+      "对话",
+      "写作",
+      "模型"
+    ],
+    "featured": false
+  },
+  {
+    "id": "codec",
+    "name": "编解码器",
+    "description": "Base64 / URL / Hex / Unicode / HTML / ROT13 / Punycode 编码解码；MD5 / SHA-1/256/384/512 哈希；HMAC-SHA256/512；JWT 解析。全部本地运行，不上传数据。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/codec/index.html",
+    "keywords": [
+      "工具",
+      "编码",
+      "哈希",
+      "安全"
+    ],
+    "featured": false
+  },
+  {
+    "id": "password-generator",
+    "name": "密码生成器",
+    "description": "强密码 + 助记密码（Diceware）+ zxcvbn 强度评估 + 批量生成 + 历史记录。全部本地计算，不上传数据。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/password-generator/index.html",
+    "keywords": [
+      "工具",
+      "密码",
+      "安全"
+    ],
+    "featured": false
+  },
+  {
+    "id": "whiteboard",
+    "name": "白板",
+    "description": "基于 tldraw 的无限画布：画笔、形状、文本、图片、自动保存；登录后云端同步。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/#/whiteboard",
+    "keywords": [
+      "画板",
+      "绘图",
+      "效率"
+    ],
+    "featured": true
+  },
+  {
+    "id": "markdown-editor",
+    "name": "Markdown 编辑器",
+    "description": "支持 LaTeX 公式的 Markdown 编辑器，可导出为图片，支持自定义配色",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/markdown-editor/index.html",
+    "keywords": [
+      "编辑器",
+      "Markdown",
+      "LaTeX"
+    ],
+    "featured": true
+  },
+  {
+    "id": "todo",
+    "name": "待办清单",
+    "description": "极简待办管理：优先级、截止日期、分组、子任务、标签、Markdown 备注。未登录本地保存，登录后云端同步。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/todo/index.html",
+    "keywords": [
+      "效率",
+      "待办",
+      "GTD",
+      "通用"
+    ],
+    "featured": true
+  },
+  {
+    "id": "word-counter",
+    "name": "字数统计",
+    "description": "实时统计中文字符、英文单词、段落、行数与阅读时长，支持多文稿和文件导入导出。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/word-counter/index.html",
+    "keywords": [
+      "写作",
+      "效率",
+      "文本分析",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "qrcode",
+    "name": "二维码生成器",
+    "description": "实时输入文本生成可定制的二维码：颜色、形状、渐变、中心 Logo 嵌入；下载 PNG / SVG。全部本地完成，文本与 Logo 不上传。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/qrcode/index.html",
+    "keywords": [
+      "工具",
+      "二维码",
+      "图形"
+    ],
+    "featured": false
+  },
+  {
+    "id": "regex",
+    "name": "正则表达式工作台",
+    "description": "实时高亮匹配、拆解捕获组、替换结果预览，内置 13 条常用片段与可分享链接。纯本地运行，正则与测试文本都不上传。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/regex/index.html",
+    "keywords": [
+      "开发",
+      "正则",
+      "文本"
+    ],
+    "featured": false
+  },
+  {
+    "id": "image-compressor",
+    "name": "图片压缩器",
+    "description": "批量压缩图片并逐张对比前后体积，可选 JPEG / WebP / PNG、质量与最大尺寸。图片不上传，全部在浏览器完成。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/image-compressor/index.html",
+    "keywords": [
+      "工具",
+      "图片",
+      "效率"
+    ],
+    "featured": false
+  },
+  {
+    "id": "kaomoji",
+    "name": "颜文字大全",
+    "description": "按情境浏览或用一句话描述心情来模糊搜索，覆盖 30 类情境。语义检索在服务器完成，搜索词不用于训练。",
+    "category": "tools",
+    "href": "https://tools.oscarstudio.cn/kaomoji/index.html",
+    "keywords": [
+      "工具",
+      "颜文字",
+      "表达"
+    ],
+    "featured": false
+  },
+  {
+    "id": "linear-function",
+    "name": "一次函数演示",
+    "description": "演示一次函数与二次函数（顶部可切换）",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/一次函数演示/index.html",
+    "keywords": [
+      "图像",
+      "函数",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "data-stats",
+    "name": "数据统计",
+    "description": "根据输入的数据计算平均数、离散平方和、方差和标准差",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/数据统计/index.html",
+    "keywords": [
+      "统计",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "pythagoras-tree",
+    "name": "勾股树",
+    "description": "显示勾股树",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/勾股树/index.html",
+    "keywords": [
+      "勾股定理",
+      "图像",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "boxplot",
+    "name": "箱线图与分位数",
+    "description": "根据输入数据显示9个分位数和箱线图",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/箱线图与分位数/index.html",
+    "keywords": [
+      "统计",
+      "图像",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "convex-lens",
+    "name": "凸透镜成像规律",
+    "description": "动态HTML凸透镜成像规律演示",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/凸透镜成像规律/index.html",
+    "keywords": [
+      "动画",
+      "图像",
+      "物理"
+    ],
+    "featured": false
+  },
+  {
+    "id": "english-parser",
+    "name": "英语句子成分分析",
+    "description": "分析输入英语句子的成分（主谓宾等）",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/英语句子成分分析/index.html",
+    "keywords": [
+      "语法",
+      "英语",
+      "英语"
+    ],
+    "featured": false
+  },
+  {
+    "id": "great-people-writing",
+    "name": "英语人物写作",
+    "description": "9AU1 Great People 人物写作精选：36 条高级表达按六条主线分类、10 组升级替换对照、5 个亮点句模版，全部点击即复制",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/英语人物写作/index.html",
+    "keywords": [
+      "英语",
+      "写作",
+      "表达",
+      "英语"
+    ],
+    "featured": false
+  },
+  {
+    "id": "great-ideas-writing",
+    "name": "英语写作精华",
+    "description": "9AU2 Unit 2 Great Ideas 高分表达手册：四步逻辑链 + 三段框架时态 + 21 条高分整句 + 15 条描述素材 + 12 个亮点短语，附万能模板与范文，点击即复制",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/英语写作精华/index.html",
+    "keywords": [
+      "英语",
+      "写作",
+      "语法",
+      "英语"
+    ],
+    "featured": false
+  },
+  {
+    "id": "chinese-parser",
+    "name": "语文句子成分分析",
+    "description": "使用DeepSeek API 分析输入的中文句子的成分（主谓宾定状补）",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/语文句子成分分析/index.html",
+    "keywords": [
+      "语法",
+      "语文",
+      "AI",
+      "语文"
+    ],
+    "featured": false
+  },
+  {
+    "id": "data-stats-pro",
+    "name": "数据统计PRO",
+    "description": "更高级的数据统计功能",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/数据统计PRO/index.html",
+    "keywords": [
+      "统计",
+      "图像",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "chem-balance",
+    "name": "化学方程式配平",
+    "description": "使用AI配平输入的化学方程式",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/化学方程式配平/index.html",
+    "keywords": [
+      "配平",
+      "AI",
+      "化学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "scientific-calc",
+    "name": "科学计算器",
+    "description": "简洁好用的科学计算器",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/科学计算器/index.html",
+    "keywords": [
+      "计算",
+      "数学"
+    ],
+    "featured": true
+  },
+  {
+    "id": "concentration",
+    "name": "浓度计算器",
+    "description": "计算溶液的浓度或需要的质量",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/浓度计算器/index.html",
+    "keywords": [
+      "溶液",
+      "生物",
+      "化学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "polygon-bloom",
+    "name": "PolygonBloom",
+    "description": "观察多边形边数随时间指数级增长的过程。每秒钟边数乘以倍数。",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/PolygonBloom/index.html",
+    "keywords": [
+      "动画",
+      "图像",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "homework-mgmt",
+    "name": "作业管理系统",
+    "description": "全新的作业管理系统",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/作业管理系统/index.html",
+    "keywords": [
+      "作业",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "roll-caller",
+    "name": "智能点名器",
+    "description": "简洁的自动随机点名系统",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/智能点名器/index.html",
+    "keywords": [
+      "点名",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "class-timer",
+    "name": "课堂倒计时器",
+    "description": "适用于课堂答题、小组讨论等场景的倒计时工具",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/课堂倒计时器/index.html",
+    "keywords": [
+      "计时",
+      "课堂",
+      "通用"
+    ],
+    "featured": true
+  },
+  {
+    "id": "random-group",
+    "name": "随机分组器",
+    "description": "按组数或每组人数随机分组，支持避免重复搭档、锁定分组、拖拽调整与导出",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/随机分组器/index.html",
+    "keywords": [
+      "分组",
+      "课堂",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "dice-sim",
+    "name": "骰子模拟器",
+    "description": "模拟掷骰子，可用于随机抽取或课堂互动",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/骰子模拟器/index.html",
+    "keywords": [
+      "随机",
+      "课堂",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "lucky-wheel",
+    "name": "幸运转盘",
+    "description": "从任意一组选项中随机抽取一个或多个；支持加权、抽后移除、结果历史与分享链接",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/幸运转盘/index.html",
+    "keywords": [
+      "随机",
+      "课堂",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "stopwatch",
+    "name": "计时器",
+    "description": "秒表功能，记录单圈时间",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/计时器/index.html",
+    "keywords": [
+      "计时",
+      "秒表",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "scoreboard",
+    "name": "记分板",
+    "description": "课堂竞赛、答题比赛专用记分工具；自动记录每回合变化并绘制复式折线统计图，支持 CSV 导出",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/记分板/index.html",
+    "keywords": [
+      "竞赛",
+      "记分",
+      "历史",
+      "统计图",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "history-timeline",
+    "name": "历史时间轴",
+    "description": "中国近现代史时间轴，垂直分为政治、外交、经济、科技、社会等类别，点击查看详情",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/历史时间轴/index.html",
+    "keywords": [
+      "历史",
+      "时间轴",
+      "事件",
+      "历史"
+    ],
+    "featured": false
+  },
+  {
+    "id": "camouflage",
+    "name": "保护色实验",
+    "description": "模拟生物保护色实验，点击你看到的纸片进行自然选择，观看复式折线统计图了解种群变化",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/保护色实验/index.html",
+    "keywords": [
+      "生物",
+      "实验",
+      "教学",
+      "生物"
+    ],
+    "featured": false
+  },
+  {
+    "id": "pomodoro",
+    "name": "番茄钟",
+    "description": "专注计时器，适合学习和工作",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/番茄钟/index.html",
+    "keywords": [
+      "计时",
+      "专注",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "wordbook",
+    "name": "摘词本",
+    "description": "英语单词背诵与复习工具，基于 FSRS 自适应复习算法",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/摘词本/index.html",
+    "keywords": [
+      "英语",
+      "背诵",
+      "记忆",
+      "英语"
+    ],
+    "featured": false
+  },
+  {
+    "id": "media-player",
+    "name": "媒体播放器",
+    "description": "支持多种音视频格式播放，倍速、单曲循环、列表循环、随机播放、全屏等功能",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/media-player/index.html",
+    "keywords": [
+      "播放器",
+      "音视频",
+      "多媒体",
+      "通用"
+    ],
+    "featured": false
+  },
+  {
+    "id": "geometry-board",
+    "name": "几何画板",
+    "description": "交互式几何画板，支持点、线段、射线、直线、圆、多边形、角度标、文本;多边形下拉提供等腰/等边三角形、平行四边形/矩形/菱形/正方形;可一键构造中点、垂线、平行线、角平分线、三角形的高/中线/角平分线/中位线/外接圆/内切圆/四心(重/垂/外/内);支持 PNG / JSON 导出与可分享链接",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/几何画板/index.html",
+    "keywords": [
+      "几何",
+      "画板",
+      "绘图",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "homothety",
+    "name": "位似图形",
+    "description": "绘制任意多边形，选取位似中心（自动吸附），沿射线选取位似比即可得到位似图形；预览模式用绿色折线连接对应点，可切换 2D/3D：3D 模式下图形被渲染为半透明面，对应边之间连出半透明蓝色面，支持鼠标旋转、缩放。",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/位似图形/index.html",
+    "keywords": [
+      "几何",
+      "位似",
+      "变换",
+      "3D",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
+    "id": "lagrangian-fluid",
+    "name": "拉格朗日流体模拟",
+    "description": "基于 SPH 的拉格朗日流体演示：溃坝、水滴滴落、石子入水、对撞、方块下落、倾倒（杯→杯）、漏斗；粒子数/平滑半径/气体常数/粘度/重力与模拟速度均可调，支持连续模拟与分步模拟（分步时把力向量画成箭头）",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/拉格朗日流体模拟/index.html",
+    "keywords": [
+      "流体",
+      "SPH",
+      "物理",
+      "仿真",
+      "物理"
+    ],
+    "featured": false
+  },
+  {
+    "id": "eulerian-fluid",
+    "name": "欧拉流体模拟",
+    "description": "基于 MAC 网格的欧拉流体演示：溃坝、水滴滴落、对撞、方块下落、倾倒（杯→杯）、漏斗、石子入水（网格刚体）；可调网格分辨率、压力迭代次数、粘度、重力与模拟速度；着色模式含染料浓度/速度/压力/涡量",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/欧拉流体模拟/index.html",
+    "keywords": [
+      "流体",
+      "MAC",
+      "欧拉",
+      "物理",
+      "仿真",
+      "物理"
+    ],
+    "featured": false
+  },
+  {
+    "id": "six-stroke-engine",
+    "name": "六冲程汽油机工作循环模拟器",
+    "description": "可视化展示六冲程汽油机的曲柄-连杆-活塞机构与完整工作循环（进气、压缩、燃烧/做功、排气、冷却水进气、蒸汽排气），实时显示曲柄转角、活塞位移与 P-V 图",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/六冲程汽油机工作循环模拟器/index.html",
+    "keywords": [
+      "动画",
+      "热机",
+      "物理",
+      "仿真",
+      "物理"
+    ],
+    "featured": false
+  },
+  {
+    "id": "circuit-board",
+    "name": "电路画板",
+    "description": "初中物理电路作图工具：画实物图与电路图并一键互转（共享同一份连通关系），自动识别串/并/混联与拓扑，按教材规范排布电路图（并联支路上下对齐），实时检查悬空、短路、电流表串联/电压表并联等接法错误，可导出 PNG/SVG/JSON 并分享",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/电路画板/index.html",
+    "keywords": [
+      "电路",
+      "实物图",
+      "电路图",
+      "串并联",
+      "欧姆定律",
+      "物理",
+      "物理"
+    ],
+    "featured": false
+  },
+  {
+    "id": "chess-international",
+    "name": "国际象棋",
+    "description": "经典国际象棋，支持王车易位、吃过路兵、兵升变等全部规则",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/国际象棋/index.html",
+    "keywords": [
+      "棋类"
+    ],
+    "featured": false
+  },
+  {
+    "id": "gobang",
+    "name": "五子棋",
+    "description": "五子棋棋盘",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/五子棋/index.html",
+    "keywords": [
+      "棋类"
+    ],
+    "featured": false
+  },
+  {
+    "id": "chinese-chess",
+    "name": "中国象棋",
+    "description": "中国象棋棋盘",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/中国象棋/index.html",
+    "keywords": [
+      "棋类"
+    ],
+    "featured": false
+  },
+  {
+    "id": "schulte-grid",
+    "name": "舒尔特方格",
+    "description": "练习专注力和对数字敏感程度的舒尔特方格游戏",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/舒尔特方格/index.html",
+    "keywords": [
+      "数字",
+      "专注"
+    ],
+    "featured": false
+  },
+  {
+    "id": "game-2048",
+    "name": "2048",
+    "description": "简单好玩的2048游戏",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/2048/index.html",
+    "keywords": [
+      "数字"
+    ],
+    "featured": true
+  },
+  {
+    "id": "skill-gobang",
+    "name": "技能五子棋",
+    "description": "全新的技能五子棋游戏",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/技能五子棋/index.html",
+    "keywords": [
+      "棋类"
+    ],
+    "featured": false
+  },
+  {
+    "id": "word-match",
+    "name": "单词翻翻乐",
+    "description": "中英文单词记忆匹配游戏",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/单词翻翻乐/index.html",
+    "keywords": [
+      "学习",
+      "益智"
+    ],
+    "featured": false
+  },
+  {
+    "id": "twenty-four",
+    "name": "二十四点",
+    "description": "用四个数字通过加减乘除得到24的经典数学游戏",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/二十四点/index.html",
+    "keywords": [
+      "数学",
+      "益智"
+    ],
+    "featured": false
+  },
+  {
+    "id": "penalty-game",
+    "name": "罚分游戏",
+    "description": "用给出的数字计算目标值，差值越大扣分越多",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/罚分游戏/index.html",
+    "keywords": [
+      "数学",
+      "益智"
+    ],
+    "featured": false
+  },
+  {
+    "id": "cellular-automata",
+    "name": "元胞自动机",
+    "description": "生命游戏、电子电路Wireworld、一维Wolfram规则，支持7种规则切换与预设图案",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/元胞自动机/index.html",
+    "keywords": [
+      "模拟",
+      "益智"
+    ],
+    "featured": false
+  },
+  {
+    "id": "rubiks-cube",
+    "name": "魔方",
+    "description": "3D 魔方，手指滑动转面，拖动空白旋转视角，支持打乱/撤销/计时",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/魔方/index.html",
+    "keywords": [
+      "益智",
+      "3D"
+    ],
+    "featured": false
+  },
+  {
+    "id": "sudoku",
+    "name": "数独",
+    "description": "经典 9×9 数独，5 级难度，每难度 10-20 题，按需生成唯一解，支持笔记与冲突检测",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/数独/index.html",
+    "keywords": [
+      "益智",
+      "数字"
+    ],
+    "featured": false
+  },
+  {
+    "id": "guess-number",
+    "name": "猜数字",
+    "description": "1A2B 数字 + Mastermind 颜色双模式，3 档难度，推理破译隐藏序列",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/猜数字/index.html",
+    "keywords": [
+      "数字",
+      "益智",
+      "推理"
+    ],
+    "featured": false
+  },
+  {
+    "id": "mental-memory",
+    "name": "心算记忆",
+    "description": "10 级难度，看算式记答案，按级别倒推前 N 轮的答案，复杂度随轮次递增",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/心算记忆/index.html",
+    "keywords": [
+      "数学",
+      "记忆",
+      "益智"
+    ],
+    "featured": false
+  },
+  {
+    "id": "neon-pulse",
+    "name": "霓虹音游",
+    "description": "参考 Phigros 玩法的浏览器音游，音乐与谱面全部由内置合成器实时生成，键鼠与触屏都能玩",
+    "category": "games",
+    "href": "https://games.oscarstudio.cn/neon-pulse/index.html",
+    "keywords": [
+      "音乐",
+      "音游"
+    ],
+    "featured": false
+  },
+  {
+    "id": "ppt-studio",
+    "name": "HTML-PPT",
+    "description": "在浏览器中制作与播放 HTML 演示文稿。",
+    "category": "ppt",
+    "href": "https://ppt.oscarstudio.cn/",
+    "keywords": [
+      "演示",
+      "幻灯片",
+      "PPT",
+      "编辑器"
+    ],
+    "featured": false
+  }
+]

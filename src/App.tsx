@@ -14,15 +14,29 @@ const AtlasApp = lazy(() => import('./themes/atlas/ThemeApp'));
 function useExternalScripts() {
   useEffect(() => {
     const id = 'oscar-user-button';
-    if (document.getElementById(id)) return;
-    const s = document.createElement('script');
-    s.id = id;
-    s.src = 'https://api.oscarstudio.cn/user-button.js';
-    // 不设 crossOrigin:api.oscarstudio.cn 的静态资源 CORS 白名单只覆盖
-    // oscarstudio.cn 域,dev 跑 localhost 时会触发 CORS 拒绝。script 标签
-    // 默认不发 Origin header 所以不触发 CORS,反而是干净的跨域加载。
-    s.async = true;
-    document.body.appendChild(s);
+    let lastContainer: HTMLElement | null = null;
+    const mount = () => {
+      const container = document.getElementById('userButtonContainer');
+      if (!container || container === lastContainer) return;
+      lastContainer = container;
+      if (document.getElementById(id)) {
+        // The SDK already owns authentication. Ask its existing storage listener
+        // to render again when switching between classic and the lazy Atlas tree.
+        window.dispatchEvent(new StorageEvent('storage', { key: 'ai_user' }));
+        return;
+      }
+      const s = document.createElement('script');
+      s.id = id;
+      s.src = 'https://api.oscarstudio.cn/user-button.js';
+      // Load only after the lazy theme has mounted the SDK container.
+      // Do not set crossOrigin: localhost is outside the static resource allowlist.
+      s.async = true;
+      document.body.appendChild(s);
+    };
+    mount();
+    const observer = new MutationObserver(mount);
+    observer.observe(document.getElementById('root')!, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, []);
 }
 
@@ -44,22 +58,24 @@ function useShortenedLoginButton() {
 
 /** Atlas 加载期间的占位，避免整页闪白 */
 function AtlasLoading() {
+  let dark = false;
+  try { dark = localStorage.getItem('oscar-crazy-4-theme') === 'ink'; } catch { /* ignore */ }
   return (
     <div
       style={{
         minHeight: '100vh',
-        background: '#0a0a0a',
-        color: '#7d8187',
+        background: dark ? '#1b1e1b' : '#f8f7f2',
+        color: dark ? '#b2b7a9' : '#686b61',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: 'system-ui, sans-serif',
         fontSize: 14,
         letterSpacing: '1.2px',
         textTransform: 'uppercase',
       }}
     >
-      Loading Atlas…
+      Oscar Studio
     </div>
   );
 }
