@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from './hooks/useTheme';
 import { StudioArtwork } from './components/studio/StudioArtwork';
+import { BackgroundPanel } from './components/studio/BackgroundPanel';
+import { useHeroBackground } from './hooks/useHeroBackground';
 import { Icon } from './components/studio/Icon';
 import { CATEGORIES, PROJECTS, findTools } from './data/studio';
 import atlasCss from './styles/globals.css?inline';
 
 export default function ThemeApp() {
+  const background = useHeroBackground();
+  const { cover } = background;
+  const [imageFailed, setImageFailed] = useState(false);
+  useEffect(() => setImageFailed(false), [cover.image]);
+  const hasCover = Boolean(cover.image) && !imageFailed;
   const [theme, , toggleTheme] = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -59,7 +66,9 @@ export default function ThemeApp() {
       </header>
 
       <main id="studio-main" tabIndex={-1}>
-        <section id="studio-top" className="st-shell st-hero" aria-labelledby="studio-title">
+        <div className={`st-hero-stage${hasCover ? ' st-has-cover' : ''}`}>
+          {hasCover && <div className="st-cover-image" aria-hidden="true"><img src={cover.image} alt="" style={{ filter: `blur(${cover.blur}px)` }} onError={() => { setImageFailed(true); background.setError('背景图加载失败，已显示默认画布。请重新选择图片。'); }} /><div className="st-cover-shade" style={{ opacity: cover.overlay / 100 }} /></div>}
+          <section id="studio-top" className="st-shell st-hero" aria-labelledby="studio-title">
           <div className="st-hero-copy">
             <p className="st-eyebrow"><span className="st-small-star" aria-hidden="true">✳</span> 一个装得下好奇心的工具工作室</p>
             <h1 id="studio-title">让灵感，<br /><span>有处落地。</span><i aria-hidden="true">↗</i></h1>
@@ -69,6 +78,8 @@ export default function ThemeApp() {
           </div>
           <div className="st-hero-art"><StudioArtwork /><div className="st-art-caption"><span>THE WORKBENCH</span><span>想法正在发生 / 01</span></div></div>
         </section>
+          <div className="st-shell st-cover-toolbar"><span>{hasCover ? 'MY SPACE / 我的灵感风景' : 'YOUR SPACE, YOUR WAY / 留一点自己的风格'}</span><BackgroundPanel {...background} /></div>
+        </div>
 
         <nav className="st-shell st-shortcuts" aria-label="子站快捷入口">
           {PROJECTS.map((project, index) => <a key={project.id} href={project.href} target="_blank" rel="noopener noreferrer"><span className="st-shortcut-number">0{index + 1}</span><Icon name={project.icon} /><span>{project.shortName}</span><span className="st-shortcut-arrow" aria-hidden="true">↗</span></a>)}

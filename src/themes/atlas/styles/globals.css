@@ -321,3 +321,58 @@
 @media (prefers-reduced-motion: reduce) {
   #atlas-scope *, #atlas-scope *::before, #atlas-scope *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* One layout, with an optional personal cover confined to the opening section. */
+#atlas-scope .st-hero-stage { position: relative; isolation: isolate; }
+#atlas-scope .st-cover-image { position: absolute; inset: 0; z-index: -1; overflow: hidden; background: #253840; }
+#atlas-scope .st-cover-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scale(1.05); }
+#atlas-scope .st-cover-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #101d2de8 0%, #101d2d99 32%, #101d2d0a 75%), linear-gradient(0deg, #101d2d66, transparent 30%); }
+#atlas-scope .st-cover-shade { position: absolute; inset: 0; background: #000; }
+#atlas-scope .st-has-cover { color: #fff; }
+#atlas-scope .st-has-cover .st-hero { min-height: 580px; padding-block: 80px 60px; }
+#atlas-scope .st-has-cover .st-hero-art { visibility: hidden; }
+#atlas-scope .st-has-cover .st-hero h1 > span { color: #f6dbad; }
+#atlas-scope .st-has-cover .st-hero h1 i, #atlas-scope .st-has-cover .st-small-star { color: #f6dbad; }
+#atlas-scope .st-has-cover .st-hero-description, #atlas-scope .st-has-cover .st-hero-note { color: #f0f0ef; }
+#atlas-scope .st-has-cover .st-button { background: #f6dbad; color: #252b2b; }
+#atlas-scope .st-has-cover .st-text-link:hover { color: #f6dbad; }
+#atlas-scope .st-cover-toolbar { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 12px 22px; color: var(--st-muted); }
+#atlas-scope .st-cover-toolbar > span { font: 9px/1.5 ui-monospace, monospace; letter-spacing: 1px; }
+#atlas-scope .st-cover-trigger { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 14px; border: 1px solid var(--st-line); background: transparent; border-radius: 2px; color: var(--st-ink); font-size: 12px; }
+#atlas-scope .st-cover-trigger svg { width: 16px; height: 16px; }
+#atlas-scope .st-cover-trigger:hover { background: var(--st-surface); }
+#atlas-scope .st-has-cover .st-cover-toolbar { color: #fff; }
+#atlas-scope .st-has-cover .st-cover-trigger { color: #fff; background: #15233180; border-color: #ffffff66; backdrop-filter: blur(8px); }
+#atlas-scope .st-cover-dialog { position: fixed; inset: 0; margin: auto; width: min(520px, calc(100% - 32px)); max-height: calc(100dvh - 40px); padding: 0; border: 1px solid var(--st-line); border-radius: 6px; background: var(--st-paper); color: var(--st-ink); box-shadow: 0 24px 90px #0004; }
+#atlas-scope .st-cover-dialog::backdrop { background: #10191380; backdrop-filter: blur(5px); }
+#atlas-scope .st-cover-panel { padding: 30px; }
+#atlas-scope .st-cover-panel-heading { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+#atlas-scope .st-cover-panel-heading .st-eyebrow { color: var(--st-orange); font-size: 9px; margin-bottom: 10px; }
+#atlas-scope .st-cover-panel h2 { font-size: 25px; }
+#atlas-scope .st-cover-intro { margin-top: 16px; color: var(--st-muted); font-size: 13px; line-height: 1.8; }
+#atlas-scope .st-cover-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px; }
+#atlas-scope .st-cover-options button { padding: 5px 5px 10px; border: 1px solid var(--st-line); background: var(--st-card); border-radius: 3px; font-size: 11px; }
+#atlas-scope .st-cover-options button[aria-pressed='true'] { outline: 2px solid var(--st-orange); outline-offset: 2px; }
+#atlas-scope .st-cover-swatch { display: flex; align-items: center; justify-content: center; height: 65px; margin-bottom: 8px; }
+#atlas-scope .st-cover-swatch-paper { background: var(--st-surface); color: var(--st-orange); font: 40px Arial, sans-serif; }
+#atlas-scope .st-cover-swatch-photo { background: url('https://api.oscarstudio.cn/default-bg.jpeg') center / cover; }
+#atlas-scope .st-cover-swatch-upload { background: var(--st-surface); color: var(--st-muted); border: 1px dashed var(--st-line); }
+#atlas-scope .st-cover-file-hint { margin-top: 14px; color: var(--st-muted); font-size: 10px; }
+#atlas-scope .st-cover-slider { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 24px; font-size: 12px; }
+#atlas-scope .st-cover-slider output { color: var(--st-muted); font: 11px ui-monospace, monospace; }
+#atlas-scope .st-cover-slider input { width: 100%; accent-color: var(--st-orange); }
+#atlas-scope .st-cover-panel-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; border-top: 1px solid var(--st-line); padding-top: 20px; margin-top: 26px; }
+#atlas-scope .st-cover-panel-footer > span { font-size: 10px; color: var(--st-muted); }
+#atlas-scope .st-cover-panel-footer .st-button { min-height: 42px; font-size: 12px; padding: 9px 16px; }
+#atlas-scope .st-cover-error { margin-top: 15px; color: var(--st-orange); font-size: 12px; }
+@media (max-width: 800px) {
+  #atlas-scope .st-has-cover .st-hero { min-height: 540px; grid-template-columns: 1fr; }
+  #atlas-scope .st-has-cover .st-hero-art { display: none; }
+}
+@media (max-width: 560px) {
+  #atlas-scope .st-has-cover .st-hero { min-height: 510px; padding-block: 58px 35px; }
+  #atlas-scope .st-cover-toolbar > span { max-width: 150px; font-size: 8px; }
+  #atlas-scope .st-cover-panel { padding: 22px; }
+  #atlas-scope .st-cover-panel h2 { font-size: 22px; }
+  #atlas-scope .st-cover-image::after { background: linear-gradient(90deg, #101d2dd9, #101d2d33), linear-gradient(0deg, #101d2d66, transparent); }
+}

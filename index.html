@@ -34,15 +34,9 @@
         } catch (e) { /* ignore */ }
       })();
 
-      // 渲染前应用主页主题（classic / atlas），避免闪烁
-      // 默认 atlas（新用户），用户可在 settings 切换并会缓存到 localStorage。
-      (function() {
-        try {
-          var ht = localStorage.getItem('oscar-home-theme');
-          if (ht !== 'classic' && ht !== 'atlas') ht = 'atlas';
-          document.documentElement.setAttribute('data-home-theme', ht);
-        } catch (e) { /* ignore */ }
-      })();
+      // The landing page has one design; normalize retired cached preferences.
+      document.documentElement.setAttribute('data-home-theme', 'atlas');
+      try { localStorage.setItem('oscar-home-theme', 'atlas'); } catch (e) { /* storage may be unavailable */ }
     </script>
     <script defer src="https://analytics.oscarstudio.cn/script.js" data-website-id="d6ad57c2-3661-4787-930f-c9271baf6e9b"></script>
   </head>

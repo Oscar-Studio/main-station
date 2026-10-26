@@ -1,14 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import ToolSection from './components/ToolSection';
-import Footer from './components/Footer';
-import BackToTop from './components/BackToTop';
-import { useUserBackground } from './lib/useUserBackground';
-import { useHomeTheme } from './hooks/useHomeTheme';
 
-// Atlas（crazy/4 实验主题）整棵子树懒加载。
-// 没选 Atlas 的用户首屏不会下载 three.js / framer-motion 等 ~150kb JS。
+// Keep the studio page in its own chunk.
 const AtlasApp = lazy(() => import('./themes/atlas/ThemeApp'));
 
 function useExternalScripts() {
@@ -21,7 +13,7 @@ function useExternalScripts() {
       lastContainer = container;
       if (document.getElementById(id)) {
         // The SDK already owns authentication. Ask its existing storage listener
-        // to render again when switching between classic and the lazy Atlas tree.
+        // to render again after the lazy studio tree mounts.
         window.dispatchEvent(new StorageEvent('storage', { key: 'ai_user' }));
         return;
       }
@@ -80,76 +72,8 @@ function AtlasLoading() {
   );
 }
 
-function ClassicTree() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <ToolSection
-        id="ai"
-        icon="🤖"
-        titleKey="aiTitle"
-        descKey="aiDesc"
-        actionKey="aiAction"
-        href="https://ai.oscarstudio.cn"
-        external
-      />
-      <ToolSection
-        id="teaching-tools"
-        icon="📚"
-        titleKey="teachingTitle"
-        descKey="teachingDesc"
-        actionKey="teachingAction"
-        href="https://edu.oscarstudio.cn"
-        external
-      />
-      <ToolSection
-        id="tools"
-        icon="🧰"
-        titleKey="toolsTitle"
-        descKey="toolsDesc"
-        actionKey="toolsAction"
-        href="https://tools.oscarstudio.cn"
-        external
-      />
-      <ToolSection
-        id="games"
-        icon="🎮"
-        titleKey="gamesTitle"
-        descKey="gamesDesc"
-        actionKey="gamesAction"
-        href="https://games.oscarstudio.cn"
-        external
-      />
-      <ToolSection
-        id="html-ppt"
-        icon="📊"
-        titleKey="pptTitle"
-        descKey="pptDesc"
-        actionKey="pptAction"
-        href="https://ppt.oscarstudio.cn"
-        external
-      />
-      <Footer />
-      <BackToTop />
-    </>
-  );
-}
-
 export default function App() {
   useExternalScripts();
   useShortenedLoginButton();
-  const [homeTheme] = useHomeTheme();
-  // useUserBackground 内部已感知 homeTheme === 'atlas'，会自动跳过 userBgLayer
-  useUserBackground(homeTheme);
-
-  if (homeTheme === 'atlas') {
-    return (
-      <Suspense fallback={<AtlasLoading />}>
-        <AtlasApp />
-      </Suspense>
-    );
-  }
-
-  return <ClassicTree />;
+  return <Suspense fallback={<AtlasLoading />}><AtlasApp /></Suspense>;
 }

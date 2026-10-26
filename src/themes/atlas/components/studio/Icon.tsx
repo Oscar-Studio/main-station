@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 export function Icon({ name }: { name: string }) {
   const paths: Record<string, ReactNode> = {
+    image: <><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="8" cy="9" r="1.5" /><path d="m3 17 5-5 4 4 4-6 5 7" /></>,
     search: <><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4.5 4.5" /></>,
     arrow: <path d="M4 12h16m-6-6 6 6-6 6" />,
     moon: <path d="M20 14A8.5 8.5 0 0 1 10 4a8.5 8.5 0 1 0 10 10Z" />,
