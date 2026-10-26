@@ -63,7 +63,7 @@ export const NEURAL_STATS = [
 ] as const;
 
 export const TYPING_DEMO = {
-  title: 'opilot · live preview',
+  title: 'AI · live preview',
   initialPrompt: 'Draft a syllabus for an intro to design systems',
   initialResponse:
     'Module 01 — Foundations · What design systems are, why they exist, and what they are not. Module 02 — Tokens · Color, type, space, motion — the atoms. Module 03 — Components · Patterns that compose tokens into reusable building blocks. Module 04 — Documentation · How to write the manual your team will actually read.',

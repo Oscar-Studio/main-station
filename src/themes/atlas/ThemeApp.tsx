@@ -33,7 +33,7 @@ export default function ThemeApp() {
         if (menuOpen) menuRef.current?.focus();
       }
     };
-    // Capture before the global Opilot document shortcut; Atlas owns tool search.
+    // Handle the Atlas tool-search shortcut.
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
   }, [menuOpen]);

@@ -3,12 +3,6 @@ import { useI18n } from '../i18n/I18nProvider';
 import { ThemeToggle } from './ThemeToggle';
 import type { Lang } from '../i18n/translations';
 
-declare global {
-  interface Window {
-    Opilot?: { openPanel?: () => void };
-  }
-}
-
 type NavLink = { href: string; label: string; external?: boolean };
 
 function HamburgerIcon({ open }: { open: boolean }) {
@@ -153,8 +147,6 @@ export default function Navbar() {
     return () => document.removeEventListener('click', onClick);
   }, [open]);
 
-  const onOpilot = () => window.Opilot?.openPanel?.();
-
   const onPickLang = (next: Lang) => {
     setLang(next);
     setOpen(false);
@@ -195,18 +187,6 @@ export default function Navbar() {
           >
             {t('navCta')}
           </a>
-
-          <button
-            type="button"
-            className="opilot-trigger"
-            id="opilotTrigger"
-            title="Opilot (⌘K)"
-            onClick={onOpilot}
-          >
-            <span className="opilot-trigger-icon">✨</span>
-            <span className="opilot-trigger-text">{t('opilotLabel')}</span>
-            <kbd className="opilot-trigger-kbd">⌘K</kbd>
-          </button>
 
           <div
             ref={dropdownRef}

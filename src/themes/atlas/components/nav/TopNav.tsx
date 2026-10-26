@@ -9,10 +9,10 @@ import { UserButton } from '@/components/auth/UserButton';
 import { cn } from '@/lib/cn';
 
 interface TopNavProps {
-  onOpenOpilot: () => void;
+  onOpenSearch: () => void;
 }
 
-export function TopNav({ onOpenOpilot }: TopNavProps) {
+export function TopNav({ onOpenSearch }: TopNavProps) {
   const now = useNow();
   const y = useScrollY();
   const scrolled = y > 24;
@@ -88,7 +88,7 @@ export function TopNav({ onOpenOpilot }: TopNavProps) {
 
         <div className="flex items-center gap-4 justify-end">
           <button
-            onClick={onOpenOpilot}
+            onClick={onOpenSearch}
             data-cursor="Search"
             className="hidden md:inline-flex items-center gap-2 rounded-pill border border-hairline-strong px-3 py-1.5 text-[12px] font-mono text-mute hover:text-ink hover:border-ink transition-colors duration-300"
           >

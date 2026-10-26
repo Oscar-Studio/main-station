@@ -169,58 +169,6 @@ img {
   color: #92400e;
 }
 
-/* —— Opilot —— */
-.opilot-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: inherit;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.opilot-trigger:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(0, 229, 255, 0.4);
-  color: var(--secondary);
-}
-
-[data-theme="light"] .opilot-trigger {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-[data-theme="light"] .opilot-trigger:hover {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 229, 255, 0.6);
-}
-
-.opilot-trigger-icon {
-  font-size: 1rem;
-}
-
-.opilot-trigger-kbd {
-  font-size: 0.7rem;
-  font-family: ui-monospace, monospace;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  color: inherit;
-  opacity: 0.7;
-}
-
-[data-theme="light"] .opilot-trigger-kbd {
-  background: rgba(0, 0, 0, 0.06);
-}
-
 /* —— Language Dropdown —— */
 .lang-dropdown {
   position: relative;
@@ -854,8 +802,6 @@ footer a {
   }
 
   .nav-docs-link,
-  .opilot-trigger-text,
-  .opilot-trigger-kbd,
   .lang-toggle-text,
   .nav-cta-btn {
     display: none;
