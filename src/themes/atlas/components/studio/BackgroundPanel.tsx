@@ -16,7 +16,7 @@ export function BackgroundPanel({ cover, update, error, backgrounds }: Props) {
           <button aria-pressed={!cover.image} onClick={() => update({ image: '', overlay: 35, blur: 0 })}><span className="st-cover-swatch st-cover-swatch-paper">✳</span>默认画布</button>
           {backgrounds.map((background, index) => <button key={background.key} aria-pressed={cover.objectKey === background.key} onClick={() => update({ ...cover, image: background.url, cloudImage: background.url, objectKey: background.key })}><span className="st-cover-swatch" style={{ backgroundImage: `url(${background.url})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />我的背景 {index + 1}</button>)}
         </div>
-        <p className="st-cover-file-hint">在 <a href="https://api.oscarstudio.cn/settings.html">UI 设置</a> 上传照片，这里只选择背景。</p>
+        <p className="st-cover-file-hint">在 <a href="https://api.oscarstudio.cn/user/settings#appearance">UI 设置</a> 上传照片，这里只选择背景。</p>
         <label className="st-cover-slider">遮罩深度 <output>{cover.overlay}%</output><input type="range" min="0" max="70" value={cover.overlay} disabled={!cover.image} onChange={event => update({ ...cover, overlay: Number(event.target.value) })} /></label>
         <label className="st-cover-slider">背景模糊 <output>{cover.blur}px</output><input type="range" min="0" max="16" value={cover.blur} disabled={!cover.image} onChange={event => update({ ...cover, blur: Number(event.target.value) })} /></label>
         {error && <p className="st-cover-error" role="alert">{error}</p>}

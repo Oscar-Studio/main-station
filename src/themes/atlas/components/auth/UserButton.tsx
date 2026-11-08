@@ -145,7 +145,7 @@ export function UserButton() {
             data-cursor="Settings"
             className="block px-4 py-2.5 text-[12px] hover:bg-canvas-soft"
           >
-            UI 设置
+            设置
           </a>
 
           <button
