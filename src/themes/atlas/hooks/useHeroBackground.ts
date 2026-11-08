@@ -8,10 +8,13 @@ function cacheKey() {
   return 'oscar-atlas-cover:guest';
 }
 const KEY = cacheKey();
-export const DEMO_COVER = 'https://api.oscarstudio.cn/default-bg.jpeg';
 type Cover = { image: string; overlay: number; blur: number; objectKey?: string; cloudImage?: string };
 const EMPTY: Cover = { image: '', overlay: 35, blur: 0 };
-const resolveImage = (url: string) => url.startsWith('/') && !url.startsWith('//') ? `https://api.oscarstudio.cn${url}` : url;
+function resolveImage(url: string) {
+  const image = url.startsWith('/') && !url.startsWith('//') ? `https://api.oscarstudio.cn${url}` : url;
+  // Older settings may still reference the retired preset.
+  return image === 'https://api.oscarstudio.cn/default-bg.jpeg' ? '' : image;
+}
 const base = () => window.API_BASE || 'https://api.oscarstudio.cn';
 function token() {
   const cookie = document.cookie.match(/(?:^|;\s*)userToken=([^;]*)/)?.[1];
@@ -31,10 +34,9 @@ async function api(path: string, body?: unknown) {
 }
 export function useHeroBackground() {
   const [cover, setCover] = useState<Cover>(() => {
-    if (import.meta.env.DEV && new URLSearchParams(location.search).get('cover') === 'demo') return { ...EMPTY, image: DEMO_COVER };
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (saved && typeof saved.image === 'string') return { ...EMPTY, ...saved };
+      if (saved && typeof saved.image === 'string') return { ...EMPTY, ...saved, image: resolveImage(saved.image) };
       const legacy = localStorage.getItem('lg-bg');
       if (legacy) return { ...EMPTY, image: resolveImage(legacy) };
     } catch { /* Local storage is optional. */ }

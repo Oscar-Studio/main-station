@@ -355,7 +355,6 @@
 #atlas-scope .st-cover-options button[aria-pressed='true'] { outline: 2px solid var(--st-orange); outline-offset: 2px; }
 #atlas-scope .st-cover-swatch { display: flex; align-items: center; justify-content: center; height: 65px; margin-bottom: 8px; }
 #atlas-scope .st-cover-swatch-paper { background: var(--st-surface); color: var(--st-orange); font: 40px Arial, sans-serif; }
-#atlas-scope .st-cover-swatch-photo { background: url('https://api.oscarstudio.cn/default-bg.jpeg') center / cover; }
 #atlas-scope .st-cover-swatch-upload { background: var(--st-surface); color: var(--st-muted); border: 1px dashed var(--st-line); }
 #atlas-scope .st-cover-file-hint { margin-top: 14px; color: var(--st-muted); font-size: 10px; }
 #atlas-scope .st-cover-slider { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 24px; font-size: 12px; }

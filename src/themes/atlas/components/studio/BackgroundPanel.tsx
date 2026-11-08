@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { DEMO_COVER, useHeroBackground } from '../../hooks/useHeroBackground';
+import type { useHeroBackground } from '../../hooks/useHeroBackground';
 import { Icon } from './Icon';
 
 type Props = ReturnType<typeof useHeroBackground>;
@@ -14,7 +14,6 @@ export function BackgroundPanel({ cover, update, error, backgrounds }: Props) {
         <p className="st-cover-intro">把喜欢的照片放在首页。工具箱依然清爽，风景留给第一眼。</p>
         <div className="st-cover-options" role="group" aria-label="背景样式">
           <button aria-pressed={!cover.image} onClick={() => update({ image: '', overlay: 35, blur: 0 })}><span className="st-cover-swatch st-cover-swatch-paper">✳</span>默认画布</button>
-          <button aria-pressed={cover.image === DEMO_COVER} onClick={() => update({ image: DEMO_COVER, overlay: 35, blur: 0 })}><span className="st-cover-swatch st-cover-swatch-photo" />山间日出</button>
           {backgrounds.map((background, index) => <button key={background.key} aria-pressed={cover.objectKey === background.key} onClick={() => update({ ...cover, image: background.url, cloudImage: background.url, objectKey: background.key })}><span className="st-cover-swatch" style={{ backgroundImage: `url(${background.url})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />我的背景 {index + 1}</button>)}
         </div>
         <p className="st-cover-file-hint">在 <a href="https://api.oscarstudio.cn/settings.html">UI 设置</a> 上传照片，这里只选择背景。</p>
