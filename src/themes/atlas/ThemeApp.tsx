@@ -1,11 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 import { useTheme } from './hooks/useTheme';
 import { StudioArtwork } from './components/studio/StudioArtwork';
 import { BackgroundPanel } from './components/studio/BackgroundPanel';
 import { useHeroBackground } from './hooks/useHeroBackground';
 import { Icon } from './components/studio/Icon';
-import { CATEGORIES, PROJECTS, findTools } from './data/studio';
+import { CATEGORIES, PROJECTS, TOOLS, findTools } from './data/studio';
 import atlasCss from './styles/globals.css?inline';
+
+const RECENT_TOOLS_KEY = 'oscar-studio-recent-tools';
+const RECENT_TOOLS_LIMIT = 4;
+const toolIdsByHref = new Map(TOOLS.map(tool => [tool.href, tool.id]));
+const toolsById = new Map(TOOLS.map(tool => [tool.id, tool]));
+
+function readRecentTools(fallback: string[] = []): string[] {
+  try {
+    const saved: unknown = JSON.parse(localStorage.getItem(RECENT_TOOLS_KEY) ?? '[]');
+    if (Array.isArray(saved)) {
+      const ids = saved.filter((id): id is string => typeof id === 'string' && toolsById.has(id));
+      return [...new Set(ids)].slice(0, RECENT_TOOLS_LIMIT);
+    }
+  } catch { /* Storage may be unavailable or contain invalid JSON. */ }
+  return fallback;
+}
 
 export default function ThemeApp() {
   const background = useHeroBackground();
@@ -17,10 +34,31 @@ export default function ThemeApp() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
+  const [recentIds, setRecentIds] = useState(() => readRecentTools());
   const searchRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
   const results = findTools(query, category);
   const exploring = Boolean(query.trim()) || category !== 'all';
+  const recentTools = recentIds.flatMap(id => toolsById.get(id) ?? []);
+
+  const rememberTool = (event: MouseEvent<HTMLElement>) => {
+    if (event.defaultPrevented || (event.button !== 0 && event.button !== 1)) return;
+    const href = (event.target as Element).closest('a[href]')?.getAttribute('href');
+    const id = href && toolIdsByHref.get(href);
+    if (!id) return;
+
+    const next = [id, ...readRecentTools(recentIds).filter(item => item !== id)].slice(0, RECENT_TOOLS_LIMIT);
+    setRecentIds(next);
+    try { localStorage.setItem(RECENT_TOOLS_KEY, JSON.stringify(next)); } catch { /* Keep the session history. */ }
+  };
+
+  useEffect(() => {
+    const syncRecentTools = (event: StorageEvent) => {
+      if (event.key === RECENT_TOOLS_KEY || event.key === null) setRecentIds(readRecentTools());
+    };
+    window.addEventListener('storage', syncRecentTools);
+    return () => window.removeEventListener('storage', syncRecentTools);
+  }, []);
 
   const focusSearch = () => {
     setMenuOpen(false);
@@ -65,7 +103,7 @@ export default function ThemeApp() {
         {menuOpen && <nav id="studio-mobile-nav" className="st-mobile-nav st-shell" aria-label="移动端导航" onClick={() => setMenuOpen(false)}><a href="#explore">探索工具 <span>↘</span></a><a href="#projects">关于项目 <span>↘</span></a><a href="https://docs.oscarstudio.cn/" target="_blank" rel="noopener noreferrer">使用文档 <span>↗</span></a></nav>}
       </header>
 
-      <main id="studio-main" tabIndex={-1}>
+      <main id="studio-main" tabIndex={-1} onClick={rememberTool} onAuxClick={rememberTool}>
         <div className={`st-hero-stage${hasCover ? ' st-has-cover' : ''}`}>
           {hasCover && <div className="st-cover-image" aria-hidden="true"><img src={cover.image} alt="" style={{ filter: `blur(${cover.blur}px)` }} onError={() => { setImageFailed(true); background.setError('背景图加载失败，已显示默认画布。请重新选择图片。'); }} /><div className="st-cover-shade" style={{ opacity: cover.overlay / 100 }} /></div>}
           <section id="studio-top" className="st-shell st-hero" aria-labelledby="studio-title">
@@ -84,6 +122,23 @@ export default function ThemeApp() {
         <nav className="st-shell st-shortcuts" aria-label="子站快捷入口">
           {PROJECTS.map((project, index) => <a key={project.id} href={project.href} target="_blank" rel="noopener noreferrer"><span className="st-shortcut-number">0{index + 1}</span><Icon name={project.icon} /><span>{project.shortName}</span><span className="st-shortcut-arrow" aria-hidden="true">↗</span></a>)}
         </nav>
+
+        {recentTools.length > 0 && (
+          <section className="st-shell st-recent" aria-labelledby="recent-tools-title">
+            <h2 id="recent-tools-title"><Icon name="clock" />最近使用</h2>
+            <ul className="st-recent-list">
+              {recentTools.map(tool => (
+                <li key={tool.id}>
+                  <a href={tool.href} target="_blank" rel="noopener noreferrer">
+                    <span className={`st-tool-symbol st-tint-${tool.category}`}><Icon name={tool.icon} /></span>
+                    <span>{tool.name}</span>
+                    <span className="st-recent-arrow" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section id="explore" className="st-shell st-explore" aria-labelledby="explore-title">
           <div className="st-section-heading"><div><p className="st-eyebrow">THE TOOLBOX / 工具箱</p><h2 id="explore-title">好工具，随手可得<span className="st-orange">。</span></h2></div><p className="st-section-aside">少一点繁琐，<br />多一点创造的时间。</p></div>

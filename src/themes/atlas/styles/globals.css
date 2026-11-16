@@ -95,6 +95,16 @@
 #atlas-scope .st-shortcut-number { position: absolute; top: 9px; left: 23px; font-family: ui-monospace, monospace; font-size: 9px; color: var(--st-muted); }
 #atlas-scope .st-shortcut-arrow { margin-left: auto; color: var(--st-muted); }
 #atlas-scope .st-shortcuts svg { width: 21px; }
+#atlas-scope .st-recent { padding-block: 28px; border-bottom: 1px solid var(--st-line); }
+#atlas-scope .st-recent h2 { display: flex; align-items: center; gap: 8px; margin-bottom: 13px; font-size: 15px; letter-spacing: normal; }
+#atlas-scope .st-recent h2 svg { width: 18px; height: 18px; color: var(--st-orange); }
+#atlas-scope .st-recent-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+#atlas-scope .st-recent-list a { display: flex; align-items: center; gap: 9px; min-height: 52px; height: 100%; padding: 8px 11px; background: var(--st-card); border: 1px solid var(--st-line); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+#atlas-scope .st-recent-list a:hover { border-color: var(--st-ink); }
+#atlas-scope .st-recent-list .st-tool-symbol { width: 28px; height: 28px; flex-shrink: 0; }
+#atlas-scope .st-recent-list .st-tool-symbol svg { width: 16px; height: 16px; }
+#atlas-scope .st-recent-arrow { margin-left: auto; color: var(--st-muted); }
+#atlas-scope .st-recent + .st-explore { padding-top: 52px; }
 #atlas-scope #explore, #atlas-scope #projects, #atlas-scope #studio-top { scroll-margin-top: 110px; }
 #atlas-scope .st-explore { padding-block: 105px 94px; }
 #atlas-scope .st-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
@@ -218,6 +228,7 @@
   #atlas-scope .st-shortcuts a { padding-inline: 12px; gap: 7px; }
   #atlas-scope .st-shortcuts svg, #atlas-scope .st-shortcut-arrow { display: none; }
   #atlas-scope .st-shortcut-number { left: 12px; }
+  #atlas-scope .st-recent-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   #atlas-scope .st-search { width: 100%; }
   #atlas-scope .st-search-hint, #atlas-scope .st-section-aside { display: none; }
   #atlas-scope .st-tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -261,6 +272,9 @@
   #atlas-scope .st-shortcuts a:nth-child(4) { border-left: 0; }
   #atlas-scope .st-shortcut-arrow { display: inline; }
   #atlas-scope .st-shortcut-number { font-size: 8px; top: 4px; }
+  #atlas-scope .st-recent { padding-block: 22px; }
+  #atlas-scope .st-recent-arrow { display: none; }
+  #atlas-scope .st-recent + .st-explore { padding-top: 38px; }
   #atlas-scope .st-explore { padding-block: 64px 56px; }
   #atlas-scope .st-section-heading { margin-bottom: 26px; }
   #atlas-scope h2 { font-size: 27px; }
