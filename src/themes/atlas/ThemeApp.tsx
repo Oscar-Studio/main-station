@@ -4,14 +4,14 @@ import { useTheme } from './hooks/useTheme';
 import { StudioArtwork } from './components/studio/StudioArtwork';
 import { BackgroundPanel } from './components/studio/BackgroundPanel';
 import { useHeroBackground } from './hooks/useHeroBackground';
+import { useFeaturedTools } from './hooks/useFeaturedTools';
 import { Icon } from './components/studio/Icon';
-import { CATEGORIES, PROJECTS, TOOLS, findTools } from './data/studio';
+import { CATEGORIES, PROJECTS, TOOLS, findTools, toolsById } from './data/studio';
 import atlasCss from './styles/globals.css?inline';
 
 const RECENT_TOOLS_KEY = 'oscar-studio-recent-tools';
 const RECENT_TOOLS_LIMIT = 4;
 const toolIdsByHref = new Map(TOOLS.map(tool => [tool.href, tool.id]));
-const toolsById = new Map(TOOLS.map(tool => [tool.id, tool]));
 
 function readRecentTools(fallback: string[] = []): string[] {
   try {
@@ -37,8 +37,9 @@ export default function ThemeApp() {
   const [recentIds, setRecentIds] = useState(() => readRecentTools());
   const searchRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
-  const results = findTools(query, category);
   const exploring = Boolean(query.trim()) || category !== 'all';
+  const featuredIds = useFeaturedTools();
+  const results = findTools(query, category, featuredIds);
   const recentTools = recentIds.flatMap(id => toolsById.get(id) ?? []);
 
   const rememberTool = (event: MouseEvent<HTMLElement>) => {
@@ -143,7 +144,7 @@ export default function ThemeApp() {
         <section id="explore" className="st-shell st-explore" aria-labelledby="explore-title">
           <div className="st-section-heading"><div><p className="st-eyebrow">THE TOOLBOX / 工具箱</p><h2 id="explore-title">好工具，随手可得<span className="st-orange">。</span></h2></div><p className="st-section-aside">少一点繁琐，<br />多一点创造的时间。</p></div>
           <div className="st-search-row"><div className="st-search"><Icon name="search" /><label className="st-sr-only" htmlFor="studio-search">搜索工具名称、分类或关键词</label><input id="studio-search" ref={searchRef} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="找个工具，开始做点什么…" autoComplete="off" />{query ? <button className="st-icon-button" aria-label="清空搜索" onClick={() => { setQuery(''); searchRef.current?.focus(); }}><Icon name="close" /></button> : <kbd>⌘ / Ctrl K</kbd>}</div><span className="st-search-hint">好奇什么，就搜什么。</span></div>
-          <div className="st-filter-row"><div className="st-filters" role="group" aria-label="工具分类">{CATEGORIES.map(item => <button key={item.id} aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</button>)}</div><p className="st-result-count" role="status">{exploring ? `${results.length} 个结果` : '从这 6 个开始'}</p></div>
+          <div className="st-filter-row"><div className="st-filters" role="group" aria-label="工具分类">{CATEGORIES.map(item => <button key={item.id} aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</button>)}</div>{exploring ? <p className="st-result-count" role="status">{results.length} 个结果</p> : <a className="st-text-link st-featured-settings" href="https://api.oscarstudio.cn/user/settings#featured">自定义精选 <span aria-hidden="true">↗</span></a>}</div>
           <div className="st-tool-grid">{results.map((tool, index) => <a className="st-tool" key={tool.id} href={tool.href} target="_blank" rel="noopener noreferrer"><div className="st-tool-top"><span className={`st-tool-symbol st-tint-${tool.category}`}><Icon name={tool.icon} /></span><span className="st-tool-category">{tool.categoryLabel}</span><span className="st-tool-arrow" aria-hidden="true">↗</span></div><h3>{tool.name}</h3><p>{tool.description}</p><div className="st-tool-bottom"><span>打开工具</span><span className="st-mono">{String(index + 1).padStart(2, '0')}</span></div></a>)}</div>
           {results.length === 0 && <div className="st-empty"><Icon name="search" /><h3>暂时没找到这个工具</h3><p>试试「计算器」「写作」或切换分类。</p><button className="st-text-link" onClick={() => { setQuery(''); setCategory('all'); searchRef.current?.focus(); }}>清空搜索与筛选 <span aria-hidden="true">↗</span></button></div>}
           {!exploring && <div className="st-explore-end"><span>还有更多小而实用的工具，等你发现。</span><button className="st-text-link" onClick={() => setCategory('tools')}>查看实用工具 <span aria-hidden="true">↗</span></button></div>}

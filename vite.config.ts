@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { seoInject } from './vite-plugin-seo-inject';
+import homepageTools from './src/themes/atlas/data/catalog.json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -11,7 +12,12 @@ const SRC = path.resolve(__dirname, 'src');
 
 export default defineConfig({
   base: '/',
-  plugins: [react(), seoInject()],
+  plugins: [react(), seoInject(), {
+    name: 'homepage-tools-catalog',
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: 'homepage-tools.json', source: JSON.stringify(homepageTools) });
+    },
+  }],
   resolve: {
     // 顺序很关键：先匹配 src/themes/atlas（atlas 子树专用），再回退 src。
     // atlas（crazy/4）子树里大量使用 '@/hooks/...' '@/lib/...' '@/data/...'

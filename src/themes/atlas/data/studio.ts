@@ -22,11 +22,16 @@ export const TOOLS = catalog.map(tool => {
   return { ...tool, icon: icons[tool.id] || project.icon, categoryLabel: project.shortName };
 });
 
-export function findTools(query: string, category: string) {
+export const toolsById = new Map(TOOLS.map(tool => [tool.id, tool]));
+
+export function findTools(query: string, category: string, featuredIds: string[] = []) {
   const words = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0 && category === 'all') {
+    const featured = [...new Set(featuredIds)].flatMap(id => toolsById.get(id) ?? []);
+    return featured.length ? featured : TOOLS.filter(tool => tool.featured);
+  }
   return TOOLS.filter(tool => {
     if (category !== 'all' && tool.category !== category) return false;
-    if (words.length === 0 && category === 'all') return tool.featured;
     const text = [tool.name, tool.description, tool.categoryLabel, tool.category, ...tool.keywords].join(' ').toLocaleLowerCase();
     return words.every(word => text.includes(word));
   });

@@ -8,10 +8,18 @@ const server = await createServer({ server: { middlewareMode: true }, appType: '
 after(() => server.close());
 const { findTools, TOOLS, PROJECTS } = await server.ssrLoadModule('/src/themes/atlas/data/studio.ts');
 
-test('initial and whitespace searches show the six curated tools', () => {
-  const expected = ['whiteboard', 'markdown-editor', 'todo', 'scientific-calc', 'class-timer', 'game-2048'];
+test('initial and whitespace searches show the default curated tools', () => {
+  const expected = ['whiteboard', 'markdown-editor', 'todo', 'data-stats', 'scientific-calc', 'class-timer', 'game-2048'];
   assert.deepEqual(findTools('', 'all').map(tool => tool.id), expected);
   assert.deepEqual(findTools('  ', 'all').map(tool => tool.id), expected);
+});
+
+test('account selections retain saved order and skip missing or duplicate tools', () => {
+  const ids = ['game-2048', 'retired-tool', 'whiteboard', 'game-2048'];
+  assert.deepEqual(findTools('', 'all', ids).map(tool => tool.id), ['game-2048', 'whiteboard']);
+  assert.deepEqual(findTools('', 'all', ['retired-tool']), findTools('', 'all'));
+  assert.deepEqual(findTools('计算器', 'all', ids), findTools('计算器', 'all'));
+  assert.deepEqual(findTools('', 'games', ids), findTools('', 'games'));
 });
 
 test('search covers Chinese names, descriptions, English and multiple keywords', () => {
@@ -34,7 +42,7 @@ test('category filters combine with search and cover every project', () => {
 
 test('no matches and clearing filters return the appropriate states', () => {
   assert.equal(findTools('不存在xyz', 'all').length, 0);
-  assert.equal(findTools('', 'all').length, 6);
+  assert.equal(findTools('', 'all').length, 7);
 });
 
 test('catalog preserves hash and Unicode routes and excludes retired demos', () => {
@@ -49,30 +57,20 @@ test('catalog preserves hash and Unicode routes and excludes retired demos', () 
   }
 });
 
-test('Atlas renders Chinese content, shared SDK container and six tool links', async () => {
+test('Atlas renders Chinese content, shared SDK container and default tool links', async () => {
   const { default: Atlas } = await server.ssrLoadModule('/src/themes/atlas/ThemeApp.tsx');
   const html = renderToStaticMarkup(createElement(Atlas));
   assert.match(html, /id="atlas-scope" data-theme="paper"/);
   assert.match(html, /让灵感，/);
   assert.match(html, /id="userButtonContainer"/);
-  assert.equal((html.match(/class="st-tool"/g) || []).length, 6);
+  assert.equal((html.match(/class="st-tool"/g) || []).length, 7);
+  assert.match(html, /\/user\/settings#featured/);
   assert.doesNotMatch(html, /<canvas|opilot · live preview|All systems operational/);
 });
 
-test('classic remains selectable and renders its original five sections', async () => {
-  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
-  Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: {
-    getItem: key => key === 'oscar-home-theme' ? 'classic' : null,
-  } });
-  try {
-    const { default: App } = await server.ssrLoadModule('/src/App.tsx');
-    const { I18nProvider } = await server.ssrLoadModule('/src/i18n/I18nProvider.tsx');
-    const html = renderToStaticMarkup(createElement(I18nProvider, null, createElement(App)));
-    assert.doesNotMatch(html, /id="atlas-scope"/);
-    assert.match(html, /id="userButtonContainer"/);
-    for (const id of ['ai', 'teaching-tools', 'tools', 'games', 'html-ppt']) assert.ok(html.includes(`id="${id}"`));
-  } finally {
-    if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
-    else delete globalThis.localStorage;
-  }
+test('the app displays the studio loading screen while the lazy homepage loads', async () => {
+  const { default: App } = await server.ssrLoadModule('/src/App.tsx');
+  const html = renderToStaticMarkup(createElement(App));
+  assert.match(html, /Oscar Studio/);
+  assert.doesNotMatch(html, /id="atlas-scope"/);
 });

@@ -128,6 +128,7 @@
 #atlas-scope .st-filters button[aria-pressed='true'] { background: var(--st-ink); color: var(--st-paper); }
 #atlas-scope .st-filters button:hover { border-color: var(--st-ink); }
 #atlas-scope .st-result-count { flex-shrink: 0; color: var(--st-muted); font-size: 11px; }
+#atlas-scope .st-featured-settings { color: var(--st-muted); flex-shrink: 0; }
 #atlas-scope .st-tool-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 #atlas-scope .st-tool { display: flex; flex-direction: column; padding: 25px 27px 18px; background: var(--st-card); border: 1px solid var(--st-line); min-height: 244px; transition: border-color .2s, transform .2s; }
 #atlas-scope .st-tool:hover { border-color: var(--st-ink); transform: translateY(-3px); }

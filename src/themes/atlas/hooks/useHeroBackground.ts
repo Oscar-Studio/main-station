@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { getSessionToken } from '../lib/sessionToken';
 
 function cacheKey() {
   try {
-    const raw = token();
+    const raw = getSessionToken();
     if (raw) { const data = JSON.parse(atob(raw.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).data; return `oscar-atlas-cover:user:${data.id || data.user_id}`; }
   } catch { /* Fall back to guest cache. */ }
   return 'oscar-atlas-cover:guest';
@@ -16,13 +17,8 @@ function resolveImage(url: string) {
   return image === 'https://api.oscarstudio.cn/default-bg.jpeg' ? '' : image;
 }
 const base = () => window.API_BASE || 'https://api.oscarstudio.cn';
-function token() {
-  const cookie = document.cookie.match(/(?:^|;\s*)userToken=([^;]*)/)?.[1];
-  if (cookie) return decodeURIComponent(cookie);
-  try { return localStorage.getItem('ai_token') || localStorage.getItem('userToken'); } catch { return null; }
-}
 async function api(path: string, body?: unknown) {
-  const auth = token();
+  const auth = getSessionToken();
   const response = await fetch(`${base()}/api/ui${path}`, {
     method: body ? 'POST' : 'GET', credentials: 'include',
     headers: { ...(auth ? { Authorization: `Bearer ${auth}` } : {}), ...(body ? { 'Content-Type': 'application/json' } : {}) },
@@ -57,7 +53,7 @@ export function useHeroBackground() {
   useEffect(() => {
     let active = true;
     async function refresh() {
-      if (!token()) return;
+      if (!getSessionToken()) return;
       const startRevision = revision.current;
       try {
         const { ui } = await api('');
@@ -99,7 +95,7 @@ export function useHeroBackground() {
     setError('');
     apply(next);
     clearTimeout(timer.current);
-    if (token() && (next.objectKey || !next.image.startsWith('data:'))) timer.current = setTimeout(() => persist(next, current), 400);
+    if (getSessionToken() && (next.objectKey || !next.image.startsWith('data:'))) timer.current = setTimeout(() => persist(next, current), 400);
   }
   async function cachePhoto(next: Cover, expectedRevision: number) {
     if (!next.objectKey || next.image.startsWith('data:')) return;
