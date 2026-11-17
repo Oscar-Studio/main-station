@@ -92,7 +92,10 @@ export default function ThemeApp() {
         <div className="st-shell st-header-inner">
           <a className="st-brand" href="#studio-top" aria-label="Oscar Studio 首页"><span className="st-brand-mark" aria-hidden="true">✳</span> Oscar Studio</a>
           <nav className="st-desktop-nav" aria-label="主导航">
-            <a href="#explore">探索工具</a><a href="#projects">关于项目</a><a href="https://docs.oscarstudio.cn/" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
+            <a href="#explore">探索工具</a>
+            <a href="#projects">关于项目</a>
+            <a href="https://docs.oscarstudio.cn/" target="_blank" rel="noopener noreferrer">文档 <span aria-hidden="true">↗</span></a>
+            <a href="https://api.oscarstudio.cn/feedback" target="_blank" rel="noopener noreferrer">反馈 <span aria-hidden="true">↗</span></a>
           </nav>
           <div className="st-header-actions">
             <button className="st-icon-button" onClick={focusSearch} aria-label="搜索工具"><Icon name="search" /></button>
@@ -101,7 +104,14 @@ export default function ThemeApp() {
             <button ref={menuRef} className="st-icon-button st-menu-button" aria-label={menuOpen ? '关闭导航菜单' : '打开导航菜单'} aria-expanded={menuOpen} aria-controls={menuOpen ? 'studio-mobile-nav' : undefined} onClick={() => setMenuOpen(!menuOpen)}><Icon name={menuOpen ? 'close' : 'menu'} /></button>
           </div>
         </div>
-        {menuOpen && <nav id="studio-mobile-nav" className="st-mobile-nav st-shell" aria-label="移动端导航" onClick={() => setMenuOpen(false)}><a href="#explore">探索工具 <span>↘</span></a><a href="#projects">关于项目 <span>↘</span></a><a href="https://docs.oscarstudio.cn/" target="_blank" rel="noopener noreferrer">使用文档 <span>↗</span></a></nav>}
+        {menuOpen && (
+          <nav id="studio-mobile-nav" className="st-mobile-nav st-shell" aria-label="移动端导航" onClick={() => setMenuOpen(false)}>
+            <a href="#explore">探索工具 <span>↘</span></a>
+            <a href="#projects">关于项目 <span>↘</span></a>
+            <a href="https://docs.oscarstudio.cn/" target="_blank" rel="noopener noreferrer">使用文档 <span>↗</span></a>
+            <a href="https://api.oscarstudio.cn/feedback" target="_blank" rel="noopener noreferrer">反馈 <span aria-hidden="true">↗</span></a>
+          </nav>
+        )}
       </header>
 
       <main id="studio-main" tabIndex={-1} onClick={rememberTool} onAuxClick={rememberTool}>
