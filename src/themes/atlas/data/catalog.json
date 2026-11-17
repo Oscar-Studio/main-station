@@ -168,9 +168,9 @@
     "href": "https://edu.oscarstudio.cn/数据统计/index.html",
     "keywords": [
       "统计",
-      "数学",
       "图像",
       "分位数",
+      "数学",
       "箱线图",
       "直方图",
       "平均值"
@@ -211,7 +211,6 @@
     "href": "https://edu.oscarstudio.cn/英语句子成分分析/index.html",
     "keywords": [
       "语法",
-      "英语",
       "英语"
     ],
     "featured": false
@@ -318,6 +317,20 @@
     "featured": false
   },
   {
+    "id": "coin-toss",
+    "name": "掷硬币模拟",
+    "description": "模拟同时掷两枚公平硬币，用折线图观察两正、两反和一正一反的累计次数与实验概率。",
+    "category": "teaching",
+    "href": "https://edu.oscarstudio.cn/掷硬币模拟/index.html",
+    "keywords": [
+      "概率",
+      "统计",
+      "实验",
+      "数学"
+    ],
+    "featured": false
+  },
+  {
     "id": "dice-sim",
     "name": "骰子模拟器",
     "description": "模拟掷骰子，可用于随机抽取或课堂互动",
@@ -380,8 +393,7 @@
     "keywords": [
       "历史",
       "时间轴",
-      "事件",
-      "历史"
+      "事件"
     ],
     "featured": false
   },
@@ -394,8 +406,7 @@
     "keywords": [
       "生物",
       "实验",
-      "教学",
-      "生物"
+      "教学"
     ],
     "featured": false
   },
@@ -421,8 +432,7 @@
     "keywords": [
       "英语",
       "背诵",
-      "记忆",
-      "英语"
+      "记忆"
     ],
     "featured": false
   },
@@ -479,8 +489,7 @@
       "流体",
       "SPH",
       "物理",
-      "仿真",
-      "物理"
+      "仿真"
     ],
     "featured": false
   },
@@ -495,8 +504,7 @@
       "MAC",
       "欧拉",
       "物理",
-      "仿真",
-      "物理"
+      "仿真"
     ],
     "featured": false
   },
@@ -510,8 +518,7 @@
       "动画",
       "热机",
       "物理",
-      "仿真",
-      "物理"
+      "仿真"
     ],
     "featured": false
   },
@@ -527,7 +534,6 @@
       "电路图",
       "串并联",
       "欧姆定律",
-      "物理",
       "物理"
     ],
     "featured": false
@@ -546,7 +552,7 @@
   {
     "id": "gobang",
     "name": "五子棋",
-    "description": "五子棋棋盘",
+    "description": "弈室五子棋：双人对战、挑战自训练 AI、观战 AI",
     "category": "games",
     "href": "https://games.oscarstudio.cn/五子棋/index.html",
     "keywords": [

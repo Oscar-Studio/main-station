@@ -1,0 +1,33 @@
+{
+  "featured": [
+    "whiteboard",
+    "markdown-editor",
+    "todo",
+    "data-stats",
+    "scientific-calc",
+    "class-timer",
+    "game-2048"
+  ],
+  "keywords": {
+    "data-stats": ["箱线图", "直方图", "平均值"]
+  },
+  "exclude": [],
+  "manual": [
+    {
+      "id": "ai-studio",
+      "name": "AI Studio",
+      "description": "多模型 AI 对话，让想法继续生长。",
+      "category": "ai",
+      "href": "https://ai.oscarstudio.cn/",
+      "keywords": ["AI", "人工智能", "对话", "写作", "模型"]
+    },
+    {
+      "id": "ppt-studio",
+      "name": "HTML-PPT",
+      "description": "在浏览器中制作与播放 HTML 演示文稿。",
+      "category": "ppt",
+      "href": "https://ppt.oscarstudio.cn/",
+      "keywords": ["演示", "幻灯片", "PPT", "编辑器"]
+    }
+  ]
+}

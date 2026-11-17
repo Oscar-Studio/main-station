@@ -6,18 +6,18 @@ import { BackgroundPanel } from './components/studio/BackgroundPanel';
 import { useHeroBackground } from './hooks/useHeroBackground';
 import { useFeaturedTools } from './hooks/useFeaturedTools';
 import { Icon } from './components/studio/Icon';
-import { CATEGORIES, PROJECTS, TOOLS, findTools, toolsById } from './data/studio';
+import { CATEGORIES, DEFAULT_CATALOG, PROJECTS, createToolCatalog } from './data/studio';
+import type { Tool } from './data/studio';
 import atlasCss from './styles/globals.css?inline';
 
 const RECENT_TOOLS_KEY = 'oscar-studio-recent-tools';
 const RECENT_TOOLS_LIMIT = 4;
-const toolIdsByHref = new Map(TOOLS.map(tool => [tool.href, tool.id]));
 
-function readRecentTools(fallback: string[] = []): string[] {
+function readRecentTools(byId: Map<string, Tool>, fallback: string[] = []): string[] {
   try {
     const saved: unknown = JSON.parse(localStorage.getItem(RECENT_TOOLS_KEY) ?? '[]');
     if (Array.isArray(saved)) {
-      const ids = saved.filter((id): id is string => typeof id === 'string' && toolsById.has(id));
+      const ids = saved.filter((id): id is string => typeof id === 'string' && byId.has(id));
       return [...new Set(ids)].slice(0, RECENT_TOOLS_LIMIT);
     }
   } catch { /* Storage may be unavailable or contain invalid JSON. */ }
@@ -34,32 +34,46 @@ export default function ThemeApp() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
-  const [recentIds, setRecentIds] = useState(() => readRecentTools());
+  const [catalog, setCatalog] = useState(DEFAULT_CATALOG);
+  const [recentIds, setRecentIds] = useState(() => readRecentTools(DEFAULT_CATALOG.byId));
   const searchRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
   const exploring = Boolean(query.trim()) || category !== 'all';
   const featuredIds = useFeaturedTools();
-  const results = findTools(query, category, featuredIds);
-  const recentTools = recentIds.flatMap(id => toolsById.get(id) ?? []);
+  const results = catalog.find(query, category, featuredIds);
+  const recentTools = recentIds.flatMap(id => catalog.byId.get(id) ?? []);
+
+  // 内置目录先渲染，再从 API 拉取按子站配置实时组装的版本。
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`${window.API_BASE || 'https://api.oscarstudio.cn'}/api/ui/home-tools`, { signal: controller.signal })
+      .then(response => (response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`))))
+      .then(({ tools }) => {
+        if (controller.signal.aborted || !Array.isArray(tools) || tools.length === 0) return;
+        setCatalog(createToolCatalog(tools));
+      })
+      .catch(() => { /* 保留内置目录兜底。 */ });
+    return () => controller.abort();
+  }, []);
 
   const rememberTool = (event: MouseEvent<HTMLElement>) => {
     if (event.defaultPrevented || (event.button !== 0 && event.button !== 1)) return;
     const href = (event.target as Element).closest('a[href]')?.getAttribute('href');
-    const id = href && toolIdsByHref.get(href);
+    const id = href && catalog.byHref.get(href);
     if (!id) return;
 
-    const next = [id, ...readRecentTools(recentIds).filter(item => item !== id)].slice(0, RECENT_TOOLS_LIMIT);
+    const next = [id, ...readRecentTools(catalog.byId, recentIds).filter(item => item !== id)].slice(0, RECENT_TOOLS_LIMIT);
     setRecentIds(next);
     try { localStorage.setItem(RECENT_TOOLS_KEY, JSON.stringify(next)); } catch { /* Keep the session history. */ }
   };
 
   useEffect(() => {
     const syncRecentTools = (event: StorageEvent) => {
-      if (event.key === RECENT_TOOLS_KEY || event.key === null) setRecentIds(readRecentTools());
+      if (event.key === RECENT_TOOLS_KEY || event.key === null) setRecentIds(readRecentTools(catalog.byId));
     };
     window.addEventListener('storage', syncRecentTools);
     return () => window.removeEventListener('storage', syncRecentTools);
-  }, []);
+  }, [catalog]);
 
   const focusSearch = () => {
     setMenuOpen(false);

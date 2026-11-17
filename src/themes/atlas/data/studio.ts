@@ -13,26 +13,54 @@ export const CATEGORIES = [
   ...PROJECTS.map(project => ({ id: project.id, label: project.shortName })),
 ];
 
-// Verified snapshot of sub-sites' tools-config.json, plus AI and PPT entries.
-// HTML-PPT's two legacy demo entries now return 404; only its current app is listed.
-// Keep original demoFile/hash routes; no runtime cross-site catalogue request.
-export const TOOLS = catalog.map(tool => {
-  const project = PROJECTS.find(item => item.id === tool.category)!;
-  const icons: Record<string, string> = { whiteboard: 'pen', 'markdown-editor': 'text', todo: 'check', 'scientific-calc': 'calculator', 'class-timer': 'clock', 'game-2048': 'game' };
-  return { ...tool, icon: icons[tool.id] || project.icon, categoryLabel: project.shortName };
-});
-
-export const toolsById = new Map(TOOLS.map(tool => [tool.id, tool]));
-
-export function findTools(query: string, category: string, featuredIds: string[] = []) {
-  const words = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-  if (words.length === 0 && category === 'all') {
-    const featured = [...new Set(featuredIds)].flatMap(id => toolsById.get(id) ?? []);
-    return featured.length ? featured : TOOLS.filter(tool => tool.featured);
-  }
-  return TOOLS.filter(tool => {
-    if (category !== 'all' && tool.category !== category) return false;
-    const text = [tool.name, tool.description, tool.categoryLabel, tool.category, ...tool.keywords].join(' ').toLocaleLowerCase();
-    return words.every(word => text.includes(word));
-  });
+export interface ToolEntry {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  href: string;
+  keywords: string[];
+  featured: boolean;
 }
+
+export interface Tool extends ToolEntry {
+  icon: string;
+  categoryLabel: string;
+}
+
+const TOOL_ICONS: Record<string, string> = { whiteboard: 'pen', 'markdown-editor': 'text', todo: 'check', 'scientific-calc': 'calculator', 'class-timer': 'clock', 'game-2048': 'game' };
+
+// catalog.json 是构建时生成的内置快照（来自三个子站的 tools-config.json），不要手改。
+// 运行时 ThemeApp 会再从 /api/ui/home-tools 拉取实时目录替换它。
+export function createToolCatalog(entries: readonly ToolEntry[]) {
+  const tools: Tool[] = entries.flatMap(entry => {
+    const project = PROJECTS.find(item => item.id === entry.category);
+    if (!project) return [];
+    return [{ ...entry, icon: TOOL_ICONS[entry.id] || project.icon, categoryLabel: project.shortName }];
+  });
+  const byId = new Map(tools.map(tool => [tool.id, tool]));
+  const byHref = new Map(tools.map(tool => [tool.href, tool.id]));
+
+  function find(query: string, category: string, featuredIds: string[] = []): Tool[] {
+    const words = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+    if (words.length === 0 && category === 'all') {
+      const featured = [...new Set(featuredIds)].flatMap(id => byId.get(id) ?? []);
+      return featured.length ? featured : tools.filter(tool => tool.featured);
+    }
+    return tools.filter(tool => {
+      if (category !== 'all' && tool.category !== category) return false;
+      const text = [tool.name, tool.description, tool.categoryLabel, tool.category, ...tool.keywords].join(' ').toLocaleLowerCase();
+      return words.every(word => text.includes(word));
+    });
+  }
+
+  return { tools, byId, byHref, find };
+}
+
+export type ToolCatalog = ReturnType<typeof createToolCatalog>;
+
+export const DEFAULT_CATALOG: ToolCatalog = createToolCatalog(catalog as ToolEntry[]);
+
+export const TOOLS = DEFAULT_CATALOG.tools;
+export const toolsById = DEFAULT_CATALOG.byId;
+export const findTools = DEFAULT_CATALOG.find;

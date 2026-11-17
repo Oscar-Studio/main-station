@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "sync:catalog": "node scripts/sync-tools-catalog.mjs",
+    "check:catalog": "node scripts/sync-tools-catalog.mjs --check",
     "deploy": "bash ../sync-site.sh main-station /www/wwwroot/oscarstudio.cn",
     "predeploy": "npm run build"
   },
