@@ -17,11 +17,11 @@ import { SITE, MODULES, UTILS } from './src/themes/atlas/data/content';
 const DOMAIN = 'oscarstudio.cn';
 
 const META = {
-  title: 'Oscar Studio - AI、教学、演示与游戏工具集',
+  title: 'Oscar Studio - AI、教学与游戏工具集',
   description:
-    'Oscar Studio 是一间做小而锋利工具的独立工作室：AI Studio 多模型对话、教学工具集（函数图像、几何画板、化学方程式配平）、HTML-PPT 在线演示编辑器、益智游戏集与实用工具集，全部免安装、打开即用。',
+    'Oscar Studio 是一间做小而锋利工具的独立工作室：AI Studio 多模型对话、教学工具集（函数图像、几何画板、化学方程式配平）、益智游戏集与实用工具集，全部免安装、打开即用。',
   keywords:
-    'Oscar Studio,AI工具,教学工具,HTML PPT,演示文稿,益智游戏,在线工具,数独,2048,函数图像',
+    'Oscar Studio,AI工具,教学工具,益智游戏,在线工具,数独,2048,函数图像',
 };
 
 function escapeHtml(s: string): string {

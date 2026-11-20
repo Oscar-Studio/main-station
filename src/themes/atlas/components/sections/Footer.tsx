@@ -36,7 +36,6 @@ export function Footer() {
           <FooterCol title="Modules" items={[
             { label: 'AI Studio ↗', href: 'https://ai.oscarstudio.cn', external: true },
             { label: 'Teaching Tools ↗', href: 'https://edu.oscarstudio.cn', external: true },
-            { label: 'HTML-PPT ↗', href: 'https://ppt.oscarstudio.cn', external: true },
             { label: 'Games ↗', href: 'https://games.oscarstudio.cn', external: true },
           ]} />
 

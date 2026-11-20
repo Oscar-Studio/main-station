@@ -714,19 +714,5 @@
       "音游"
     ],
     "featured": false
-  },
-  {
-    "id": "ppt-studio",
-    "name": "HTML-PPT",
-    "description": "在浏览器中制作与播放 HTML 演示文稿。",
-    "category": "ppt",
-    "href": "https://ppt.oscarstudio.cn/",
-    "keywords": [
-      "演示",
-      "幻灯片",
-      "PPT",
-      "编辑器"
-    ],
-    "featured": false
   }
 ]

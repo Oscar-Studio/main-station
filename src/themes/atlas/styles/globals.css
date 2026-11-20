@@ -88,7 +88,7 @@
 #atlas-scope .st-art-caption { display: flex; justify-content: space-between; margin: -4px 24px 0; color: var(--st-muted); font-size: 9px; letter-spacing: 1.3px; font-family: ui-monospace, monospace; }
 #atlas-scope .st-art-window { animation: st-window-in .9s both; }
 #atlas-scope .st-art-sheet { animation: st-sheet-in 1s both; }
-#atlas-scope .st-shortcuts { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--st-line); border-bottom: 1px solid var(--st-line); }
+#atlas-scope .st-shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--st-line); border-bottom: 1px solid var(--st-line); }
 #atlas-scope .st-shortcuts a { display: flex; align-items: center; gap: 12px; position: relative; min-height: 90px; padding-inline: 23px; font-size: 14px; transition: background .2s; }
 #atlas-scope .st-shortcuts a + a { border-left: 1px solid var(--st-line); }
 #atlas-scope .st-shortcuts a:hover { background: var(--st-surface); }
@@ -136,7 +136,7 @@
 #atlas-scope .st-tool-top { display: flex; align-items: center; gap: 12px; margin-bottom: 23px; }
 #atlas-scope .st-tool-symbol { display: inline-flex; align-items: center; justify-content: center; width: 43px; height: 43px; background: var(--st-art-peach); }
 #atlas-scope .st-tint-teaching, #atlas-scope .st-tint-ai { background: var(--st-art-blue); }
-#atlas-scope .st-tint-games, #atlas-scope .st-tint-ppt { background: var(--st-art-yellow); }
+#atlas-scope .st-tint-games { background: var(--st-art-yellow); }
 #atlas-scope .st-tool-category { font-size: 10px; color: var(--st-muted); }
 #atlas-scope .st-tool-arrow { margin-left: auto; font-size: 20px; }
 #atlas-scope .st-tool h3 { font-size: 18px; line-height: 1.5; font-weight: 600; letter-spacing: -.5px; }
@@ -153,6 +153,7 @@
 #atlas-scope .st-project { grid-column: span 2; background: var(--st-card); border: 1px solid var(--st-line); overflow: hidden; transition: border-color .2s; }
 #atlas-scope .st-project:hover { border-color: var(--st-ink); }
 #atlas-scope .st-project-ai, #atlas-scope .st-project-teaching { grid-column: span 3; }
+#atlas-scope .st-project-tools, #atlas-scope .st-project-games { grid-column: span 3; }
 #atlas-scope .st-project-meta { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px 0; font: 10px ui-monospace, monospace; letter-spacing: .6px; }
 #atlas-scope .st-project-meta > span:last-child { font-size: 22px; }
 #atlas-scope .st-project-art { height: 195px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 0 22px; }
@@ -178,9 +179,6 @@
 #atlas-scope .st-game-tile:nth-child(2) { background: var(--st-art-peach); }
 #atlas-scope .st-game-tile:nth-child(3) { background: var(--st-art-blue); }
 #atlas-scope .st-game-tile:nth-child(4) { background: var(--st-orange); color: var(--st-paper); }
-#atlas-scope .st-slide-front { position: relative; width: 203px; padding: 19px 20px 14px; line-height: 1.1; background: var(--st-art-blue); border: 1px solid var(--st-ink); font: 30px/1.1 Georgia, serif; transform: rotate(5deg); }
-#atlas-scope .st-slide-front small { display: block; font: 7px ui-monospace, monospace; margin-top: 20px; }
-#atlas-scope .st-slide-back { position: absolute; width: 202px; height: 126px; background: var(--st-art-yellow); border: 1px solid var(--st-ink); transform: rotate(-8deg); }
 #atlas-scope .st-closing { display: flex; align-items: center; gap: 30px; padding-block: 88px; }
 #atlas-scope .st-closing-star { color: var(--st-orange); font: 110px/1 Arial, sans-serif; margin-right: 12px; }
 #atlas-scope .st-closing h2 { font-size: 34px; line-height: 1.5; margin-top: 12px; }
@@ -236,10 +234,7 @@
   #atlas-scope .st-tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   #atlas-scope .st-filter-row { flex-wrap: wrap; }
   #atlas-scope .st-project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #atlas-scope .st-project, #atlas-scope .st-project-ai, #atlas-scope .st-project-teaching { grid-column: span 1; }
-  #atlas-scope .st-project-ppt { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; }
-  #atlas-scope .st-project-ppt .st-project-meta { grid-column: span 2; }
-  #atlas-scope .st-project-ppt .st-project-copy { border: 0; align-self: center; }
+  #atlas-scope .st-project, #atlas-scope .st-project-ai, #atlas-scope .st-project-teaching, #atlas-scope .st-project-tools, #atlas-scope .st-project-games { grid-column: span 1; }
   #atlas-scope .st-project-ai .st-project-art { height: 240px; }
   #atlas-scope .st-closing { flex-wrap: wrap; gap: 20px; padding-block: 65px; }
   #atlas-scope .st-closing h2 { font-size: 28px; }
@@ -270,8 +265,7 @@
   #atlas-scope .st-art-caption { margin: 0 9px; font-size: 8px; }
   #atlas-scope .st-shortcuts { grid-template-columns: repeat(6, 1fr); }
   #atlas-scope .st-shortcuts a { grid-column: span 2; min-height: 70px; padding: 12px; font-size: 12px; }
-  #atlas-scope .st-shortcuts a:nth-child(4), #atlas-scope .st-shortcuts a:nth-child(5) { grid-column: span 3; border-top: 1px solid var(--st-line); }
-  #atlas-scope .st-shortcuts a:nth-child(4) { border-left: 0; }
+  #atlas-scope .st-shortcuts a:nth-child(4) { grid-column: span 6; border-top: 1px solid var(--st-line); border-left: 0; }
   #atlas-scope .st-shortcut-arrow { display: inline; }
   #atlas-scope .st-shortcut-number { font-size: 8px; top: 4px; }
   #atlas-scope .st-recent { padding-block: 22px; }
@@ -299,13 +293,11 @@
   #atlas-scope .st-explore-end { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 11px; }
   #atlas-scope .st-project-section { padding-block: 55px; }
   #atlas-scope .st-project-grid { grid-template-columns: 1fr; gap: 20px; }
-  #atlas-scope .st-project-ppt { grid-column: span 1; display: block; }
   #atlas-scope .st-project-meta { padding-inline: 22px; }
   #atlas-scope .st-project-copy { padding: 22px; }
   #atlas-scope .st-project-copy h3 { font-size: 23px; }
   #atlas-scope .st-project-copy p { min-height: 0; }
   #atlas-scope .st-project-art { height: 205px; }
-  #atlas-scope .st-project-ppt .st-project-copy { border-top: 1px solid var(--st-line); }
   #atlas-scope .st-closing { padding-block: 55px; gap: 18px; }
   #atlas-scope .st-closing-star { font-size: 60px; align-self: flex-start; margin-top: 30px; }
   #atlas-scope .st-closing h2 { font-size: 26px; }

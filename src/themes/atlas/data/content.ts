@@ -3,10 +3,10 @@
 export const SITE = {
   brand: 'Oscar Studio',
   title: 'Tools for thinkers, makers, teachers, players.',
-  sub: 'A studio building instruments for AI, teaching, presentation, and play. Every tool is open, sharp, and made to disappear into your work.',
+  sub: 'A studio building instruments for AI, teaching, and play. Every tool is open, sharp, and made to disappear into your work.',
   icp: 'OSCAR STUDIO · SHANGHAI · 2026',
   version: 'v2.0 · redrawn',
-  marqueeText: 'AI · TEACHING · HTML-PPT · GAMES · OPEN SOURCE · BUILT IN SHANGHAI · 2026 — ',
+  marqueeText: 'AI · TEACHING · GAMES · OPEN SOURCE · BUILT IN SHANGHAI · 2026 — ',
 } as const;
 
 export interface NavLink {
@@ -33,7 +33,6 @@ export const NAV_LINKS: readonly NavLink[] = [
   { href: '#teaching', label: 'Teaching', cursor: 'Teaching' },
   { href: 'https://tools.oscarstudio.cn', label: 'Tools', cursor: 'Open', external: true },
   { href: '#games', label: 'Games', cursor: 'Games' },
-  { href: '#ppt', label: 'HTML-PPT', cursor: 'HTML-PPT' },
   { href: 'https://docs.oscarstudio.cn', label: 'Docs ↗', cursor: 'Open', external: true },
 ];
 
@@ -42,7 +41,6 @@ export const MODULES: readonly ModuleCard[] = [
   { id: 'teaching', label: 'Teaching', index: 2, tagline: 'edu.oscarstudio.cn', name: 'Teaching Tools', desc: '17+ HTML instruments for the classroom.' },
   { id: 'tools', label: 'Tools', index: 3, tagline: 'tools.oscarstudio.cn', name: 'Tools', desc: 'Quick utilities for everyday work — converters, generators, and tiny scripts.' },
   { id: 'games', label: 'Games', index: 4, tagline: 'games.oscarstudio.cn', name: 'Games', desc: 'Quiet puzzles for restless evenings.' },
-  { id: 'ppt', label: 'HTML-PPT', index: 5, tagline: 'ppt.oscarstudio.cn', name: 'HTML-PPT', desc: 'Slides that breathe, in pure HTML.' },
 ];
 
 export const NEURAL_TAGS = [

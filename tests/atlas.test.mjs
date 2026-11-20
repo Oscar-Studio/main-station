@@ -48,8 +48,8 @@ test('no matches and clearing filters return the appropriate states', () => {
 test('catalog preserves hash and Unicode routes and excludes retired demos', () => {
   assert.equal(findTools('白板', 'all')[0].href, 'https://tools.oscarstudio.cn/#/whiteboard');
   assert.equal(findTools('科学计算器', 'all')[0].href, 'https://edu.oscarstudio.cn/科学计算器/index.html');
-  assert.equal(findTools('', 'ppt').length, 1);
-  assert.equal(findTools('', 'ppt')[0].href, 'https://ppt.oscarstudio.cn/');
+  assert.equal(findTools('', 'ppt').length, 0);
+  assert.equal(TOOLS.some(tool => tool.href.includes('ppt.oscarstudio.cn')), false);
   assert.equal(new Set(TOOLS.map(tool => tool.id)).size, TOOLS.length);
   for (const tool of TOOLS) {
     const project = PROJECTS.find(project => project.id === tool.category);

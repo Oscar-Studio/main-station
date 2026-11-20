@@ -5,7 +5,6 @@ export const PROJECTS = [
   { id: 'teaching', shortName: '教学工具', name: '把知识，变得看得见。', english: 'LEARN & TEACH', icon: 'learn', href: 'https://edu.oscarstudio.cn/', description: '从函数图像到物理实验，让抽象的概念在眼前发生。', action: '探索教学工具' },
   { id: 'tools', shortName: '实用工具', name: '小工具，解决真问题。', english: 'EVERYDAY TOOLS', icon: 'tools', href: 'https://tools.oscarstudio.cn/', description: '写一段文字、画一张草图、整理一件小事。顺手，就很好。', action: '打开工具集' },
   { id: 'games', shortName: '益智游戏', name: '给大脑，放个小假。', english: 'PLAY A LITTLE', icon: 'game', href: 'https://games.oscarstudio.cn/', description: '在棋盘与数字之间，找回单纯的快乐。下一局，也许就有新思路。', action: '去玩一会儿' },
-  { id: 'ppt', shortName: '演示文稿', name: '好想法，值得好好讲。', english: 'PRESENT YOUR IDEAS', icon: 'slides', href: 'https://ppt.oscarstudio.cn/', description: '用 HTML 演示文稿，把你的故事带到浏览器里的舞台上。', action: '探索 HTML-PPT' },
 ] as const;
 
 export const CATEGORIES = [
